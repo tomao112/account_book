@@ -7,9 +7,6 @@ const Header = () => {
 			<div>
 				<Link href={'/'}>home</Link>
 			</div>
-			<div>
-				<Link href={'/'}>月ごとの収支</Link>
-			</div>
 		</div>
 	)
 }

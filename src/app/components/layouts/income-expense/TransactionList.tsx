@@ -62,104 +62,109 @@ const TransactionList: FC<TransactionListProps> = ({ transactions, onEdit, onDel
 	}
 
   return (
-    <div>
-      <table className="min-w-full bg-white border">
-        <thead>
-          <tr>
-            <th className="border px-4 py-2">Amount</th>
-            <th className="border px-4 py-2">Type</th>
-            <th className="border px-4 py-2">Category</th>
-            <th className="border px-4 py-2">Note</th>
-            <th className="border px-4 py-2">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {transactions.map((transaction) => (
-            <tr key={transaction.id}>
-              <td className="border px-4 py-2">
-                {editingTransaction?.id === transaction.id ? (
-                  <input
-                    type="number"
-                    value={editingTransaction.amount}
-                    onChange={(e) => setEditingTransaction({ ...editingTransaction, amount: parseFloat(e.target.value) })}
-                  />
-                ) : (
-                  transaction.amount
-                )}
-              </td>
-              <td className="border px-4 py-2">
-                {editingTransaction?.id === transaction.id ? (
-                  <select
-                    value={editingTransaction.type}
-                    onChange={(e) => setEditingTransaction({ ...editingTransaction, type: e.target.value })}
-                  >
-                    <option value="income">収入</option>
-                    <option value="expense">支出</option>
-                  </select>
-                ) : (
-                  transaction.type
-                )}
-              </td>
-              <td className="border px-4 py-2">
-                {editingTransaction?.id === transaction.id ? (
-                  <input
-                    type="text"
-                    value={editingTransaction.category}
-                    onChange={(e) => setEditingTransaction({ ...editingTransaction, category: e.target.value })}
-                  />
-                ) : (
-                  transaction.category
-                )}
-              </td>
-              <td className="border px-4 py-2">
-                {editingTransaction?.id === transaction.id ? (
-                  <input
-                    type="text"
-                    value={editingTransaction.note}
-                    onChange={(e) => setEditingTransaction({ ...editingTransaction, note: e.target.value })}
-                  />
-                ) : (
-                  transaction.note
-                )}
-              </td>
-              <td className="border px-4 py-2">
-                {editingTransaction?.id === transaction.id ? (
-                  <>
-                    <button
-                      onClick={() => handleSaveEdit(editingTransaction)}
-                      className="bg-blue-500 text-white px-2 py-1 rounded"
-                    >
-                      Save
-                    </button>
-                    <button
-                      onClick={handleCancelEdit}
-                      className="bg-gray-500 text-white px-2 py-1 rounded ml-2"
-                    >
-                      Cancel
-                    </button>
-                  </>
-                ) : (
-									<>
-                  <button
-                    onClick={() => handleEdit(transaction)}
-                    className="bg-yellow-500 text-white px-2 py-1 rounded"
-                  >
-                    Edit
-                  </button>
-									<button
-                    onClick={() => handleDelete(transaction.id)}
-                    className="bg-yellow-500 text-white px-2 py-1 rounded"
-                  >
-                    Delete
-                  </button>
-									</>
-                )}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+<div className="overflow-x-auto">
+  <table className="min-w-full bg-white border rounded-lg shadow-md">
+    <thead>
+      <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+        <th className="border px-4 py-3 text-left">Amount</th>
+        <th className="border px-4 py-3 text-left">Type</th>
+        <th className="border px-4 py-3 text-left">Category</th>
+        <th className="border px-4 py-3 text-left">Note</th>
+        <th className="border px-4 py-3 text-left">Actions</th>
+      </tr>
+    </thead>
+    <tbody className="text-gray-600 text-sm">
+      {transactions.map((transaction) => (
+        <tr key={transaction.id} className="border-b hover:bg-gray-100">
+          <td className="border px-4 py-3">
+            {editingTransaction?.id === transaction.id ? (
+              <input
+                type="number"
+                value={editingTransaction.amount}
+                onChange={(e) => setEditingTransaction({ ...editingTransaction, amount: parseFloat(e.target.value) })}
+                className="w-full px-2 py-1 border rounded-md"
+              />
+            ) : (
+              <span>{transaction.amount}</span>
+            )}
+          </td>
+          <td className="border px-4 py-3">
+            {editingTransaction?.id === transaction.id ? (
+              <select
+                value={editingTransaction.type}
+                onChange={(e) => setEditingTransaction({ ...editingTransaction, type: e.target.value })}
+                className="w-full px-2 py-1 border rounded-md"
+              >
+                <option value="income">収入</option>
+                <option value="expense">支出</option>
+              </select>
+            ) : (
+              <span>{transaction.type}</span>
+            )}
+          </td>
+          <td className="border px-4 py-3">
+            {editingTransaction?.id === transaction.id ? (
+              <input
+                type="text"
+                value={editingTransaction.category}
+                onChange={(e) => setEditingTransaction({ ...editingTransaction, category: e.target.value })}
+                className="w-full px-2 py-1 border rounded-md"
+              />
+            ) : (
+              <span>{transaction.category}</span>
+            )}
+          </td>
+          <td className="border px-4 py-3">
+            {editingTransaction?.id === transaction.id ? (
+              <input
+                type="text"
+                value={editingTransaction.note}
+                onChange={(e) => setEditingTransaction({ ...editingTransaction, note: e.target.value })}
+                className="w-full px-2 py-1 border rounded-md"
+              />
+            ) : (
+              <span>{transaction.note}</span>
+            )}
+          </td>
+          <td className="border px-4 py-3 flex items-center">
+            {editingTransaction?.id === transaction.id ? (
+              <>
+                <button
+                  onClick={() => handleSaveEdit(editingTransaction)}
+                  className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md"
+                >
+                  Save
+                </button>
+                <button
+                  onClick={handleCancelEdit}
+                  className="bg-gray-500 hover:bg-gray-600 text-white px-3 py-1 rounded-md ml-2"
+                >
+                  Cancel
+                </button>
+              </>
+            ) : (
+              <>
+                <button
+                  onClick={() => handleEdit(transaction)}
+                  className="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded-md mr-2"
+                >
+                  Edit
+                </button>
+                <button
+                  onClick={() => handleDelete(transaction.id)}
+                  className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md"
+                >
+                  Delete
+                </button>
+              </>
+            )}
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+
   );
 };
 

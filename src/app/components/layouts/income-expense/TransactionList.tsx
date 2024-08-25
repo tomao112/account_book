@@ -27,6 +27,7 @@ const TransactionList: FC<TransactionListProps> = ({ transactions, onEdit, onDel
 				type: transaction.type,
 				category: transaction.category,
 				note: transaction.note,
+				date: transaction.date,
 			})
 			.eq('id', transaction.id);
 	
@@ -70,6 +71,7 @@ const TransactionList: FC<TransactionListProps> = ({ transactions, onEdit, onDel
         <th className="border px-4 py-3 text-left">Type</th>
         <th className="border px-4 py-3 text-left">Category</th>
         <th className="border px-4 py-3 text-left">Note</th>
+        <th className="border px-4 py-3 text-left">Date</th>
         <th className="border px-4 py-3 text-left">Actions</th>
       </tr>
     </thead>
@@ -124,6 +126,18 @@ const TransactionList: FC<TransactionListProps> = ({ transactions, onEdit, onDel
               />
             ) : (
               <span>{transaction.note}</span>
+            )}
+          </td>
+					<td className="border px-4 py-3">
+            {editingTransaction?.id === transaction.id ? (
+              <input
+                type="text"
+                value={editingTransaction.date}
+                onChange={(e) => setEditingTransaction({ ...editingTransaction, date: e.target.value })}
+                className="w-full px-2 py-1 border rounded-md"
+              />
+            ) : (
+              <span>{transaction.date}</span>
             )}
           </td>
           <td className="border px-4 py-3 flex items-center">

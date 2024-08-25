@@ -75,7 +75,7 @@ export default function Home() {
 
   return (
     <main>
-      <div className="grid grid-cols-10">
+      <div>
         <Calendar />
         <div className="col-span-8">
           <TransactionList transactions={transactions} onEdit={handleEdit} onDelete={handleDelete} />
@@ -85,11 +85,9 @@ export default function Home() {
         {selectedDate && (
           <TransactionForm
             selectedDate={selectedDate}
-            onSubmit={(handleAddTransaction) => {
-              // ここで新しい取引を追加する処理を呼び出します
-              
-              setSelectedDate(null);
-            }}
+            onSubmit={handleAddTransaction
+              // setSelectedDate(null);
+            }
           />
         )}
       </div>

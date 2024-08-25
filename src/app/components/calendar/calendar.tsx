@@ -56,6 +56,7 @@ const Calendar = () => {
 
   const handleDateClick = (date: Date) => {
     setSelectedDate(date);
+    console.log('クリックされました');
   };
 
   const handleSubmit = async (transaction: {
@@ -67,7 +68,10 @@ const Calendar = () => {
   }) => {
     const { error } = await supabase
       .from('transactions')
-      .insert([transaction]);
+      .insert([{
+        ...transaction,
+        date: transaction.date
+      }]);
 
       if(error) {
         console.error('Error adding transaction:', error);
@@ -86,7 +90,7 @@ const Calendar = () => {
       </header>
       <div className="calendar-grid">
         {days.map((day, index) => {
-          const dayStr = day.toISOString().split('T')[0];
+          const dayStr = day.toLocaleDateString('en-CA');
           return (
             <div
             key={index}

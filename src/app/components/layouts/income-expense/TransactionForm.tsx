@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface TransactionFormProps {
 	selectedDate: Date;
@@ -11,14 +11,23 @@ interface TransactionFormProps {
   }) => void;
 }
 
-const TransactionForm: React.FC<TransactionFormProps> = ({ onSubmit }) => {
+const TransactionForm: React.FC<TransactionFormProps> = ({ selectedDate, onSubmit }) => {
   const [newTransaction, setNewTransaction] = useState({
     amount: '',
     type: '支出',
     category: '',
     note: '',
-    date: '',
+    date: selectedDate.toLocaleDateString('en-CA'),
   });
+
+
+	useEffect(() => {
+		setNewTransaction((prev) => ({
+			...prev,
+			date: selectedDate.toLocaleDateString('en-CA'),
+		}));
+	}, [selectedDate]);
+
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setNewTransaction({
@@ -35,7 +44,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ onSubmit }) => {
       type: '支出',
       category: '',
       note: '',
-      date: '',
+      date: selectedDate.toISOString().split('T')[0],
     });
   };
 

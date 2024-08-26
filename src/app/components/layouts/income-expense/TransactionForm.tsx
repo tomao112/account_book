@@ -44,7 +44,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ selectedDate, onSubmi
       type: '支出',
       category: '',
       note: '',
-      date: selectedDate.toISOString().split('T')[0],
+      date: selectedDate.toLocaleDateString('en-CA'),
     });
   };
 
@@ -70,8 +70,8 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ selectedDate, onSubmi
           className="mt-1 p-2 w-full border"
           required
         >
-          <option value="income">収入</option>
           <option value="expense">支出</option>
+					<option value="income">収入</option>
         </select>
       </div>
       <div className="mb-4">

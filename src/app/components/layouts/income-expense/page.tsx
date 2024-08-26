@@ -21,6 +21,7 @@ export default function Home() {
       if (error) {
         console.error('Error fetching transactions:', error);
       } else {
+        console.log('Fetched transactions:', data);
         setTransactions(data as Transaction[]);
       }
     };
@@ -35,6 +36,7 @@ export default function Home() {
     note: string;
     date: string;
   }) => {
+    console.log('handleAddTransaction called with:', newTransaction);
     const { amount, type, category, note, date } = newTransaction;
 
     const { data, error} = await supabase
@@ -45,8 +47,8 @@ export default function Home() {
       if(error) {
         console.error('Error adding transaction:', error);
       } else if(data && data.length > 0) {
-        setTransactions([data[0], ...transactions]);
-
+        setTransactions((prevTransactions) => [data[0], ...prevTransactions]);
+        console.log('New transaction added:', data[0]);
         setSelectedDate(null);
       }
   }
@@ -65,13 +67,27 @@ export default function Home() {
     if (error) {
       console.error('Error updating transaction:', error);
     } else {
-      setTransactions(transactions.map(t => t.id === updatedTransaction.id ? updatedTransaction : t));
+      console.log('Transaction updated:', updatedTransaction);
+      setTransactions((prevTransactions) => prevTransactions.map((t) => t.id === updatedTransaction.id ? updatedTransaction : t));
+    }
+  };
+  
+  const handleDelete = async (id: number) => {
+    const { error } = await supabase
+      .from('transactions')
+      .delete()
+      .eq('id', id);
+
+    if (error) {
+      console.error('Error deleting transaction:', error);
+    } else {
+      console.log('Transaction deleted:', id);
+      setTransactions((prevTransactions) =>
+        prevTransactions.filter((t) => t.id !== id)
+      );
     }
   };
 
-  const handleDelete = (id: number) => {
-    setTransactions(transactions.filter(t => t.id !== id));
-  }
 
   return (
     <main>
@@ -85,9 +101,7 @@ export default function Home() {
         {selectedDate && (
           <TransactionForm
             selectedDate={selectedDate}
-            onSubmit={handleAddTransaction
-              // setSelectedDate(null);
-            }
+            onSubmit={handleAddTransaction}
           />
         )}
       </div>

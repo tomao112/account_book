@@ -13,6 +13,7 @@ const TransactionList: FC<TransactionListProps> = ({ transactions, onEdit, onDel
 
   const handleEdit = (transaction: Transaction) => {
     setEditingTransaction(transaction);
+		console.log(setEditingTransaction);
   };
 
   const handleCancelEdit = () => {
@@ -67,12 +68,12 @@ const TransactionList: FC<TransactionListProps> = ({ transactions, onEdit, onDel
   <table className="min-w-full bg-white border rounded-lg shadow-md">
     <thead>
       <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
-        <th className="border px-4 py-3 text-left">Amount</th>
-        <th className="border px-4 py-3 text-left">Type</th>
-        <th className="border px-4 py-3 text-left">Category</th>
-        <th className="border px-4 py-3 text-left">Note</th>
-        <th className="border px-4 py-3 text-left">Date</th>
-        <th className="border px-4 py-3 text-left">Actions</th>
+        <th className="border px-4 py-3 text-left">金額</th>
+        <th className="border px-4 py-3 text-left">支出/収入</th>
+        <th className="border px-4 py-3 text-left">カテゴリー</th>
+        <th className="border px-4 py-3 text-left">メモ</th>
+        <th className="border px-4 py-3 text-left">日付</th>
+        <th className="border px-4 py-3 text-left">編集/削除</th>
       </tr>
     </thead>
     <tbody className="text-gray-600 text-sm">
@@ -97,11 +98,11 @@ const TransactionList: FC<TransactionListProps> = ({ transactions, onEdit, onDel
                 onChange={(e) => setEditingTransaction({ ...editingTransaction, type: e.target.value })}
                 className="w-full px-2 py-1 border rounded-md"
               >
-                <option value="income">収入</option>
                 <option value="expense">支出</option>
+								<option value="income">収入</option>
               </select>
             ) : (
-              <span>{transaction.type}</span>
+              <span>{transaction.type === 'expense' ? '支出' : '収入'}</span>
             )}
           </td>
           <td className="border px-4 py-3">

@@ -29,6 +29,8 @@ export default function Home() {
     };
 
     fetchTransactions();
+
+    // supabaseの変更をリアルタイムで監視する
     const subscription = supabase
     .channel('public:transactions')
     .on('postgres_changes', { event: '*', schema: 'public', table: 'transactions' }, (payload) => {
@@ -37,6 +39,10 @@ export default function Home() {
       const newTransaction = payload.new as Transaction;
       const oldTransaction = payload.old as Transaction;
 
+      // prevTransactions = 現在のtransactionsの状態
+      // newTransactions, ...prevTransactions = 新しいデータをtransactionsの先頭に追加
+      // t = 現在のtransactions
+      // 条件が一致すればnewTransactionに置き換え、一致しなければそのまま
       switch (payload.eventType) {
         case 'INSERT':
           setTransactions(prevTransactions => [newTransaction, ...prevTransactions]);
@@ -56,6 +62,8 @@ export default function Home() {
     .subscribe();
 
   return () => {
+    // コンポーネントがアンマウントされるときにsupabaseのサブスクリプションを解除してリソースを開放する
+    // メモリリークや無駄なリソースを避ける
     supabase.removeChannel(subscription);
   };
   }, []);

@@ -7,6 +7,7 @@ const Calendar = () => {
   const [days, setDays] = useState<Date[]>([]);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [transactions, setTransactions] = useState<Map<string, number>>(new Map());
+  console.log(setCurrentDate)
 
   useEffect(() => {
     generateCalendar(currentDate);

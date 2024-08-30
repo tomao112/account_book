@@ -13,7 +13,7 @@ const TransactionList: FC<TransactionListProps> = ({ transactions, onEdit, onDel
 
   const handleEdit = (transaction: Transaction) => {
     setEditingTransaction(transaction);
-		console.log(setEditingTransaction);
+		// console.log(setEditingTransaction);
   };
 
   const handleCancelEdit = () => {

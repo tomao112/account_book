@@ -14,7 +14,7 @@ interface TransactionFormProps {
 const TransactionForm: React.FC<TransactionFormProps> = ({ selectedDate, onSubmit }) => {
   const [newTransaction, setNewTransaction] = useState({
     amount: '',
-    type: '支出',
+    type: 'expense',
     category: '',
     note: '',
     date: selectedDate.toLocaleDateString('en-CA'),
@@ -41,7 +41,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ selectedDate, onSubmi
     onSubmit(newTransaction);
     setNewTransaction({
       amount: '',
-      type: '支出',
+      type: 'expense',
       category: '',
       note: '',
       date: selectedDate.toLocaleDateString('en-CA'),

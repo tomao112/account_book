@@ -12,7 +12,6 @@ export default function Home() {
   // transactionsデータとカレンダーで選択された日付を管理する
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  const [selectedMonth, setSelectedMonth] = useState(new Date());
 
   useEffect(() => {
     const fetchTransactions = async () => {
@@ -135,7 +134,7 @@ export default function Home() {
       <div>
         <Calendar />
         <div>
-          <TotalAmount selectedMonth={selectedMonth} />
+          <TotalAmount selectedMonth={new Date()} transactions={transactions} />
         </div>
         <div className="col-span-8">
           <TransactionList transactions={transactions} onEdit={handleEdit} onDelete={handleDelete} />

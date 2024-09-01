@@ -6,10 +6,12 @@ import type { Transaction } from './transactions';
 import Calendar from '@/app/components/calendar/calendar';
 import TransactionList from '@/app/components/layouts/income-expense/TransactionList';
 import TransactionForm from '@/app/components/layouts/income-expense/TransactionForm';
-import TotalAmount from './TotalAmount';
+// import TotalAmount from '@/app/components/layouts/income-expense/MonthlySummary';
+import MonthlySummary from '@/app/components/layouts/income-expense/MonthlySummary';
 
 export default function Home() {
   // transactionsデータとカレンダーで選択された日付を管理する
+  const [selectedMonth, setSelectedMonth] = useState<Date>(new Date());
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 
@@ -134,7 +136,7 @@ export default function Home() {
       <div>
         <Calendar />
         <div>
-          <TotalAmount selectedMonth={new Date()} transactions={transactions} />
+          <MonthlySummary selectedMonth={selectedMonth} />
         </div>
         <div className="col-span-8">
           <TransactionList transactions={transactions} onEdit={handleEdit} onDelete={handleDelete} />

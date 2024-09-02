@@ -142,14 +142,14 @@ export default function Home() {
           <TransactionList transactions={transactions} onEdit={handleEdit} onDelete={handleDelete} />
         </div>
       </div>
-      <div className="container mx-auto p-4">
+      {/* <div className="container mx-auto p-4">
         {selectedDate && (
           <TransactionForm
             selectedDate={selectedDate}
             onSubmit={handleAddTransaction}
           />
         )}
-      </div>
+      </div> */}
     </main>
   );
 }

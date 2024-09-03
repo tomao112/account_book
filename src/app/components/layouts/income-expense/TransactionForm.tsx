@@ -20,7 +20,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ selectedDate, onSubmi
     date: selectedDate.toLocaleDateString('en-CA'),
   });
 
-
+	// 日付の変更を監視
 	useEffect(() => {
 		setNewTransaction((prev) => ({
 			...prev,
@@ -28,7 +28,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ selectedDate, onSubmi
 		}));
 	}, [selectedDate]);
 
-
+	// フォーム入力値を変更したときに実行される
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setNewTransaction({
       ...newTransaction,
@@ -36,6 +36,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ selectedDate, onSubmi
     });
   };
 
+	// フォーム送信時に実行
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSubmit(newTransaction);

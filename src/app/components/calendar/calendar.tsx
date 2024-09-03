@@ -1,12 +1,18 @@
 import { useState, useEffect } from 'react';
 import TransactionForm from '@/app/components/layouts/income-expense/TransactionForm';
 import { supabase } from '@/app/lib/supabaseClient';
+import { Transaction } from '../layouts/income-expense/transactions';
 
-const Calendar = () => {
+interface CalendarProps {
+  transactions: Transaction[];
+  onEdit: (updateTransaction: Transaction) => Promise<void>;
+  onDelete: (id: number) => Promise<void>;
+}
+const Calendar: React.FC<CalendarProps> = ({ transactions, onEdit, onDelete}) => {
   const [currentDate, setCurrentDate] = useState<Date>(new Date());
   const [days, setDays] = useState<Date[]>([]);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  const [transactions, setTransactions] = useState<Map<string, number>>(new Map());
+  const [calendarTransactions, setCalendarTransactions] = useState<Map<string, number>>(new Map());
 
   useEffect(() => {
     generateCalendar(currentDate);
@@ -50,7 +56,7 @@ const Calendar = () => {
         data.forEach((transaction: { date: string; amount: number }) => {
           transactionsMap.set(transaction.date, transaction.amount);
         });
-        setTransactions(transactionsMap);
+        setCalendarTransactions(transactionsMap);
       }
   };
 
@@ -75,7 +81,9 @@ const Calendar = () => {
       if(error) {
         console.error('Error adding transaction:', error);
       } else {
-        setTransactions(new Map(transactions.set(transaction.date, parseFloat(transaction.amount))));
+        const updatedTransactions = new Map(calendarTransactions);
+        updatedTransactions.set(transaction.date, parseFloat(transaction.amount));
+        setCalendarTransactions(updatedTransactions);
         setSelectedDate(null);
       }
   };
@@ -97,7 +105,7 @@ const Calendar = () => {
             onClick={() => handleDateClick(day)}
           >
             <div>{day.getDate()}</div>
-            <div>{transactions.get(dayStr) ? `${transactions.get(dayStr)}円` : ''}</div>
+            <div>{calendarTransactions.get(dayStr) ? `${calendarTransactions.get(dayStr)}円` : ''}</div>
           </div>
           );
         })}

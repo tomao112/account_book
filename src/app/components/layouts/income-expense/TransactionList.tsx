@@ -20,46 +20,12 @@ const TransactionList: FC<TransactionListProps> = ({ transactions, onEdit, onDel
     setEditingTransaction(null);
   };
 
-	const updateTransactionInDatabase = async (transaction: Transaction) => {
-		const { error } = await supabase
-			.from('transactions')
-			.update({
-				amount: transaction.amount,
-				type: transaction.type,
-				category: transaction.category,
-				note: transaction.note,
-				date: transaction.date,
-			})
-			.eq('id', transaction.id);
-	
-		if (error) {
-			console.error('Error updating transaction:', error);
-		}
-	};
-	
-
   const handleSaveEdit = async (updatedTransaction: Transaction) => {
-		
-    // 更新処理をサーバーに送信する例
-    await updateTransactionInDatabase(updatedTransaction);
-
     onEdit(updatedTransaction);
     handleCancelEdit();
   };
 
-	const deleteTransactionFormDatabase = async (id: number) => {
-		const { error } = await supabase
-			.from('transactions')
-			.delete()
-			.eq('id', id);
-
-			if(error) {
-				console.error('Error deleting transaction:', error);
-			}
-	};
-
 	const handleDelete = async (id: number) => {
-		await deleteTransactionFormDatabase(id);
 		onDelete(id);
 	}
 

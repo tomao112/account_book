@@ -1,37 +1,44 @@
 import { useEffect, useState } from 'react';
+import { Transaction } from './transactions';
 
 interface TransactionFormProps {
-	selectedDate: Date;
-  onSubmit: (transaction: {
-    amount: string;
-    type: string;
-    category: string;
-    note: string;
-    date: string;
-  }) => void;
+	selectedDate: Date | null;
+  editingTransaction: Transaction | null;
+  onSubmit: (transaction: Omit<Transaction, 'id'>) => void;
+  onCancel: () => void;
 }
 
-const TransactionForm: React.FC<TransactionFormProps> = ({ selectedDate, onSubmit }) => {
-  const [newTransaction, setNewTransaction] = useState({
+const TransactionForm: React.FC<TransactionFormProps> = ({ selectedDate, editingTransaction, onSubmit, onCancel }) => {
+  const [transaction, setTransaction] = useState({
     amount: '',
     type: 'expense',
     category: '',
     note: '',
-    date: selectedDate.toLocaleDateString('en-CA'),
+    date: selectedDate ? selectedDate.toLocaleDateString('en-CA') : new Date().toLocaleDateString('en-CA'),
   });
 
 	// 日付の変更を監視
 	useEffect(() => {
-		setNewTransaction((prev) => ({
-			...prev,
-			date: selectedDate.toLocaleDateString('en-CA'),
-		}));
-	}, [selectedDate]);
+    if(editingTransaction) {
+      setTransaction({
+        amount: editingTransaction.amount.toString(),
+        type: editingTransaction.type,
+        category: editingTransaction.category,
+        note: editingTransaction.note,
+        date: editingTransaction.date,
+      });
+    } else if(selectedDate) {
+      setTransaction((prev) => ({
+        ...prev,
+        date: selectedDate.toLocaleDateString('en-CA'),
+      }));
+    }
+	}, [editingTransaction, selectedDate]);
 
 	// フォーム入力値を変更したときに実行される
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    setNewTransaction({
-      ...newTransaction,
+    setTransaction({
+      ...transaction,
       [e.target.name]: e.target.value,
     });
   };
@@ -39,13 +46,16 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ selectedDate, onSubmi
 	// フォーム送信時に実行
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit(newTransaction);
-    setNewTransaction({
+    onSubmit({
+      ...transaction,
+      amount: parseFloat(transaction.amount),
+    });;
+    setTransaction({
       amount: '',
       type: 'expense',
       category: '',
       note: '',
-      date: selectedDate.toLocaleDateString('en-CA'),
+      date: new Date().toLocaleDateString('en-CA'),
     });
   };
 
@@ -56,7 +66,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ selectedDate, onSubmi
         <input
           type="number"
           name="amount"
-          value={newTransaction.amount}
+          value={transaction.amount}
           onChange={handleChange}
           className="mt-1 p-2 w-full border"
           required
@@ -66,7 +76,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ selectedDate, onSubmi
         <label className="block text-gray-700">収入/支出</label>
         <select
           name="type"
-          value={newTransaction.type}
+          value={transaction.type}
           onChange={handleChange}
           className="mt-1 p-2 w-full border"
           required
@@ -80,7 +90,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ selectedDate, onSubmi
         <input
           type="text"
           name="category"
-          value={newTransaction.category}
+          value={transaction.category}
           onChange={handleChange}
           className="mt-1 p-2 w-full border"
           required
@@ -91,7 +101,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ selectedDate, onSubmi
         <input
           type="text"
           name="note"
-          value={newTransaction.note}
+          value={transaction.note}
           onChange={handleChange}
           className="mt-1 p-2 w-full border"
         />
@@ -101,15 +111,20 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ selectedDate, onSubmi
         <input
           type="date"
           name="date"
-          value={newTransaction.date}
+          value={transaction.date}
           onChange={handleChange}
           className="mt-1 p-2 w-full border"
           required
         />
       </div>
-      <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
-        Add Transaction
-      </button>
+      <div className="flex justify-between">
+        <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
+          {editingTransaction ? '更新' : '追加'}
+        </button>
+        <button className="bg-gray-500 text-white px-4 py-2 rounded">
+          キャンセル
+        </button>
+      </div>
     </form>
   );
 };

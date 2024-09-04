@@ -1,141 +1,101 @@
 import { useState, useEffect } from 'react';
 import TransactionForm from '@/app/components/layouts/income-expense/TransactionForm';
-import { supabase } from '@/app/lib/supabaseClient';
 import { Transaction } from '../layouts/income-expense/transactions';
 
+
 interface CalendarProps {
+  selectedMonth: Date;
   transactions: Transaction[];
   onEdit: (updateTransaction: Transaction) => Promise<void>;
   onDelete: (id: number) => Promise<void>;
+  onDateSelect: (date: Date) => void;
 }
-const Calendar: React.FC<CalendarProps> = ({ transactions, onEdit, onDelete}) => {
-  const [currentDate, setCurrentDate] = useState<Date>(new Date());
-  const [days, setDays] = useState<Date[]>([]);
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  const [calendarTransactions, setCalendarTransactions] = useState<Map<string, number>>(new Map());
+
+
+const Calendar: React.FC<CalendarProps> = ({ selectedMonth, transactions, onEdit, onDelete, onDateSelect}) => {
+  // const [currentDate, setCurrentDate] = useState<Date>(new Date());
+  // const [days, setDays] = useState<Date[]>([]);
+  const [ calendarDays, setCalendarDays ] = useState<Date[]>([]);
+  const [ selectedDate, setSelectedDate ] = useState<Date | null>(null);
+  const [ calendarTransactions, setCalendarTransactions ] = useState<Map<string, number>>(new Map());
 
   useEffect(() => {
-    generateCalendar(currentDate);
-    fetchTransactions();
-  }, [currentDate]);
+    const days = generateCalendar(selectedMonth);
+    setCalendarDays(days);
+  }, [selectedMonth]);
 
   const generateCalendar = (date: Date) => {
-    const start = new Date(date.getFullYear(), date.getMonth(), 1);
-    const end = new Date(date.getFullYear(), date.getMonth() + 1, 0);
-    const daysArray: Date[] = [];
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+    const days: Date[] = [];
 
-    for (let i = start.getDay(); i > 0; i--) {
-      const day = new Date(start);
-      day.setDate(start.getDate() - i);
-      daysArray.push(day);
-    }
+  for(let i = firstDay.getDay(); i > 0; i--) {
+    days.push(new Date(year, month, 1 - i));
+  }
 
-    for (let i = 1; i <= end.getDate(); i++) {
-      daysArray.push(new Date(date.getFullYear(), date.getMonth(), i));
-    }
+  for(let i = 1; i <= lastDay.getDate(); i++) {
+    days.push(new Date(year, month, i));
+  }
 
-    for (let i = end.getDay(); i < 6; i++) {
-      const day = new Date(end);
-      day.setDate(end.getDate() + (i - end.getDay() + 1));
-      daysArray.push(day);
-    }
+  while (days.length < 42) {
+    days.push(new Date(year, month + 1, days.length - lastDay.getDate()));
+  }
 
-    setDays(daysArray);
-  };
-
-  const fetchTransactions = async () => {
-    const { data, error } = await supabase
-      .from('transactions')
-      .select('*')
-      .order('date', { ascending: true });
-
-      if(error) {
-        console.error('Error fetching transactions:', error);
-      } else {
-        const transactionsMap = new Map<string, number>();
-        data.forEach((transaction: { date: string; amount: number }) => {
-          transactionsMap.set(transaction.date, transaction.amount);
-        });
-        setCalendarTransactions(transactionsMap);
-      }
-  };
-
-  const handleDateClick = (date: Date) => {
-    setSelectedDate(date);
-  };
-
-  const handleSubmit = async (transaction: {
-    amount: string;
-    type: string;
-    category: string;
-    note: string;
-    date: string;
-  }) => {
-    const { error } = await supabase
-      .from('transactions')
-      .insert([{
-        ...transaction,
-        date: transaction.date
-      }]);
-
-      if(error) {
-        console.error('Error adding transaction:', error);
-      } else {
-        const updatedTransactions = new Map(calendarTransactions);
-        updatedTransactions.set(transaction.date, parseFloat(transaction.amount));
-        setCalendarTransactions(updatedTransactions);
-        setSelectedDate(null);
-      }
-  };
-
-  return (
-    <div>
-      <header>
-        <button onClick={() => setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1))}>Previous</button>
-        <h2>{currentDate.toLocaleString('default', { month: 'long' })} {currentDate.getFullYear()}</h2>
-        <button onClick={() => setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1))}>Next</button>
-      </header>
-      <div className="calendar-grid">
-        {days.map((day, index) => {
-          const dayStr = day.toLocaleDateString('en-CA');
-          return (
-            <div
-            key={index}
-            className="calendar-day"
-            onClick={() => handleDateClick(day)}
+  return days;
+};
+  const renderCalendar = () => {
+    return (
+    <div className='grid grid-cols-7 gap-1'>
+      {[ '日', '月', '火', '水', '木', '金', '土', ].map(day => (
+        <div key={day} className="text-center font-bold">{day}</div>
+      ))}
+      {calendarDays.map((day, index) => (
+        <div
+          key={index}
+          className={`p-2 border ${day.getMonth() !== selectedMonth.getMonth() ? 'bg-gray-100' : ''}`}
+          onClick={() => onDateSelect(day)}
           >
-            <div>{day.getDate()}</div>
-            <div>{calendarTransactions.get(dayStr) ? `${calendarTransactions.get(dayStr)}円` : ''}</div>
-          </div>
-          );
-        })}
-      </div>
-      {selectedDate && (
-        <div className="note-input">
-          <TransactionForm selectedDate={selectedDate} onSubmit={handleSubmit} />
+          <div className="text-sm">{day.getDate()}</div>
+          {rendarTransactionForDay(day)}
         </div>
-      )}
-      <style jsx>{`
-        .calendar-grid {
-          display: grid;
-          grid-template-columns: repeat(7, 1fr);
-          gap: 2px;
-        }
-        .calendar-day {
-          padding: 10px;
-          border: 1px solid #ddd;
-          text-align: center;
-          cursor: pointer;
-        }
-        .calendar-day:hover {
-          background-color: #f0f0f0;
-        }
-        .note-input {
-          margin-top: 20px;
-        }
-      `}</style>
-    </div>
+    ))}
+  </div>
   );
+};
+
+const rendarTransactionForDay = (day: Date) => {
+  const dayTransactions = transactions.filter(t => {
+    const tDate = new Date(t.date);
+    return  tDate.getFullYear() === day.getFullYear() &&
+            tDate.getMonth() === day.getMonth() &&
+            tDate.getDate() === day.getDate();
+  });
+
+  return dayTransactions.map(transactions => (
+    <div key={transactions.id} className="text-xs">
+      {transactions.amount}円 ({transactions.category})
+      <button onClick={(e) => {
+        e.stopPropagation();
+        onEdit(transactions);
+      }} className="ml-1 text-blue-500">編集</button>
+      <button onClick={(e) => {
+        e.stopPropagation();
+        onDelete(transactions.id)
+      }} className="ml-1 text-red-500">削除</button>
+    </div>
+  ));
+};
+
+return (
+  <div>
+    <h2 className="text-xl">
+    {selectedMonth.getFullYear()}年{selectedMonth.getMonth() + 1}月
+    </h2>
+    {renderCalendar()}
+  </div>
+);
 };
 
 export default Calendar;

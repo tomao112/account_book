@@ -17,6 +17,8 @@ export default function Home() {
   const [ calendarKey, setCalendarKey ] = useState(0);
   const [ monthlySummary, setMonthlySummary ] = useState({ income: 0, expense: 0});
   const [ selectedMonth, setSelectedMonth ] = useState(() => new Date());
+  const [ editingTransaction, setEditingTransaction] = useState<Transaction | null>(null);
+  // const [ selectedDateCalendar, setSelectedDateCalendar ] = useState<Date | null>(null);
   
   useEffect(() => {
     // トランザクションデータが変更されるたびに月の収支を再計算
@@ -54,31 +56,11 @@ export default function Home() {
     .on('postgres_changes', { event: '*', schema: 'public', table: 'transactions' }, (payload) => {
       console.log('Change received!', payload);
 
-      const newTransaction = payload.new as Transaction;
-      const oldTransaction = payload.old as Transaction;
-
-      // prevTransactions = 現在のtransactionsの状態
-      // newTransactions, ...prevTransactions = 新しいデータをtransactionsの先頭に追加
-      // t = 現在のtransactions
-      // 条件が一致すればnewTransactionに置き換え、一致しなければそのまま
-      switch (payload.eventType) {
-        case 'INSERT':
-          setTransactions(prevTransactions => [newTransaction, ...prevTransactions]);
-          break;
-        case 'UPDATE':
-          setTransactions(prevTransactions =>
-            prevTransactions.map(t => t.id === newTransaction.id ? newTransaction : t)
-          );
-          break;
-        case 'DELETE':
-          setTransactions(prevTransactions =>
-            prevTransactions.filter(t => t.id !== oldTransaction.id)
-          );
-          break;
-      }
+      // const newTransaction = payload.new as Transaction;
+      // const oldTransaction = payload.old as Transaction;
+      fetchTransactions();
     })
     .subscribe();
-
   return () => {
     // コンポーネントがアンマウントされるときにsupabaseのサブスクリプションを解除してリソースを開放する
     // メモリリークや無駄なリソースを避ける
@@ -87,29 +69,52 @@ export default function Home() {
   }, []);
 
   // 新しいデータをsupabaseに追加
-  const handleAddTransaction = async (newTransaction: {
-    amount: string;
-    type: string;
-    category: string;
-    note: string;
-    date: string;
-  }) => {
+  const handleAddTransaction = async (newTransaction: Omit<Transaction, 'id'>) => {
     console.log('handleAddTransaction called with:', newTransaction);
-    const { amount, type, category, note, date } = newTransaction;
 
     const { data, error} = await supabase
       .from('transactions')
-      .insert([{ amount: parseFloat(amount), type, category, note, date }])
+      .insert([newTransaction])
       .select('*');
 
       if(error) {
         console.error('Error adding transaction:', error);
       } else if(data && data.length > 0) {
-        setTransactions((prevTransactions) => [data[0], ...prevTransactions]);
         console.log('New transaction added:', data[0]);
         setSelectedDate(null);
+        setEditingTransaction(null);
       }
   }
+
+  const handleEditTransaction = async (updatedTransaction: Omit<Transaction, 'id'> & {id?: number}) => {
+    console.log('handleEditiongTransaction called with:', updatedTransaction);
+
+    if (!updatedTransaction.id) {
+      console.error('Error: Transaction ID is missing');
+      return;
+    }
+    const { data, error } = await supabase
+      .from('transactions')
+      .update(updatedTransaction)
+      .eq('id', updatedTransaction.id)
+      .select('*');
+
+    if(error) {
+      console.log('Error updating transaction:', error);
+    } else if(data && data.length > 0) {
+      console.log('Transaction updated:', data[0]);
+      setEditingTransaction(null);
+    }
+  }
+
+  const handleDateSelect = (date: Date) => {
+    setSelectedDate(date);
+  }
+
+  const handleCancel = () => {
+    setSelectedDate(null);
+    setEditingTransaction(null);
+  };
 
   // 指定されたデータをsupabaseで更新
   const handleEdit = async (updatedTransaction: Transaction) => {
@@ -185,7 +190,6 @@ export default function Home() {
     setMonthlySummary(summary);
   }, [selectedMonth, transactions]);
 
-
   return (
     <main>
       <div>
@@ -202,9 +206,11 @@ export default function Home() {
         </div>
         <Calendar 
           key={calendarKey}
+          selectedMonth={selectedMonth}
           transactions={getFilterTransactions()}
           onEdit={handleEdit}
           onDelete={handleDelete}
+          onDateSelect={handleDateSelect}
           />
         <div>
           <MonthlySummary summary={monthlySummary} />
@@ -217,7 +223,9 @@ export default function Home() {
         {selectedDate && (
           <TransactionForm
             selectedDate={selectedDate}
-            onSubmit={handleAddTransaction}
+            editingTransaction={editingTransaction}
+            onSubmit={editingTransaction ? handleEditTransaction: handleAddTransaction}
+            onCancel={handleCancel}
           />
         )}
       </div>

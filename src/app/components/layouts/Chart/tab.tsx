@@ -32,6 +32,7 @@ export default function Tab({ transactions, selectedMonth }: BarGraphProps) {
     const handleTabChange = (e: TabMenuTabChangeEvent) => {
         setActiveIndex(e.index);
     };
+
     useEffect(() => {
         if (transactions) {
             const { summary, totals } = calculateMonthlySummaryAndCategoryTotals(transactions, selectedMonth);
@@ -43,7 +44,7 @@ export default function Tab({ transactions, selectedMonth }: BarGraphProps) {
 // コンポーネント内で使用
 return (
     <div>
-        <TabMenu className='mr-10 ml-10 mb-5 mt-5 border border-pink-500 rounded-lg' model={items} activeIndex={activeIndex} onTabChange={handleTabChange} />
+        <TabMenu className='mr-10 ml-10 mb-5 mt-5 border border-gray-500 rounded-lg' model={items} activeIndex={activeIndex} onTabChange={handleTabChange} />
         <div>
             {activeIndex === 0 && (
                 <>

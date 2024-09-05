@@ -46,7 +46,7 @@ return (
             {activeIndex === 0 && (
                 <>
                     <IncomeBarGraph transactions={transactions} selectedMonth={selectedMonth} />
-										<MonthlySummary summary={monthlySummary} />
+					<MonthlySummary summary={monthlySummary} />
                     <CategoryTotal selectedMonth={selectedMonth} activeIndex={activeIndex}/>
                 </>
             )}
@@ -57,7 +57,7 @@ return (
                 <>
 									
                     <ExpenseBarGraph transactions={transactions} selectedMonth={selectedMonth} />
-										<MonthlySummary summary={monthlySummary} />
+                    <MonthlySummary summary={monthlySummary} />
                     <CategoryTotal selectedMonth={selectedMonth} activeIndex={activeIndex}/>
 									
                 </>
@@ -67,7 +67,9 @@ return (
         <div>
             {activeIndex === 2 && (
                 <>
-                    貯金
+                    <ExpenseBarGraph transactions={transactions} selectedMonth={selectedMonth} />
+                    <MonthlySummary summary={monthlySummary} />
+                    <CategoryTotal selectedMonth={selectedMonth} activeIndex={activeIndex}/>
                 </>
             )}
 						

@@ -7,6 +7,7 @@ import Calendar from '@/app/components/calendar/calendar';
 import TransactionList from '@/app/components/layouts/income-expense/TransactionList';
 import TransactionForm from '@/app/components/layouts/income-expense/TransactionForm';
 import MonthlySummary from '@/app/components/layouts/income-expense/MonthlySummary';
+import TransactionModel from './TransactionModel';
 
 export default function Home() {
   // selectedMonth 現在選択されている月を保持
@@ -18,7 +19,25 @@ export default function Home() {
   const [ monthlySummary, setMonthlySummary ] = useState({ income: 0, expense: 0});
   const [ selectedMonth, setSelectedMonth ] = useState(() => new Date());
   const [ editingTransaction, setEditingTransaction] = useState<Transaction | null>(null);
-  // const [ selectedDateCalendar, setSelectedDateCalendar ] = useState<Date | null>(null);
+  const [ selectedTransaction, setSelectedTransaction ] = useState<Transaction[]>([]);
+  const [ isModelOpen, setIsModelOpen ] = useState(false);
+  const [ isEditing, setIsEditing] = useState(false);
+
+  const handleDateClick = (date: Date, dayTransactions: Transaction[]) => {
+    setSelectedDate(date);
+    setSelectedTransaction(dayTransactions);
+    setIsModelOpen(true);
+  }
+
+  const handleModelClose = () => {
+    setIsModelOpen(false);
+    setIsEditing(false);
+  }
+
+  const handleAddNew = () => {
+    setIsModelOpen(false);
+    setIsEditing(false);
+  }
   
   useEffect(() => {
     // トランザクションデータが変更されるたびに月の収支を再計算
@@ -86,13 +105,9 @@ export default function Home() {
       }
   }
 
-  const handleEditTransaction = async (updatedTransaction: Omit<Transaction, 'id'> & {id?: number}) => {
+  const handleEditTransaction = async (updatedTransaction: Transaction) => {
     console.log('handleEditiongTransaction called with:', updatedTransaction);
 
-    if (!updatedTransaction.id) {
-      console.error('Error: Transaction ID is missing');
-      return;
-    }
     const { data, error } = await supabase
       .from('transactions')
       .update(updatedTransaction)
@@ -109,6 +124,7 @@ export default function Home() {
 
   const handleDateSelect = (date: Date) => {
     setSelectedDate(date);
+    setEditingTransaction(null);
   }
 
   const handleCancel = () => {
@@ -117,25 +133,11 @@ export default function Home() {
   };
 
   // 指定されたデータをsupabaseで更新
-  const handleEdit = async (updatedTransaction: Transaction) => {
-    const { error } = await supabase
-      .from('transactions')
-      .update({
-        amount: updatedTransaction.amount,
-        type: updatedTransaction.type,
-        category: updatedTransaction.category,
-        note: updatedTransaction.note,
-      })
-      .eq('id', updatedTransaction.id);
-
-    if (error) {
-      console.error('Error updating transaction:', error);
-    } else {
-      console.log('Transaction updated:', updatedTransaction);
-      setTransactions((prevTransactions) => 
-        prevTransactions.map((t) => t.id === updatedTransaction.id ? updatedTransaction : t));
-      setCalendarKey(prevKey => prevKey + 1);
-    }
+  const handleEdit = () => {
+    setIsEditing(true);
+    setIsModelOpen(false);
+    // setEditingTransaction(transaction);
+    // setSelectedDate(null);
   };
   
   // 指定されたデータをsupabaseから削除
@@ -205,12 +207,17 @@ export default function Home() {
           </button>
         </div>
         <Calendar 
-          key={calendarKey}
-          selectedMonth={selectedMonth}
-          transactions={getFilterTransactions()}
-          onEdit={handleEdit}
-          onDelete={handleDelete}
-          onDateSelect={handleDateSelect}
+          selectedMonth={new Date()}
+          transactions={transactions}
+          onDateClick={handleDateClick}
+          />
+          <TransactionModel
+            isOpen={isModelOpen}
+            onClose={handleModelClose}
+            onAddNew={handleAddNew}
+            onEdit={handleEdit}
+            date={selectedDate}
+            transactions={selectedTransaction}
           />
         <div>
           <MonthlySummary summary={monthlySummary} />
@@ -220,11 +227,17 @@ export default function Home() {
         </div>
       </div>
       <div className="container mx-auto p-4">
-        {selectedDate && (
+        {(selectedDate || editingTransaction) && (
           <TransactionForm
             selectedDate={selectedDate}
             editingTransaction={editingTransaction}
-            onSubmit={editingTransaction ? handleEditTransaction: handleAddTransaction}
+            onSubmit={(transaction) => {
+              if('id' in transaction) {
+                handleEditTransaction(transaction as Transaction);
+              } else {
+                handleAddTransaction(transaction as Omit<Transaction, 'id'>);
+              }
+            }}
             onCancel={handleCancel}
           />
         )}

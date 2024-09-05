@@ -126,13 +126,13 @@ const TransactionList: FC<TransactionListProps> = ({ transactions, onEdit, onDel
             ) : (
               <>
                 <button
-                  onClick={() => handleEdit(transaction)}
+                  onClick={() => onEdit(transaction)}
                   className="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded-md mr-2"
                 >
                   Edit
                 </button>
                 <button
-                  onClick={() => handleDelete(transaction.id)}
+                  onClick={() => onDelete(transaction.id)}
                   className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md"
                 >
                   Delete

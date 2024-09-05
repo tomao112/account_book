@@ -1,101 +1,95 @@
-import { useState, useEffect } from 'react';
-import TransactionForm from '@/app/components/layouts/income-expense/TransactionForm';
+import React, { useState, useEffect } from 'react';
 import { Transaction } from '../layouts/income-expense/transactions';
-
 
 interface CalendarProps {
   selectedMonth: Date;
   transactions: Transaction[];
-  onEdit: (updateTransaction: Transaction) => Promise<void>;
-  onDelete: (id: number) => Promise<void>;
-  onDateSelect: (date: Date) => void;
+  onDateClick: (date: Date, dayTransactions: Transaction[]) => void;
 }
 
-
-const Calendar: React.FC<CalendarProps> = ({ selectedMonth, transactions, onEdit, onDelete, onDateSelect}) => {
-  // const [currentDate, setCurrentDate] = useState<Date>(new Date());
-  // const [days, setDays] = useState<Date[]>([]);
-  const [ calendarDays, setCalendarDays ] = useState<Date[]>([]);
-  const [ selectedDate, setSelectedDate ] = useState<Date | null>(null);
-  const [ calendarTransactions, setCalendarTransactions ] = useState<Map<string, number>>(new Map());
+const Calendar: React.FC<CalendarProps> = ({ selectedMonth, transactions, onDateClick }) => {
+  const [calendarDays, setCalendarDays] = useState<Date[]>([]);
 
   useEffect(() => {
-    const days = generateCalendar(selectedMonth);
+    const days = generateCalendarDays(selectedMonth);
     setCalendarDays(days);
   }, [selectedMonth]);
 
-  const generateCalendar = (date: Date) => {
+  const generateCalendarDays = (date: Date) => {
     const year = date.getFullYear();
     const month = date.getMonth();
     const firstDay = new Date(year, month, 1);
     const lastDay = new Date(year, month + 1, 0);
     const days: Date[] = [];
 
-  for(let i = firstDay.getDay(); i > 0; i--) {
-    days.push(new Date(year, month, 1 - i));
-  }
+    for (let i = firstDay.getDay(); i > 0; i--) {
+      days.push(new Date(year, month, 1 - i));
+    }
 
-  for(let i = 1; i <= lastDay.getDate(); i++) {
-    days.push(new Date(year, month, i));
-  }
+    for (let i = 1; i <= lastDay.getDate(); i++) {
+      days.push(new Date(year, month, i));
+    }
 
-  while (days.length < 42) {
-    days.push(new Date(year, month + 1, days.length - lastDay.getDate()));
-  }
+    while (days.length < 42) {
+      days.push(new Date(year, month + 1, days.length - lastDay.getDate()));
+    }
 
-  return days;
-};
+    return days;
+  };
+
+  const calculateDayTotal = (day: Date): number => {
+    const dayTransactions = transactions.filter(t => {
+      const tDate = new Date(t.date);
+      return tDate.getFullYear() === day.getFullYear() &&
+             tDate.getMonth() === day.getMonth() &&
+             tDate.getDate() === day.getDate();
+    });
+
+    return dayTransactions.reduce((total, t) => {
+      return total + (t.type === 'income' ? t.amount : -t.amount);
+    }, 0);
+  };
+
   const renderCalendar = () => {
     return (
-    <div className='grid grid-cols-7 gap-1'>
-      {[ '日', '月', '火', '水', '木', '金', '土', ].map(day => (
-        <div key={day} className="text-center font-bold">{day}</div>
-      ))}
-      {calendarDays.map((day, index) => (
-        <div
-          key={index}
-          className={`p-2 border ${day.getMonth() !== selectedMonth.getMonth() ? 'bg-gray-100' : ''}`}
-          onClick={() => onDateSelect(day)}
-          >
-          <div className="text-sm">{day.getDate()}</div>
-          {rendarTransactionForDay(day)}
-        </div>
-    ))}
-  </div>
-  );
-};
+      <div className="grid grid-cols-7 gap-1">
+        {['日', '月', '火', '水', '木', '金', '土'].map(day => (
+          <div key={day} className="text-center font-bold">{day}</div>
+        ))}
+        {calendarDays.map((day, index) => {
+          const dayTotal = calculateDayTotal(day);
+          const dayTransactions = transactions.filter(t => {
+            const tDate = new Date(t.date);
+            return tDate.getFullYear() === day.getFullYear() &&
+                   tDate.getMonth() === day.getMonth() &&
+                   tDate.getDate() === day.getDate();
+          });
 
-const rendarTransactionForDay = (day: Date) => {
-  const dayTransactions = transactions.filter(t => {
-    const tDate = new Date(t.date);
-    return  tDate.getFullYear() === day.getFullYear() &&
-            tDate.getMonth() === day.getMonth() &&
-            tDate.getDate() === day.getDate();
-  });
+          return (
+            <div
+              key={index}
+              className={`p-2 border ${day.getMonth() !== selectedMonth.getMonth() ? 'bg-gray-100' : ''} cursor-pointer`}
+              onClick={() => onDateClick(day, dayTransactions)}
+            >
+              <div className="text-sm">{day.getDate()}</div>
+              <div className={`text-sm ${dayTotal >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                {dayTotal.toLocaleString()}円
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    );
+  };
 
-  return dayTransactions.map(transactions => (
-    <div key={transactions.id} className="text-xs">
-      {transactions.amount}円 ({transactions.category})
-      <button onClick={(e) => {
-        e.stopPropagation();
-        onEdit(transactions);
-      }} className="ml-1 text-blue-500">編集</button>
-      <button onClick={(e) => {
-        e.stopPropagation();
-        onDelete(transactions.id)
-      }} className="ml-1 text-red-500">削除</button>
+  return (
+    <div>
+      <h2 className="text-xl font-bold mb-4">
+        {selectedMonth.getFullYear()}年{selectedMonth.getMonth() + 1}月
+      </h2>
+      {renderCalendar()}
     </div>
-  ));
-};
-
-return (
-  <div>
-    <h2 className="text-xl">
-    {selectedMonth.getFullYear()}年{selectedMonth.getMonth() + 1}月
-    </h2>
-    {renderCalendar()}
-  </div>
-);
+  );
 };
 
 export default Calendar;

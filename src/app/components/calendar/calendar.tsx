@@ -40,9 +40,9 @@ const Calendar: React.FC<CalendarProps> = ({ selectedMonth, transactions, onDate
   const calculateDayTotal = (day: Date): number => {
     const dayTransactions = transactions.filter(t => {
       const tDate = new Date(t.date);
-      return tDate.getFullYear() === day.getFullYear() &&
-             tDate.getMonth() === day.getMonth() &&
-             tDate.getDate() === day.getDate();
+      return  tDate.getFullYear() === day.getFullYear() &&
+              tDate.getMonth() === day.getMonth() &&
+              tDate.getDate() === day.getDate();
     });
 
     return dayTransactions.reduce((total, t) => {
@@ -51,18 +51,19 @@ const Calendar: React.FC<CalendarProps> = ({ selectedMonth, transactions, onDate
   };
 
   const renderCalendar = () => {
+    const days = generateCalendarDays(selectedMonth);
     return (
       <div className="grid grid-cols-7 gap-1">
         {['日', '月', '火', '水', '木', '金', '土'].map(day => (
           <div key={day} className="text-center font-bold">{day}</div>
         ))}
-        {calendarDays.map((day, index) => {
+        {days.map((day, index) => {
           const dayTotal = calculateDayTotal(day);
           const dayTransactions = transactions.filter(t => {
             const tDate = new Date(t.date);
-            return tDate.getFullYear() === day.getFullYear() &&
-                   tDate.getMonth() === day.getMonth() &&
-                   tDate.getDate() === day.getDate();
+            return  tDate.getFullYear() === day.getFullYear() &&
+                    tDate.getMonth() === day.getMonth() &&
+                    tDate.getDate() === day.getDate();
           });
 
           return (

@@ -133,11 +133,11 @@ export default function Home() {
   };
 
   // 指定されたデータをsupabaseで更新
-  const handleEdit = () => {
+  const handleEdit = (transaction: Transaction) => {
     setIsEditing(true);
     setIsModelOpen(false);
-    // setEditingTransaction(transaction);
-    // setSelectedDate(null);
+    setEditingTransaction(transaction);
+    setSelectedDate(null);
   };
   
   // 指定されたデータをsupabaseから削除

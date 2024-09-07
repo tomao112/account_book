@@ -5,7 +5,7 @@ interface TransactionModelProps {
 	isOpen: boolean;
 	onClose: () => void;
 	onAddNew: () => void;
-	onEdit: () => void;
+	onEdit: (transaction: Transaction) => void;
 	date: Date | null;
 	transactions: Transaction[];
 }
@@ -29,16 +29,19 @@ const TransactionModel: React.FC<TransactionModelProps> = ({
 				{transactions.map(t => (
 					<div key={t.id} className="mb-2">
 						{t.amount}円 ({t.category}) - {t.type}
+						<div>
+						<button onClick={() => onEdit(t)} className="bg-yellow-500 text-white px-4 py-2 rounded">
+							編集
+						</button>
+						</div>
 					</div>
 				))}
 				<div className="mt-4 flex justify-end">
 					<button onClick={onAddNew} className="bg-blue-500 text-white px-4 py-2 rounded mr-2">
 						新規追加
 					</button>
-					<button onClick={onEdit} className="bg-yellow-500 text-white px-4 py-2 rounded">
-						編集
-					</button>
-					<button className="bg-gray-500 text-white px-4 py-2 rounded">
+
+					<button onClick={onClose} className="bg-gray-500 text-white px-4 py-2 rounded">
 						閉じる
 					</button>
 				</div>

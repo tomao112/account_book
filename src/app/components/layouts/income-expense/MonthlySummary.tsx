@@ -11,8 +11,8 @@ const MonthlySummary: React.FC<MonthlySummaryProps> = ({ summary }) => {
     <div className="monthly-summary">
       <div>
       <h2>月の収支</h2>
-      <p>収入: {summary.income}円</p>
-      <p>支出: {summary.expense}円</p>
+      <p>収入: {summary.income.toLocaleString()}円</p>
+      <p>支出: {summary.expense.toLocaleString()}円</p>
       <p>差額: {summary.income - summary.expense}円</p>
     </div>
     </div>

@@ -227,7 +227,7 @@ export default function Home() {
         </div>
       </div>
       <div className="container mx-auto p-4">
-        {(selectedDate || editingTransaction) && (
+        {(editingTransaction) && (
           <TransactionForm
             selectedDate={selectedDate}
             editingTransaction={editingTransaction}

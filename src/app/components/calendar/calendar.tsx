@@ -8,12 +8,12 @@ interface CalendarProps {
 }
 
 const Calendar: React.FC<CalendarProps> = ({ selectedMonth, transactions, onDateClick }) => {
-  const [calendarDays, setCalendarDays] = useState<Date[]>([]);
+  // const [calendarDays, setCalendarDays] = useState<Date[]>([]);
 
-  useEffect(() => {
-    const days = generateCalendarDays(selectedMonth);
-    setCalendarDays(days);
-  }, [selectedMonth]);
+  // useEffect(() => {
+  //   const days = generateCalendarDays(selectedMonth);
+  //   setCalendarDays(days);
+  // }, [selectedMonth]);
 
   const generateCalendarDays = (date: Date) => {
     const year = date.getFullYear();

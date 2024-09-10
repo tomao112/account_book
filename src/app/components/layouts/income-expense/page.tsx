@@ -10,12 +10,15 @@ import MonthlySummary from '@/app/components/layouts/income-expense/MonthlySumma
 import TransactionModel from './TransactionModel';
 
 export default function Home() {
-  // selectedMonth 現在選択されている月を保持
   // transactions　トランザクションのリストを保持
-  // selectedDate　カレンダーで選択された日付を保持
+  // selectedDate カレンダーで選択された日付を保持
+  // monthlySummary 月ごとの収支を保持
+  // selectedMonth 現在選択されている月を保持
+  // editingTransaction 編集中のトランザクションを保持
+  // isModelOpen トランザクションモデルの表示状態
+  // isEditing フォームの編集状態
   const [ transactions, setTransactions ] = useState<Transaction[]>([]);
   const [ selectedDate, setSelectedDate ] = useState<Date | null>(null);
-  const [ calendarKey, setCalendarKey ] = useState(0);
   const [ monthlySummary, setMonthlySummary ] = useState({ income: 0, expense: 0});
   const [ selectedMonth, setSelectedMonth ] = useState(() => new Date());
   const [ editingTransaction, setEditingTransaction] = useState<Transaction | null>(null);
@@ -23,24 +26,28 @@ export default function Home() {
   const [ isModelOpen, setIsModelOpen ] = useState(false);
   const [ isEditing, setIsEditing] = useState(false);
 
+  // カレンダーの日付選択時にその日付のトランザクションを設定
   const handleDateClick = (date: Date, dayTransactions: Transaction[]) => {
     setSelectedDate(date);
     setSelectedTransaction(dayTransactions);
     setIsModelOpen(true);
   }
 
+  // toransactionModelを閉じる
   const handleModelClose = () => {
     setIsModelOpen(false);
     setIsEditing(false);
   }
 
+  // transactionModelを閉じ、transactionFormを表示
   const handleAddNew = () => {
-    setIsModelOpen(false);
-    setIsEditing(false);
-  }
+    setEditingTransaction(null); // 編集トランザクションをリセット
+    setIsModelOpen(false); // TransactionModelを閉じる
+    setIsEditing(true); // フォームを表示するための状態を設定
+}
   
+  // トランザクションデータが変更されるたびに月の収支を再計算
   useEffect(() => {
-    // トランザクションデータが変更されるたびに月の収支を再計算
     const income = transactions
       .filter(t => t.type === 'income')
       .reduce((sum, t) => sum + t.amount, 0);
@@ -74,9 +81,6 @@ export default function Home() {
     .channel('public:transactions')
     .on('postgres_changes', { event: '*', schema: 'public', table: 'transactions' }, (payload) => {
       console.log('Change received!', payload);
-
-      // const newTransaction = payload.new as Transaction;
-      // const oldTransaction = payload.old as Transaction;
       fetchTransactions();
     })
     .subscribe();
@@ -122,16 +126,6 @@ export default function Home() {
     }
   }
 
-  const handleDateSelect = (date: Date) => {
-    setSelectedDate(date);
-    setEditingTransaction(null);
-  }
-
-  const handleCancel = () => {
-    setSelectedDate(null);
-    setEditingTransaction(null);
-  };
-
   // 指定されたデータをsupabaseで更新
   const handleEdit = (transaction: Transaction) => {
     setIsEditing(true);
@@ -154,10 +148,10 @@ export default function Home() {
       setTransactions((prevTransactions) =>
         prevTransactions.filter((t) => t.id !== id)
       );
-      setCalendarKey(prevKey => prevKey + 1);
     }
   };
 
+  // 選択された月フィルタリング
   const getFilterTransactions = () => {
     return transactions.filter(transaction => {
       const transactionDate = new Date(transaction.date);
@@ -168,6 +162,7 @@ export default function Home() {
     });
   };
 
+  // 選択された月の収支を計算
   const calculateMonthSummary = (filteredTransactions: Transaction[]) => {
     const income = filteredTransactions
       .filter(t => t.type === 'income')
@@ -178,6 +173,7 @@ export default function Home() {
     return { income, expense}
   };
 
+  // 月の変更
   const changeMonth = (increment: number): void => {
     setSelectedMonth(prevMonth => {
       const newMonth = new Date(prevMonth);
@@ -186,6 +182,7 @@ export default function Home() {
     });
   };
 
+  // 選択された月やトランザクションが変更されるたびに、フィルタリングされたトランザクションに基づいて月のサマリーを更新
   useEffect(() => {
     const filteredTransactions = getFilterTransactions();
     const summary = calculateMonthSummary(filteredTransactions);
@@ -207,7 +204,7 @@ export default function Home() {
           </button>
         </div>
         <Calendar 
-          selectedMonth={new Date()}
+          selectedMonth={selectedMonth}
           transactions={transactions}
           onDateClick={handleDateClick}
           />
@@ -227,20 +224,24 @@ export default function Home() {
         </div>
       </div>
       <div className="container mx-auto p-4">
-        {(editingTransaction) && (
-          <TransactionForm
-            selectedDate={selectedDate}
-            editingTransaction={editingTransaction}
-            onSubmit={(transaction) => {
-              if('id' in transaction) {
+      {isEditing && (
+        <TransactionForm
+        selectedDate={selectedDate}
+        editingTransaction={editingTransaction}
+        onSubmit={(transaction) => {
+            if ('id' in transaction) {
                 handleEditTransaction(transaction as Transaction);
-              } else {
+            } else {
                 handleAddTransaction(transaction as Omit<Transaction, 'id'>);
-              }
-            }}
-            onCancel={handleCancel}
-          />
-        )}
+            }
+            setIsEditing(false); //フォームを閉じる
+        }}
+        onCancel={() => {
+            setIsEditing(false); // フォームを閉じる
+            setEditingTransaction(null); // 編集トランザクションをリセット
+        }}
+        />
+      )}
       </div>
     </main>
   );

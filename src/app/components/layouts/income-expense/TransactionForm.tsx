@@ -64,6 +64,14 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ selectedDate, editing
     })
   };
 
+  const categories = [
+    '食費',
+    '光熱費',
+    '娯楽',
+    '交通費',
+    'その他',
+  ];
+
   return (
     <form onSubmit={handleSubmit} className="mb-6">
       <div className="mb-4">
@@ -92,14 +100,20 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ selectedDate, editing
       </div>
       <div className="mb-4">
         <label className="block text-gray-700">Category</label>
-        <input
-          type="text"
+        <select
           name="category"
           value={transaction.category}
           onChange={handleChange}
-          className="mt-1 p-2 w-full border"
+          className='mt-1 p-2 w-full border'
           required
-        />
+        >
+          <option value="">選択してください</option>
+          {categories.map((category) => (
+            <option key={category} value={category}>
+              {category}
+            </option>
+          ))}
+          </select>
       </div>
       <div className="mb-4">
         <label className="block text-gray-700">Note</label>

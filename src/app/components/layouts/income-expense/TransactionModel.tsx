@@ -28,7 +28,7 @@ const TransactionModel: React.FC<TransactionModelProps> = ({
 				</h2>
 				{transactions.map(t => (
 					<div key={t.id} className="mb-2">
-						{t.amount}円 ({t.category}) - {t.type}
+						{t.amount}円 ({t.category.length > 5 ? `${t.category.slice(0, 20)}...` : t.category}) - {t.type === 'expense' ? '支出' : '収入'}
 						<div>
 						<button onClick={() => onEdit(t)} className="bg-yellow-500 text-white px-4 py-2 rounded">
 							編集

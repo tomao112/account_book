@@ -64,13 +64,32 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ selectedDate, editing
     })
   };
 
-  const categories = [
+  // 初期カテゴリ、状態管理
+  const [ categories, setCategories ] = useState<string[]>([
     '食費',
     '光熱費',
     '娯楽',
     '交通費',
     'その他',
-  ];
+  ]);
+
+  // 新しいカテゴリー
+  const [ newCategory, setNewCategory ] = useState<string>('');
+
+  // カテゴリー追加処理
+  const handleAddCategory = () => {
+    if(newCategory && !categories.includes(newCategory)) {
+      setCategories([...categories, newCategory]);
+      setNewCategory('');
+    }
+  };
+// 編集中のカテゴリー
+  const [ editingCategory, setEditingCategory ] = useState<string | null>(null);
+
+  const handleEditCategory = (category: string) => {
+    setEditingCategory(category);
+    setNewCategory(category);
+  };
 
   return (
     <form onSubmit={handleSubmit} className="mb-6">
@@ -114,6 +133,14 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ selectedDate, editing
             </option>
           ))}
           </select>
+          <label className='block textgray-700'>新しいカテゴリーを追加</label>
+          <input 
+          type="text"
+          value={newCategory}
+          onChange={(e) => setNewCategory(e.target.value)}
+          className='mt-1 p-2 w-full border'
+          />
+          <button type='button' onClick={handleAddCategory} className="mt-2 bg-blue-500 text-white px-4 py-2 rounded">追加</button>
       </div>
       <div className="mb-4">
         <label className="block text-gray-700">Note</label>

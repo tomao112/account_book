@@ -86,10 +86,20 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ selectedDate, editing
 // 編集中のカテゴリー
   const [ editingCategory, setEditingCategory ] = useState<string | null>(null);
 
+  // 
   const handleEditCategory = (category: string) => {
     setEditingCategory(category);
     setNewCategory(category);
   };
+
+  // 
+  const handleSaveCategory = () => {
+    if(editingCategory) {
+      setCategories(categories.map(cat => (cat === editingCategory ? newCategory : cat)));
+      setEditingCategory(null);
+    }
+    setNewCategory('');
+  }
 
   return (
     <form onSubmit={handleSubmit} className="mb-6">
@@ -133,15 +143,25 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ selectedDate, editing
             </option>
           ))}
           </select>
-          <label className='block textgray-700'>新しいカテゴリーを追加</label>
-          <input 
+          {/* <input 
           type="text"
           value={newCategory}
           onChange={(e) => setNewCategory(e.target.value)}
           className='mt-1 p-2 w-full border'
           />
-          <button type='button' onClick={handleAddCategory} className="mt-2 bg-blue-500 text-white px-4 py-2 rounded">追加</button>
+          <button type='button' onClick={() => handleEditCategory(transaction.category)} className='mt-2 bg-yellow-500 text-white px-4 py-2 rounded'>編集</button>
+          <button type="button" onClick={handleSaveCategory} className="mt-2 bg-blue-500 text-white px-4 py-2 rounded">
+            保存
+          </button> */}
       </div>
+      {/* <label className='block textgray-700'>新しいカテゴリーを追加</label>
+          <input 
+          type="text"
+          // value={newCategory}
+          onChange={(e) => setNewCategory(e.target.value)}
+          className='mt-1 p-2 w-full border'
+          />
+          <button type='button' onClick={handleAddCategory} className="mt-2 bg-blue-500 text-white px-4 py-2 rounded">追加</button> */}
       <div className="mb-4">
         <label className="block text-gray-700">Note</label>
         <input

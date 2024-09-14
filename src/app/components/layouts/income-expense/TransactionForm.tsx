@@ -102,96 +102,101 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ selectedDate, editing
   }
 
   return (
-    <form onSubmit={handleSubmit} className="mb-6">
-      <div className="mb-4">
-        <label className="block text-gray-700">Amount</label>
-        <input
-          type="number"
-          name="amount"
-          value={transaction.amount}
-          onChange={handleChange}
-          className="mt-1 p-2 w-full border"
-          required
-        />
+    <div className='fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50'>
+      <div className='bg-white p-6 rounded-lg z-60'>
+        <form onSubmit={handleSubmit} className="mb-6">
+          <div className="mb-4">
+            <label className="block text-gray-700">Amount</label>
+            <input
+              type="number"
+              name="amount"
+              value={transaction.amount}
+              onChange={handleChange}
+              className="mt-1 p-2 w-full border"
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">収入/支出</label>
+            <select
+              name="type"
+              value={transaction.type}
+              onChange={handleChange}
+              className="mt-1 p-2 w-full border"
+              required
+            >
+              <option value="expense">支出</option>
+		    		  <option value="income">収入</option>
+		    		  <option value="deposit">貯金</option>
+            </select>
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Category</label>
+            <select
+              name="category"
+              value={transaction.category}
+              onChange={handleChange}
+              className='mt-1 p-2 w-full border'
+              required
+            >
+              <option value="">選択してください</option>
+              {categories.map((category) => (
+                <option key={category} value={category}>
+                  {category}
+                </option>
+              ))}
+              </select>
+              {/* <input 
+              type="text"
+              value={newCategory}
+              onChange={(e) => setNewCategory(e.target.value)}
+              className='mt-1 p-2 w-full border'
+              />
+              <button type='button' onClick={() => handleEditCategory(transaction.category)} className='mt-2 bg-yellow-500 text-white px-4 py-2 rounded'>編集</button>
+              <button type="button" onClick={handleSaveCategory} className="mt-2 bg-blue-500 text-white px-4 py-2 rounded">
+                保存
+              </button> */}
+          </div>
+          {/* <label className='block textgray-700'>新しいカテゴリーを追加</label>
+              <input 
+              type="text"
+              // value={newCategory}
+              onChange={(e) => setNewCategory(e.target.value)}
+              className='mt-1 p-2 w-full border'
+              />
+              <button type='button' onClick={handleAddCategory} className="mt-2 bg-blue-500 text-white px-4 py-2 rounded">追加</button> */}
+          <div className="mb-4">
+            <label className="block text-gray-700">Note</label>
+            <input
+              type="text"
+              name="note"
+              value={transaction.note}
+              onChange={handleChange}
+              className="mt-1 p-2 w-full border"
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Date</label>
+            <input
+              type="date"
+              name="date"
+              value={transaction.date}
+              onChange={handleChange}
+              className="mt-1 p-2 w-full border"
+              required
+            />
+          </div>
+          <div className="flex justify-between">
+            <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
+              {editingTransaction ? '更新' : '追加'}
+            </button>
+            <button type='button' onClick={onCancel} className="bg-gray-500 text-white px-4 py-2 rounded">
+              キャンセル
+            </button>
+          </div>
+        </form>
       </div>
-      <div className="mb-4">
-        <label className="block text-gray-700">収入/支出</label>
-        <select
-          name="type"
-          value={transaction.type}
-          onChange={handleChange}
-          className="mt-1 p-2 w-full border"
-          required
-        >
-          <option value="expense">支出</option>
-					<option value="income">収入</option>
-        </select>
-      </div>
-      <div className="mb-4">
-        <label className="block text-gray-700">Category</label>
-        <select
-          name="category"
-          value={transaction.category}
-          onChange={handleChange}
-          className='mt-1 p-2 w-full border'
-          required
-        >
-          <option value="">選択してください</option>
-          {categories.map((category) => (
-            <option key={category} value={category}>
-              {category}
-            </option>
-          ))}
-          </select>
-          {/* <input 
-          type="text"
-          value={newCategory}
-          onChange={(e) => setNewCategory(e.target.value)}
-          className='mt-1 p-2 w-full border'
-          />
-          <button type='button' onClick={() => handleEditCategory(transaction.category)} className='mt-2 bg-yellow-500 text-white px-4 py-2 rounded'>編集</button>
-          <button type="button" onClick={handleSaveCategory} className="mt-2 bg-blue-500 text-white px-4 py-2 rounded">
-            保存
-          </button> */}
-      </div>
-      {/* <label className='block textgray-700'>新しいカテゴリーを追加</label>
-          <input 
-          type="text"
-          // value={newCategory}
-          onChange={(e) => setNewCategory(e.target.value)}
-          className='mt-1 p-2 w-full border'
-          />
-          <button type='button' onClick={handleAddCategory} className="mt-2 bg-blue-500 text-white px-4 py-2 rounded">追加</button> */}
-      <div className="mb-4">
-        <label className="block text-gray-700">Note</label>
-        <input
-          type="text"
-          name="note"
-          value={transaction.note}
-          onChange={handleChange}
-          className="mt-1 p-2 w-full border"
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block text-gray-700">Date</label>
-        <input
-          type="date"
-          name="date"
-          value={transaction.date}
-          onChange={handleChange}
-          className="mt-1 p-2 w-full border"
-          required
-        />
-      </div>
-      <div className="flex justify-between">
-        <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
-          {editingTransaction ? '更新' : '追加'}
-        </button>
-        <button type='button' onClick={onCancel} className="bg-gray-500 text-white px-4 py-2 rounded">
-          キャンセル
-        </button>
-      </div>
-    </form>
+    </div>
   );
 };
 

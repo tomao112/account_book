@@ -8,6 +8,13 @@ interface CalendarProps {
 }
 
 const Calendar: React.FC<CalendarProps> = ({ selectedMonth, transactions, onDateClick }) => {
+  const [ isPopupOpen, setIsPopupOpen ] = useState(false);
+  const [ selectedDate, setSelectedDate ] = useState<Date | null>(null);
+
+  const handleDateClick = (date: Date) => {
+    setSelectedDate(date);
+    setIsPopupOpen(true);
+  }
   // const [calendarDays, setCalendarDays] = useState<Date[]>([]);
 
   // useEffect(() => {
@@ -86,7 +93,7 @@ const Calendar: React.FC<CalendarProps> = ({ selectedMonth, transactions, onDate
   return (
     <div>
       <h2 className="text-xl font-bold mb-4">
-        {selectedMonth.getFullYear()}年{selectedMonth.getMonth() + 1}月
+        {/* {selectedMonth.getFullYear()}年{selectedMonth.getMonth() + 1}月 */}
       </h2>
       {renderCalendar()}
     </div>

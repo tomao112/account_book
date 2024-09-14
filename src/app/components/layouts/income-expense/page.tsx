@@ -19,7 +19,7 @@ export default function Home() {
   // isEditing フォームの編集状態
   const [ transactions, setTransactions ] = useState<Transaction[]>([]);
   const [ selectedDate, setSelectedDate ] = useState<Date | null>(null);
-  const [ monthlySummary, setMonthlySummary ] = useState({ income: 0, expense: 0});
+  const [ monthlySummary, setMonthlySummary ] = useState({ income: 0, expense: 0, deposit: 0});
   const [ selectedMonth, setSelectedMonth ] = useState(() => new Date());
   const [ editingTransaction, setEditingTransaction] = useState<Transaction | null>(null);
   const [ selectedTransaction, setSelectedTransaction ] = useState<Transaction[]>([]);
@@ -54,7 +54,10 @@ export default function Home() {
     const expense = transactions
       .filter(t => t.type === 'expense')
       .reduce((sum, t) => sum + t.amount, 0);
-    setMonthlySummary({ income, expense });
+    const deposit = transactions
+      .filter(t => t.type === 'deposit')
+      .reduce((sum, t) => sum + t.amount, 0);
+    setMonthlySummary({ income, expense, deposit });
   }, [transactions]);
 
   // トランザクションリストを取得
@@ -170,7 +173,10 @@ export default function Home() {
     const expense = filteredTransactions
       .filter(t => t.type === 'expense')
       .reduce((sum, t) => sum + t.amount, 0);
-    return { income, expense}
+    const deposit = filteredTransactions
+      .filter(t => t.type === 'deposit')
+      .reduce((sum, t) => sum + t.amount, 0);
+    return { income, expense, deposit}
   };
 
   // 月の変更
@@ -186,7 +192,7 @@ export default function Home() {
   useEffect(() => {
     const filteredTransactions = getFilterTransactions();
     const summary = calculateMonthSummary(filteredTransactions);
-    setMonthlySummary(summary);
+    setMonthlySummary(summary); // 'deposit' プロパティを追加してデフォルト値を設定
   }, [selectedMonth, transactions]);
 
   return (

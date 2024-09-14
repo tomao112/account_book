@@ -18,11 +18,11 @@ const TransactionModel: React.FC<TransactionModelProps> = ({
 	date,
 	transactions
 }) => {
-	if(!isOpen) return null;
+	if (!isOpen) return null;
 
 	return (
-		<div className="fixd inset-0 bg-black bg-opacity-50 flex item-center justify-center">
-			<div className="bg-white p-6 rounded-lg">
+		<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+			<div className="bg-white p-6 rounded-lg z-60">
 				<h2 className="text-xl font-bold mb-4">
 					{date?.toLocaleDateString()}の取引
 				</h2>
@@ -30,9 +30,9 @@ const TransactionModel: React.FC<TransactionModelProps> = ({
 					<div key={t.id} className="mb-2">
 						{t.amount}円 ({t.category.length > 5 ? `${t.category.slice(0, 20)}...` : t.category}) - {t.type === 'expense' ? '支出' : '収入'}
 						<div>
-						<button onClick={() => onEdit(t)} className="bg-yellow-500 text-white px-4 py-2 rounded">
-							編集
-						</button>
+							<button onClick={() => onEdit(t)} className="bg-yellow-500 text-white px-4 py-2 rounded">
+								編集
+							</button>
 						</div>
 					</div>
 				))}

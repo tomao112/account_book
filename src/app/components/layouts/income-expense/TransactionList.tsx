@@ -36,7 +36,7 @@ const TransactionList: FC<TransactionListProps> = ({ transactions, onEdit, onDel
     <thead>
       <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
         <th className="border px-4 py-3 text-left">金額</th>
-        <th className="border px-4 py-3 text-left">支出/収入</th>
+        <th className="border px-4 py-3 text-left">支出/収入/貯金</th>
         <th className="border px-4 py-3 text-left">カテゴリー</th>
         <th className="border px-4 py-3 text-left">メモ</th>
         <th className="border px-4 py-3 text-left">日付</th>
@@ -67,9 +67,12 @@ const TransactionList: FC<TransactionListProps> = ({ transactions, onEdit, onDel
               >
                 <option value="expense">支出</option>
 								<option value="income">収入</option>
+								<option value="deposit">貯金</option>
               </select>
             ) : (
-              <span>{transaction.type === 'expense' ? '支出' : '収入'}</span>
+              <span>{ transaction.type === 'expense' ? '支出' :
+                      transaction.type === 'income' ? '収入' :
+                      '貯金'}</span>
             )}
           </td>
           <td className="border px-4 py-3">

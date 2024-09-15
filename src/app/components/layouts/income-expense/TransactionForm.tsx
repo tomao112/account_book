@@ -196,6 +196,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ selectedDate, editing
           </div>
         </form>
       </div>
+      
     </div>
   );
 };

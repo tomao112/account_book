@@ -12,11 +12,6 @@ const TransactionList: FC<TransactionListProps> = ({ transactions, onEdit, onDel
   // 編集中のトランザクションを保持
   const [editingTransaction, setEditingTransaction] = useState<Transaction | null>(null);
 
-  // const handleEdit = (transaction: Transaction) => {
-  //   setEditingTransaction(transaction);
-	// 	// console.log(setEditingTransaction);
-  // };
-
   const handleCancelEdit = () => {
     setEditingTransaction(null);
   };
@@ -26,9 +21,29 @@ const TransactionList: FC<TransactionListProps> = ({ transactions, onEdit, onDel
     handleCancelEdit();
   };
 
-	// const handleDelete = async (id: number) => {
-	// 	onDelete(id);
-	// }
+  // カテゴリーごとの月の収支を計算
+const calculateMonthlyCategoryTotals = () => {
+  const categoryTotals: { [key: string]: number } = {};
+
+  transactions.forEach(transaction => {
+    const category = transaction.category; // カテゴリーを取得
+    const amount = transaction.type === 'income' ? transaction.amount : -transaction.amount;
+
+    if (!categoryTotals[category]) {
+      categoryTotals[category] = 0;
+    }
+    categoryTotals[category] += amount;
+  });
+
+  return categoryTotals;
+};
+
+// カテゴリーごとの収支を表示
+const categoryTotals = calculateMonthlyCategoryTotals();
+
+
+// ... existing code ...
+
 
   return (
 <div className="overflow-x-auto">
@@ -148,6 +163,19 @@ const TransactionList: FC<TransactionListProps> = ({ transactions, onEdit, onDel
       ))}
     </tbody>
   </table>
+  <div className="mt-4">
+    <h3 className="text-lg font-bold mb-2">カテゴリーごとの月の収支</h3>
+    <ul className="bg-gray-100 p-4 rounded-lg shadow-md">
+      {Object.entries(categoryTotals).map(([category, total]) => (
+        <li key={category} className="flex justify-between py-2 border-b last:border-b-0">
+          <span className="font-medium">{category}</span>
+          <span className={`font-bold ${total < 0 ? 'text-red-500' : 'text-green-500'}`}>
+            ¥{total.toLocaleString()}
+          </span>
+        </li>
+      ))}
+    </ul>
+  </div>
 </div>
 
   );

@@ -5,7 +5,7 @@ const Header = () => {
 	return (
 		<div>
 			<div>
-				{/* <Link href={'/'}>home</Link> */}
+				<Link href={'/'}>home</Link>
 			</div>
 		</div>
 	)

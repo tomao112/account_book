@@ -29,17 +29,22 @@ const Calendar: React.FC<CalendarProps> = ({ selectedMonth, transactions, onDate
     const lastDay = new Date(year, month + 1, 0);
     const days: Date[] = [];
 
-    for (let i = firstDay.getDay(); i > 0; i--) {
-      days.push(new Date(year, month, 1 - i));
-    }
+  // 前の月の日付を追加
+  const prevMonthLastDay = new Date(year, month, 0); // 前の月の最終日
+  for (let i = firstDay.getDay(); i > 0; i--) {
+    days.push(new Date(prevMonthLastDay.getFullYear(), prevMonthLastDay.getMonth(), prevMonthLastDay.getDate() - i + 1));
+  }
 
-    for (let i = 1; i <= lastDay.getDate(); i++) {
-      days.push(new Date(year, month, i));
-    }
+  // 今月の日付を追加
+  for (let i = 1; i <= lastDay.getDate(); i++) {
+    days.push(new Date(year, month, i));
+  }
 
-    while (days.length < 42) {
-      days.push(new Date(year, month + 1, days.length - lastDay.getDate()));
-    }
+  // 次の月の日付を追加
+  const nextMonthDaysNeeded = 35 - days.length; // 6週分の35日
+  for (let i = 1; i <= nextMonthDaysNeeded; i++) {
+    days.push(new Date(year, month + 1, i));
+  }
 
     return days;
   };
@@ -60,41 +65,44 @@ const Calendar: React.FC<CalendarProps> = ({ selectedMonth, transactions, onDate
   const renderCalendar = () => {
     const days = generateCalendarDays(selectedMonth);
     return (
-      <div className="grid grid-cols-7 gap-1">
-        {['日', '月', '火', '水', '木', '金', '土'].map(day => (
-          <div key={day} className="text-center font-bold">{day}</div>
-        ))}
-        {days.map((day, index) => {
-          const dayTotal = calculateDayTotal(day);
-          const dayTransactions = transactions.filter(t => {
-            const tDate = new Date(t.date);
-            return  tDate.getFullYear() === day.getFullYear() &&
-                    tDate.getMonth() === day.getMonth() &&
-                    tDate.getDate() === day.getDate();
-          });
-
-          return (
-            <div
-              key={index}
-              className={`p-2 border ${day.getMonth() !== selectedMonth.getMonth() ? 'bg-gray-100' : ''} cursor-pointer`}
-              onClick={() => onDateClick(day, dayTransactions)}
-            >
-              <div className="text-sm">{day.getDate()}</div>
-              <div className={`text-sm ${dayTotal >= 0 ? 'text-green-500' : 'text-red-500'}`}>
-                {dayTotal.toLocaleString()}円
+        <div className="grid grid-cols-7 pr-10 pl-10 pb-10">
+          {['日', '月', '火', '水', '木', '金', '土'].map((day, index) => (
+          <div key={index} className={`text-center border p-1 ${day === '土' ? 'text-blue-500' : day === '日' ? 'text-red-500' : 'text-black'}`}>
+            {day}
+          </div>
+          ))}
+          {days.map((day, index) => {
+            const isSaturday = day.getDay() === 6; // 土曜日
+            const isSunday = day.getDay() === 0; // 日曜日
+            const dayClass = isSaturday ? 'text-blue-500' : isSunday ? 'text-red-500' : 'text-black';
+          
+            const dayTotal = calculateDayTotal(day);
+            const dayTransactions = transactions.filter(t => {
+              const tDate = new Date(t.date);
+              return  tDate.getFullYear() === day.getFullYear() &&
+                      tDate.getMonth() === day.getMonth() &&
+                      tDate.getDate() === day.getDate();
+            });
+          
+            return (
+              <div
+                key={index}
+                className={` ${index === 28 ? 'rounded-bl-lg' : ''} ${index === 34 ? 'rounded-br-lg' : ''} p-2 border aspect-square ${dayClass} ${day.getMonth() !== selectedMonth.getMonth() ? 'bg-gray-100' : ''} cursor-pointer`}
+                onClick={() => onDateClick(day, dayTransactions)}
+              >
+                <div className="text-sm">{day.getDate()}</div>
+                <div className={`text-sm ${dayTotal >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                  {dayTotal.toLocaleString()}円
+                </div>
               </div>
-            </div>
-          );
-        })}
-      </div>
+            );
+          })}
+        </div>
     );
   };
 
   return (
     <div>
-      <h2 className="text-xl font-bold mb-4">
-        {/* {selectedMonth.getFullYear()}年{selectedMonth.getMonth() + 1}月 */}
-      </h2>
       {renderCalendar()}
     </div>
   );

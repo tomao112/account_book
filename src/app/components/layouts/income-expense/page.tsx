@@ -198,16 +198,19 @@ export default function Home() {
   return (
     <main>
       <div>
-        <div className="flex justify-between items-center mb-4">
-          <button onClick={() => changeMonth(-1)} className="bg-blue-500 text-white px-4 py-2">
-            前月
+        <div className="flex justify-end mr-20 mt-5 items-center">
+          <button onClick={() => changeMonth(-1)} className="border text-black px-2 py-1 rounded">
+            &lt;
           </button>
-          <h2 className="text-xl font-bold">
-            {selectedMonth.getFullYear()}年{selectedMonth.getMonth() + 1}月
+          <h2 className="pr-2 pl-2">
+            {selectedMonth.getFullYear()}-{selectedMonth.getMonth() + 1}
           </h2>
-          <button onClick={() => changeMonth(+1)} className="bg-blue-500 text-white px-4 py-2">
-            翌月
+          <button onClick={() => changeMonth(+1)} className="border text-black px-2 py-1 rounded">
+            &gt;
           </button>
+        </div>
+        <div>
+          <MonthlySummary summary={monthlySummary} />
         </div>
         <Calendar 
           selectedMonth={selectedMonth}
@@ -222,9 +225,6 @@ export default function Home() {
             date={selectedDate}
             transactions={selectedTransaction}
           />
-        <div>
-          <MonthlySummary summary={monthlySummary} />
-        </div>
         <div className="col-span-8">
           <TransactionList transactions={getFilterTransactions()} onEdit={handleEdit} onDelete={handleDelete} />
         </div>

@@ -49,7 +49,7 @@ const Calendar: React.FC<CalendarProps> = ({ selectedMonth, transactions, onDate
     return days;
   };
 
-  const calculateDayTotal = (day: Date): number => {
+  const calculateDayTotal = (day: Date, transactions: Transaction[]) => {
     const dayTransactions = transactions.filter(t => {
       const tDate = new Date(t.date);
       return  tDate.getFullYear() === day.getFullYear() &&
@@ -57,9 +57,25 @@ const Calendar: React.FC<CalendarProps> = ({ selectedMonth, transactions, onDate
               tDate.getDate() === day.getDate();
     });
 
-    return dayTransactions.reduce((total, t) => {
-      return total + (t.type === 'income' ? t.amount : -t.amount);
-    }, 0);
+    const income = dayTransactions
+      .filter(t => t.type === 'income')
+      .reduce((total, t) => total + t.amount, 0);
+
+    const expense = dayTransactions
+      .filter(t => t.type === 'expense')
+      .reduce((total, t) => total + t.amount, 0);
+
+    const deposit = dayTransactions
+      .filter(t => t.type === 'deposit')
+      .reduce((total, t) => total + t.amount, 0) ;
+
+    const total = income - expense;
+
+    return { income, expense, deposit, total, dayTransactions };
+
+    // return dayTransactions.reduce((total, t) => {
+    //   return total + (t.type === 'income' ? t.amount : -t.amount);
+    // }, 0);
   };
 
   const renderCalendar = () => {
@@ -76,24 +92,36 @@ const Calendar: React.FC<CalendarProps> = ({ selectedMonth, transactions, onDate
             const isSunday = day.getDay() === 0; // 日曜日
             const dayClass = isSaturday ? 'text-blue-500' : isSunday ? 'text-red-500' : 'text-black';
           
-            const dayTotal = calculateDayTotal(day);
-            const dayTransactions = transactions.filter(t => {
-              const tDate = new Date(t.date);
-              return  tDate.getFullYear() === day.getFullYear() &&
-                      tDate.getMonth() === day.getMonth() &&
-                      tDate.getDate() === day.getDate();
-            });
+            const { income, expense, deposit, total, dayTransactions } = calculateDayTotal(day, transactions);
+            // const dayTotal = calculateDayTotal(day, transactions);
           
             return (
               <div
                 key={index}
-                className={` ${index === 28 ? 'rounded-bl-lg' : ''} ${index === 34 ? 'rounded-br-lg' : ''} p-2 border aspect-square ${dayClass} ${day.getMonth() !== selectedMonth.getMonth() ? 'bg-gray-100' : ''} cursor-pointer`}
+                className={` ${index === 28 ? 'rounded-bl-lg' : ''} ${index === 34 ? 'rounded-br-lg' : ''} p-2 border aspect-video ${dayClass} ${day.getMonth() !== selectedMonth.getMonth() ? 'bg-gray-100' : ''} cursor-pointer`}
                 onClick={() => onDateClick(day, dayTransactions)}
               >
                 <div className="text-sm">{day.getDate()}</div>
-                <div className={`text-sm ${dayTotal >= 0 ? 'text-green-500' : 'text-red-500'}`}>
-                  {dayTotal.toLocaleString()}円
-                </div>
+                {income > 0 ? (
+                  <div className="text-sm text-green-500">¥{income.toLocaleString()}</div>
+                ) : (
+                  <div className="text-sm">&nbsp;</div>
+                )}
+                {expense > 0 ? (
+                  <div className="text-sm text-red-500">¥{expense.toLocaleString()}</div>
+                ) : (
+                  <div className="text-sm">&nbsp;</div>
+                )}
+                {deposit > 0 ? (
+                  <div className="text-sm text-blue-500">¥{deposit.toLocaleString()}</div>
+                ) : (
+                  <div className="text-sm">&nbsp;</div>
+                )}
+                {/* {total !== 0 && (
+                  <div className={`text-sm text- ${total >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                    ¥{total.toLocaleString()}
+                  </div>
+                )} */}
               </div>
             );
           })}

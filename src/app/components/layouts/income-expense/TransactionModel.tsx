@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Transaction } from "./transactions";
 
 interface TransactionModelProps {
@@ -18,27 +18,49 @@ const TransactionModel: React.FC<TransactionModelProps> = ({
 	date,
 	transactions
 }) => {
+  const [isClosing, setIsClosing] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false); // アニメーション状態を追加
+
+  useEffect(() => {
+    if (isOpen) {
+      setIsClosing(false);
+      setIsAnimating(true); // 開いたときにアニメーションを開始
+    } else {
+      setIsClosing(true);
+      setTimeout(() => {
+        setIsAnimating(false); // アニメーションが終わったら状態をリセット
+      }, 500); // アニメーションの時間に合わせて遅延を設定
+    }
+  }, [isOpen]);
+
+  const handleClose = () => {
+    setIsClosing(true);
+    setTimeout(() => {
+      onClose(); // スライドアウトアニメーションが終わった後にonCloseを呼び出す
+    }, 500); // アニメーションの時間に合わせて遅延を設定
+  };
+
 	if (!isOpen) return null;
 
 	return (
 		<div className="fixed inset-0 bg-black bg-opacity-50 flex justify-end z-50">
-			<div className="bg-gray-100 p-6 z-60 w-1/4">
-				<h2 className="text-xl mb-4">
-					{date?.toLocaleDateString()}
+			<div className={`bg-gray-100 p-6 z-60 w-1/4 slide-in ${isClosing ? 'slide-out-active' : 'slide-in-active'}`}>
+				<h2 className="text-base text-center">
+						{date ? date.getMonth() + 1 : ''}月{date?.getDate()}日(〇)
 				</h2>
+					<button onClick={handleClose} className="text-2xl relative bottom-9 right-5 text-gray-500 px-4 py-2 rounded-full">
+						×
+					</button>
 				<div className="flex items-center justify-around mb-3">
 					<button onClick={onAddNew} className="bg-green-400 text-white px-4 py-2 rounded-full">
 						+ 内訳
-					</button>
-					<button onClick={onClose} className="bg-gray-500 text-white px-4 py-2 rounded-full">
-						閉じる
 					</button>
 					{/* メモ機能追加予定 */}
 					<button onClick={onClose} className="bg-yellow-500 text-white px-4 py-2 rounded-full">
 						+メモ
 					</button>
 				</div>
-				<div className="bg-white text-sm flex justify-between p-5 w-full rounded-lg mb-10">
+				<div className="bg-white text-sm flex justify-between p-3 w-full rounded-lg mb-10">
 					<p className="">収入</p>
 					<p className="">支出</p>
 					</div>

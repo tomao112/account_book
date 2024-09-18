@@ -2,4 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
+/* styles.css または適切なCSSファイルに追加 */
+.slide-in {
+  @apply transform translate-x-full transition-transform duration-500 ease-in-out;
+}
 
+.slide-in-active {
+  @apply translate-x-0;
+}
+
+.slide-out {
+  @apply transform translate-x-0 transition-transform duration-500 ease-in-out;
+}
+
+.slide-out-active {
+  @apply translate-x-full; /* スライドアウトの状態 */
+}

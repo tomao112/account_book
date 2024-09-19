@@ -43,7 +43,8 @@ const TransactionModel: React.FC<TransactionModelProps> = ({
 	if (!isOpen) return null;
 
 	return (
-		<div className="fixed inset-0 bg-black bg-opacity-50 flex justify-end z-50">
+		// 一時的に非表示のコード
+		<div className={`${isClosing ? '-z-10 hidden' : 'z-50 fixed inset-0 bg-black bg-opacity-50 flex justify-end'}`}>
 			<div className={`bg-gray-100 p-6 z-60 w-1/4 slide-in ${isClosing ? 'slide-out-active' : 'slide-in-active'}`}>
 				<h2 className="text-base text-center">
 						{date ? date.getMonth() + 1 : ''}月{date?.getDate()}日(〇)

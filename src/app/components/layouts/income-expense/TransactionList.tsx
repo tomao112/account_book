@@ -42,9 +42,6 @@ const calculateMonthlyCategoryTotals = () => {
 const categoryTotals = calculateMonthlyCategoryTotals();
 
 
-// ... existing code ...
-
-
   return (
 <div className="overflow-x-auto">
   <table className="min-w-full bg-white border rounded-lg shadow-md">

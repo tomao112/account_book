@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { supabase } from '@/app/lib/supabaseClient';
 import type { Transaction } from './transactions';
 import Calendar from '@/app/components/calendar/calendar';
-import TransactionList from '@/app/components/layouts/income-expense/TransactionList';
+// import TransactionList from '@/app/components/layouts/ToransactionList/TransactionList';
 import TransactionForm from '@/app/components/layouts/income-expense/TransactionForm';
 import MonthlySummary from '@/app/components/layouts/income-expense/MonthlySummary';
 import TransactionModel from './TransactionModel';
@@ -225,9 +225,9 @@ export default function Home() {
             date={selectedDate}
             transactions={selectedTransaction}
           />
-        <div className="col-span-8">
+        {/* <div className="col-span-8">
           <TransactionList transactions={getFilterTransactions()} onEdit={handleEdit} onDelete={handleDelete} />
-        </div>
+        </div> */}
       </div>
       <div className="container mx-auto p-4">
       {isEditing && (

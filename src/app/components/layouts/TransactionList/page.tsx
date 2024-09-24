@@ -1,3 +1,4 @@
+'use client'
 import { FC, useState } from 'react';
 import { Transaction } from '@/app/components/layouts/income-expense/transactions';
 // import { supabase } from '@/app/lib/supabaseClient';
@@ -8,7 +9,7 @@ interface TransactionListProps {
 	onDelete: (id: number) => void;
 }
 
-const TransactionList: FC<TransactionListProps> = ({ transactions, onEdit, onDelete }) => {
+const TransactionList: FC<TransactionListProps> = ({ transactions = [], onEdit, onDelete }) => {
   // 編集中のトランザクションを保持
   const [editingTransaction, setEditingTransaction] = useState<Transaction | null>(null);
 

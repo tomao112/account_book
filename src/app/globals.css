@@ -18,3 +18,8 @@
 .slide-out-active {
   @apply translate-x-full; /* スライドアウトの状態 */
 }
+
+   /* styles.css または適切なCSSファイルに追加 */
+  .p-sidebar {
+    width: 16rem !important; /* 幅を自動に設定 */
+}

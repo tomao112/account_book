@@ -24,6 +24,7 @@ export default function Headless() {
       <div className="card flex justify-content-center">
         <Button icon="pi pi-bars" onClick={() => setVisible(true)} />
 				<Sidebar
+				className='w-16rem'
 					visible={visible}
 					onHide={() => setVisible(false)}
 					content={({ closeIconRef, hide }) => (
@@ -54,7 +55,7 @@ export default function Headless() {
 												</li>
 											</Link>
 											<Link href="">
-												<li style={{ backgroundColor: currentPage ===  './' ?'var(--highlight-bg)': 'white', color: 'var(--highlight-text-color)', borderRadius: '0.7rem', padding: '0.7rem' }}>
+												<li style={{ backgroundColor: currentPage ===  './' ? 'var(--highlight-bg)': 'white', color: 'var(--highlight-text-color)', borderRadius: '0.7rem', padding: '0.7rem' }}>
 													<Button className='text-xl flex gap-4'>
 														<span className='pi pi-chart-line' style={{ fontSize: '1.5rem' }}></span>
 														<span>チャート</span>

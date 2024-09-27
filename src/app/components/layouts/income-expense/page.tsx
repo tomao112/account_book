@@ -138,21 +138,21 @@ export default function Home() {
   };
   
   // 指定されたデータをsupabaseから削除
-  const handleDelete = async (id: number) => {
-    const { error } = await supabase
-      .from('transactions')
-      .delete()
-      .eq('id', id);
+  // const handleDelete = async (id: number) => {
+  //   const { error } = await supabase
+  //     .from('transactions')
+  //     .delete()
+  //     .eq('id', id);
 
-    if (error) {
-      console.error('Error deleting transaction:', error);
-    } else {
-      console.log('Transaction deleted:', id);
-      setTransactions((prevTransactions) =>
-        prevTransactions.filter((t) => t.id !== id)
-      );
-    }
-  };
+  //   if (error) {
+  //     console.error('Error deleting transaction:', error);
+  //   } else {
+  //     console.log('Transaction deleted:', id);
+  //     setTransactions((prevTransactions) =>
+  //       prevTransactions.filter((t) => t.id !== id)
+  //     );
+  //   }
+  // };
 
   // 選択された月フィルタリング
   const getFilterTransactions = () => {

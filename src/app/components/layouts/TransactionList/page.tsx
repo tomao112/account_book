@@ -1,7 +1,9 @@
 'use client'
-import { FC, useState } from 'react';
+import { FC, useState, useEffect } from 'react';
 import { Transaction } from '@/app/components/layouts/income-expense/transactions';
-// import { supabase } from '@/app/lib/supabaseClient';
+import MonthlySummary from '@/app/components/layouts/income-expense/MonthlySummary';
+import { supabase } from '@/app/lib/supabaseClient';
+import { calculateMonthSummary, getFilterTransactions, calculateMonthlyCategoryTotals, calculateMonthlySummaryAndCategoryTotals} from '@/app/components/util/transactionUtil';
 
 interface TransactionListProps {
   transactions: Transaction[];
@@ -9,9 +11,13 @@ interface TransactionListProps {
 	onDelete: (id: number) => void;
 }
 
-const TransactionList: FC<TransactionListProps> = ({ transactions = [], onEdit, onDelete }) => {
+const TransactionList: FC<TransactionListProps> = ({ onEdit, onDelete }) => {
   // 編集中のトランザクションを保持
   const [editingTransaction, setEditingTransaction] = useState<Transaction | null>(null);
+  const [ selectedMonth, setSelectedMonth ] = useState(() => new Date());
+  const [ monthlySummary, setMonthlySummary ] = useState({ income: 0, expense: 0, deposit: 0});
+  const [ transactions, setTransactions ] = useState<Transaction[]>([]);
+  const [categoryTotals, setCategoryTotals] = useState<{ [key: string]: number }>({}); // カテゴリーごとの収支を管理
 
   const handleCancelEdit = () => {
     setEditingTransaction(null);
@@ -22,29 +28,80 @@ const TransactionList: FC<TransactionListProps> = ({ transactions = [], onEdit, 
     handleCancelEdit();
   };
 
-  // カテゴリーごとの月の収支を計算
-const calculateMonthlyCategoryTotals = () => {
-  const categoryTotals: { [key: string]: number } = {};
+    // 選択された月やトランザクションが変更されるたびに、フィルタリングされたトランザクションに基づいて月のサマリーを更新
+    useEffect(() => {
+      const filteredTransactions = getFilterTransactions(transactions, selectedMonth);
+      const summary = calculateMonthSummary(filteredTransactions);
+      setMonthlySummary(summary); // 'deposit' プロパティを追加してデフォルト値を設定
+    }, [selectedMonth, transactions]);
 
-  transactions.forEach(transaction => {
-    const category = transaction.category; // カテゴリーを取得
-    const amount = transaction.type === 'income' ? transaction.amount : -transaction.amount;
 
-    if (!categoryTotals[category]) {
-      categoryTotals[category] = 0;
-    }
-    categoryTotals[category] += amount;
-  });
+  // 月の変更
+  const changeMonth = (increment: number): void => {
+    setSelectedMonth(prevMonth => {
+      const newMonth = new Date(prevMonth);
+      newMonth.setMonth(newMonth.getMonth() + increment);
+      return newMonth;
+    });
+  };
 
-  return categoryTotals;
-};
+  useEffect(() => {
+    const { summary, totals } = calculateMonthlySummaryAndCategoryTotals(transactions, selectedMonth);
+    setMonthlySummary(summary);
+    setCategoryTotals(totals);
+}, [selectedMonth, transactions]);
 
-// カテゴリーごとの収支を表示
-const categoryTotals = calculateMonthlyCategoryTotals();
+  // トランザクションリストを取得
+  useEffect(() => {
+    const fetchTransactions = async () => {
+      // transactionsテーブルのdateカラムを降順で取得
+      const { data, error } = await supabase
+        .from('transactions')
+        .select('*')
+        .order('date', { ascending: false });
+
+      if (error) {
+        console.error('Error fetching transactions:', error);
+      } else {
+        // console.log('Fetched transactions:', data);
+        setTransactions(data as Transaction[]);
+      }
+    };
+
+    fetchTransactions();
+
+    // supabaseの変更をリアルタイムで監視する
+    const subscription = supabase
+    .channel('public:transactions')
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'transactions' }, (payload) => {
+      console.log('Change received!', payload);
+      fetchTransactions();
+    })
+    .subscribe();
+  return () => {
+    // コンポーネントがアンマウントされるときにsupabaseのサブスクリプションを解除してリソースを開放する
+    // メモリリークや無駄なリソースを避ける
+    supabase.removeChannel(subscription);
+  };
+  }, []);
 
 
   return (
 <div className="overflow-x-auto">
+  <div className="flex justify-end mr-20 mt-5 items-center">
+    <button onClick={() => changeMonth(-1)} className="border text-black px-2 py-1 rounded">
+      &lt;
+    </button>
+    <h2 className="pr-2 pl-2">
+      {selectedMonth.getFullYear()}-{selectedMonth.getMonth() + 1}
+    </h2>
+    <button onClick={() => changeMonth(+1)} className="border text-black px-2 py-1 rounded">
+      &gt;
+    </button>
+  </div>
+  <div>
+    <MonthlySummary summary={monthlySummary} />
+  </div>
   <table className="min-w-full bg-white border rounded-lg shadow-md">
     <thead>
       <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">

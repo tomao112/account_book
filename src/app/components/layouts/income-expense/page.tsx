@@ -8,6 +8,8 @@ import Calendar from '@/app/components/calendar/calendar';
 import TransactionForm from '@/app/components/layouts/income-expense/TransactionForm';
 import MonthlySummary from '@/app/components/layouts/income-expense/MonthlySummary';
 import TransactionModel from './TransactionModel';
+import { calculateMonthSummary, getFilterTransactions, calculateMonthlyCategoryTotals, calculateMonthlySummaryAndCategoryTotals} from '@/app/components/util/transactionUtil';
+
 
 export default function Home() {
   // transactions　トランザクションのリストを保持
@@ -47,18 +49,18 @@ export default function Home() {
 }
   
   // トランザクションデータが変更されるたびに月の収支を再計算
-  useEffect(() => {
-    const income = transactions
-      .filter(t => t.type === 'income')
-      .reduce((sum, t) => sum + t.amount, 0);
-    const expense = transactions
-      .filter(t => t.type === 'expense')
-      .reduce((sum, t) => sum + t.amount, 0);
-    const deposit = transactions
-      .filter(t => t.type === 'deposit')
-      .reduce((sum, t) => sum + t.amount, 0);
-    setMonthlySummary({ income, expense, deposit });
-  }, [transactions]);
+  // useEffect(() => {
+  //   const income = transactions
+  //     .filter(t => t.type === 'income')
+  //     .reduce((sum, t) => sum + t.amount, 0);
+  //   const expense = transactions
+  //     .filter(t => t.type === 'expense')
+  //     .reduce((sum, t) => sum + t.amount, 0);
+  //   const deposit = transactions
+  //     .filter(t => t.type === 'deposit')
+  //     .reduce((sum, t) => sum + t.amount, 0);
+  //   setMonthlySummary({ income, expense, deposit });
+  // }, [transactions]);
 
   // トランザクションリストを取得
   useEffect(() => {
@@ -155,29 +157,29 @@ export default function Home() {
   // };
 
   // 選択された月フィルタリング
-  const getFilterTransactions = () => {
-    return transactions.filter(transaction => {
-      const transactionDate = new Date(transaction.date);
-      return (
-        transactionDate.getFullYear() === selectedMonth.getFullYear() &&
-        transactionDate.getMonth() === selectedMonth.getMonth()
-      );
-    });
-  };
+  // const getFilterTransactions = () => {
+  //   return transactions.filter(transaction => {
+  //     const transactionDate = new Date(transaction.date);
+  //     return (
+  //       transactionDate.getFullYear() === selectedMonth.getFullYear() &&
+  //       transactionDate.getMonth() === selectedMonth.getMonth()
+  //     );
+  //   });
+  // };
 
   // 選択された月の収支を計算
-  const calculateMonthSummary = (filteredTransactions: Transaction[]) => {
-    const income = filteredTransactions
-      .filter(t => t.type === 'income')
-      .reduce((sum, t) => sum + t.amount, 0);
-    const expense = filteredTransactions
-      .filter(t => t.type === 'expense')
-      .reduce((sum, t) => sum + t.amount, 0);
-    const deposit = filteredTransactions
-      .filter(t => t.type === 'deposit')
-      .reduce((sum, t) => sum + t.amount, 0);
-    return { income, expense, deposit}
-  };
+  // const calculateMonthSummary = (filteredTransactions: Transaction[]) => {
+  //   const income = filteredTransactions
+  //     .filter(t => t.type === 'income')
+  //     .reduce((sum, t) => sum + t.amount, 0);
+  //   const expense = filteredTransactions
+  //     .filter(t => t.type === 'expense')
+  //     .reduce((sum, t) => sum + t.amount, 0);
+  //   const deposit = filteredTransactions
+  //     .filter(t => t.type === 'deposit')
+  //     .reduce((sum, t) => sum + t.amount, 0);
+  //   return { income, expense, deposit}
+  // };
 
   // 月の変更
   const changeMonth = (increment: number): void => {
@@ -189,11 +191,11 @@ export default function Home() {
   };
 
   // 選択された月やトランザクションが変更されるたびに、フィルタリングされたトランザクションに基づいて月のサマリーを更新
-  useEffect(() => {
-    const filteredTransactions = getFilterTransactions();
-    const summary = calculateMonthSummary(filteredTransactions);
-    setMonthlySummary(summary); // 'deposit' プロパティを追加してデフォルト値を設定
-  }, [selectedMonth, transactions]);
+  // useEffect(() => {
+  //   const filteredTransactions = getFilterTransactions();
+  //   const summary = calculateMonthSummary(filteredTransactions);
+  //   setMonthlySummary(summary); // 'deposit' プロパティを追加してデフォルト値を設定
+  // }, [selectedMonth, transactions]);
 
   return (
     <main>

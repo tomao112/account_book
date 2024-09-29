@@ -7,7 +7,7 @@ import Sidebar from "./components/layouts/sidebar";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "acount_book",
+  title: "account_book",
   description: "account_book",
 };
 

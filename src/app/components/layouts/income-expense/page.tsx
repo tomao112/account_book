@@ -27,6 +27,8 @@ export default function Home() {
   const [ selectedTransaction, setSelectedTransaction ] = useState<Transaction[]>([]);
   const [ isModelOpen, setIsModelOpen ] = useState(false);
   const [ isEditing, setIsEditing] = useState(false);
+  const [categoryTotals, setCategoryTotals] = useState<{ [key: string]: number }>({}); // カテゴリーごとの収支を管理
+
 
   // カレンダーの日付選択時にその日付のトランザクションを設定
   const handleDateClick = (date: Date, dayTransactions: Transaction[]) => {
@@ -34,6 +36,19 @@ export default function Home() {
     setSelectedTransaction(dayTransactions);
     setIsModelOpen(true);
   }
+
+      // 選択された月やトランザクションが変更されるたびに、フィルタリングされたトランザクションに基づいて月のサマリーを更新
+      useEffect(() => {
+        const filteredTransactions = getFilterTransactions(transactions, selectedMonth);
+        const summary = calculateMonthSummary(filteredTransactions);
+        setMonthlySummary(summary); // 'deposit' プロパティを追加してデフォルト値を設定
+      }, [selectedMonth, transactions]);
+
+      useEffect(() => {
+        const { summary, totals } = calculateMonthlySummaryAndCategoryTotals(transactions, selectedMonth);
+        setMonthlySummary(summary);
+        setCategoryTotals(totals);
+    }, [selectedMonth, transactions]);
 
   // toransactionModelを閉じる
   const handleModelClose = () => {
@@ -47,20 +62,6 @@ export default function Home() {
     setIsModelOpen(false); // TransactionModelを閉じる
     setIsEditing(true); // フォームを表示するための状態を設定
 }
-  
-  // トランザクションデータが変更されるたびに月の収支を再計算
-  // useEffect(() => {
-  //   const income = transactions
-  //     .filter(t => t.type === 'income')
-  //     .reduce((sum, t) => sum + t.amount, 0);
-  //   const expense = transactions
-  //     .filter(t => t.type === 'expense')
-  //     .reduce((sum, t) => sum + t.amount, 0);
-  //   const deposit = transactions
-  //     .filter(t => t.type === 'deposit')
-  //     .reduce((sum, t) => sum + t.amount, 0);
-  //   setMonthlySummary({ income, expense, deposit });
-  // }, [transactions]);
 
   // トランザクションリストを取得
   useEffect(() => {
@@ -156,31 +157,6 @@ export default function Home() {
   //   }
   // };
 
-  // 選択された月フィルタリング
-  // const getFilterTransactions = () => {
-  //   return transactions.filter(transaction => {
-  //     const transactionDate = new Date(transaction.date);
-  //     return (
-  //       transactionDate.getFullYear() === selectedMonth.getFullYear() &&
-  //       transactionDate.getMonth() === selectedMonth.getMonth()
-  //     );
-  //   });
-  // };
-
-  // 選択された月の収支を計算
-  // const calculateMonthSummary = (filteredTransactions: Transaction[]) => {
-  //   const income = filteredTransactions
-  //     .filter(t => t.type === 'income')
-  //     .reduce((sum, t) => sum + t.amount, 0);
-  //   const expense = filteredTransactions
-  //     .filter(t => t.type === 'expense')
-  //     .reduce((sum, t) => sum + t.amount, 0);
-  //   const deposit = filteredTransactions
-  //     .filter(t => t.type === 'deposit')
-  //     .reduce((sum, t) => sum + t.amount, 0);
-  //   return { income, expense, deposit}
-  // };
-
   // 月の変更
   const changeMonth = (increment: number): void => {
     setSelectedMonth(prevMonth => {
@@ -189,13 +165,6 @@ export default function Home() {
       return newMonth;
     });
   };
-
-  // 選択された月やトランザクションが変更されるたびに、フィルタリングされたトランザクションに基づいて月のサマリーを更新
-  // useEffect(() => {
-  //   const filteredTransactions = getFilterTransactions();
-  //   const summary = calculateMonthSummary(filteredTransactions);
-  //   setMonthlySummary(summary); // 'deposit' プロパティを追加してデフォルト値を設定
-  // }, [selectedMonth, transactions]);
 
   return (
     <main>

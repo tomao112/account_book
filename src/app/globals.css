@@ -19,6 +19,6 @@
   @apply translate-x-full; /* スライドアウトの状態 */
 }
 
-  .p-sidebar {
-    width: 16rem !important; /* 幅を設定 */
+.p-sidebar {
+  width: 16rem !important; /* 幅を設定 */
 }

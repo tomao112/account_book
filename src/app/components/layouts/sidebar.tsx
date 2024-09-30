@@ -54,8 +54,9 @@ export default function Headless() {
 													</Button>
 												</li>
 											</Link>
-											<Link href="">
-												<li style={{ backgroundColor: currentPage ===  './' ? 'var(--highlight-bg)': 'white', color: 'var(--highlight-text-color)', borderRadius: '0.7rem', padding: '0.7rem' }}>
+											<Link href="./Chart">
+												<li style={{ backgroundColor: currentPage ===  './Chart' ? 'var(--highlight-bg)': 'white', color: 'var(--highlight-text-color)', borderRadius: '0.7rem', padding: '0.7rem' }}
+												onClick={() => setCurrentPage('./Chart')}>
 													<Button className='text-xl flex gap-4'>
 														<span className='pi pi-chart-line' style={{ fontSize: '1.5rem' }}></span>
 														<span>チャート</span>
@@ -63,7 +64,8 @@ export default function Headless() {
 												</li>
 											</Link>
 											<Link href="">
-												<li style={{ backgroundColor: currentPage ===  './' ?'var(--highlight-bg)': 'white', color: 'var(--highlight-text-color)', borderRadius: '0.7rem', padding: '0.7rem' }}>
+												<li style={{ backgroundColor: currentPage ===  './setting' ?'var(--highlight-bg)': 'white', color: 'var(--highlight-text-color)', borderRadius: '0.7rem', padding: '0.7rem' }}
+												onClick={() => setCurrentPage('./Setting')}>
 													<Button className='text-xl flex gap-4'>
 														<span className='pi pi-cog' style={{ fontSize: '1.5rem' }}></span>
 														<span>設定</span>

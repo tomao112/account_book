@@ -232,19 +232,6 @@ const TransactionList: FC<TransactionListProps> = ({ onEdit, onDelete }) => {
         </tbody>
       </table>
     </div>
-    <div className="mt-4">
-      <h3 className="text-lg font-bold mb-2">カテゴリーごとの月の収支</h3>
-      <ul className="bg-gray-100 p-4 rounded-lg shadow-md">
-        {Object.entries(categoryTotals).map(([category, total]) => (
-          <li key={category} className="flex justify-between py-2 border-b last:border-b-0">
-            <span className="font-medium">{category}</span>
-            <span className={`font-bold ${total < 0 ? 'text-red-500' : 'text-green-500'}`}>
-              ¥{total.toLocaleString()}
-            </span>
-          </li>
-        ))}
-      </ul>
-    </div>
   </div>
 );
 }

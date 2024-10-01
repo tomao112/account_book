@@ -4,7 +4,6 @@ import { Transaction } from '@/app/components/layouts/income-expense/transaction
 import MonthlySummary from '@/app/components/layouts/income-expense/MonthlySummary';
 import { supabase } from '@/app/lib/supabaseClient';
 import { calculateMonthSummary, getFilterTransactions, calculateMonthlySummaryAndCategoryTotals} from '@/app/components/util/transactionUtil';
-import BarGraph from '@/app/components/layouts/Chart/chart';
 import Tab from '@/app/components/layouts/Chart/tab';
 
 interface TransactionListProps {
@@ -76,6 +75,37 @@ const TransactionList: FC<TransactionListProps> = () => {
   };
   }, []);
 
+// トランザクションリストを取得
+useEffect(() => {
+  const fetchTransactions = async () => {
+    const { data, error } = await supabase
+      .from('transactions')
+      .select('*')
+      .order('date', { ascending: false });
+
+    if (error) {
+      console.error('Error fetching transactions:', error);
+    } else {
+      setTransactions(data as Transaction[]);
+      
+      // カテゴリーごとの合計を計算
+      const categoryTotals: { [key: string]: number } = {};
+      data.forEach(transaction => {
+        if (transaction.type === 'expense') { // 支出トランザクションのみを考慮
+          if (categoryTotals[transaction.category]) {
+            categoryTotals[transaction.category] += transaction.amount;
+          } else {
+            categoryTotals[transaction.category] = transaction.amount;
+          }
+        }
+      });
+			console.log('Category Totals:', categoryTotals);
+      setCategoryTotals(categoryTotals); // 計算したカテゴリー合計を設定
+    }
+  };
+
+  fetchTransactions();
+}, [selectedMonth]); // selectedMonthが変更されたときに再取得
 
   return (
   <div className="overflow-x-auto">
@@ -91,33 +121,13 @@ const TransactionList: FC<TransactionListProps> = () => {
       </button>
     </div>
 
-
-
     {/* 選択されている月の収支を表示 */}
     <div>
       <MonthlySummary summary={monthlySummary} />
     </div>
-
 				<div>
-			<Tab />
+			<Tab transactions={transactions} selectedMonth={selectedMonth} />
 		</div>
-		<div className=''>
-      <BarGraph categoryTotals={categoryTotals}/>
-    </div>
-    <div className="mt-4">
-      <h3 className="text-lg font-bold mb-2">カテゴリーごとの月の収支</h3>
-      <ul className="bg-gray-100 p-4 rounded-lg shadow-md">
-        {Object.entries(categoryTotals).map(([category, total]) => (
-          <li key={category} className="flex justify-between py-2 border-b last:border-b-0">
-            <span className="font-medium">{category}</span>
-            <span className={`font-bold ${total < 0 ? 'text-red-500' : 'text-green-500'}`}>
-              ¥{total.toLocaleString()}
-            </span>
-          </li>
-        ))}
-      </ul>
-    </div>
-
   </div>
 );
 }

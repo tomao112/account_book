@@ -22,3 +22,16 @@
 .p-sidebar {
   width: 16rem !important; /* 幅を設定 */
 }
+
+.tab-Card {
+  background: black;
+}
+
+.p-tabmenu-nav {
+  display: flex;
+  justify-content: space-around;
+}
+
+.p-tabmenuitem {
+  /* grid: 1rem; */
+}

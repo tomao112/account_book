@@ -24,17 +24,44 @@ export default function Tab({ transactions, selectedMonth }: BarGraphProps) {
         setActiveIndex(e.index);
     };
 
-    return (
-        <div className="card">
-            <TabMenu model={items} activeIndex={activeIndex} onTabChange={handleTabChange} />
-            <div className="mt-4">
-                {activeIndex === 1 && ( // 支出タブが選択されたとき
-                    <><BarGraph transactions={transactions} selectedMonth={selectedMonth} />
-										<CategoryTotal selectedMonth={selectedMonth}/></>
-                )}
-                {/* 他のタブに応じたチャートを表示 */}
-            </div>
+// コンポーネント内で使用
+return (
+    <div>
+        <TabMenu model={items} activeIndex={activeIndex} onTabChange={handleTabChange} />
+        <div>
+            {activeIndex === 0 && (
+                <>
+                    収入
+                </>
+            )}
 						
         </div>
-    );
+        <div>
+            {activeIndex === 1 && (
+                <>
+                    <BarGraph transactions={transactions} selectedMonth={selectedMonth} />
+                    <CategoryTotal selectedMonth={selectedMonth} />
+                </>
+            )}
+						
+        </div>
+        <div>
+            {activeIndex === 2 && (
+                <>
+                    貯金
+                </>
+            )}
+						
+        </div>
+        <div>
+            {activeIndex === 3 && (
+                <>
+                    予算
+                </>
+            )}
+						
+        </div>
+
+    </div>
+);
 }

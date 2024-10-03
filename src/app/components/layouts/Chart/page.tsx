@@ -125,7 +125,7 @@ useEffect(() => {
     <div>
       <MonthlySummary summary={monthlySummary} />
     </div>
-				<div>
+		<div>
 			<Tab transactions={transactions} selectedMonth={selectedMonth} />
 		</div>
   </div>

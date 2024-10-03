@@ -19,10 +19,12 @@
   @apply translate-x-full; /* スライドアウトの状態 */
 }
 
+/* sidebar.tsx */
 .p-sidebar {
   width: 16rem !important; /* 幅を設定 */
 }
 
+/* tab.tsx */
 .tab-Card {
   background: black;
 }
@@ -30,8 +32,4 @@
 .p-tabmenu-nav {
   display: flex;
   justify-content: space-around;
-}
-
-.p-tabmenuitem {
-  /* grid: 1rem; */
 }

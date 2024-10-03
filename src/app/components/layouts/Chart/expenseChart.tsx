@@ -3,11 +3,11 @@ import { Chart } from 'primereact/chart';
 import { Transaction } from '@/app/components/layouts/income-expense/transactions';
 
 interface BarGraphProps {
-	transactions: Transaction[] | null;
-  selectedMonth: Date; // 選択された月を受け取る
+    transactions: Transaction[] | null;
+    selectedMonth: Date; // 選択された月を受け取る
 }
 
-export default function BarGraph({ transactions, selectedMonth }: BarGraphProps) {
+export default function ExpenseBarGraph({ transactions, selectedMonth }: BarGraphProps) {
     const [chartData, setChartData] = useState({});
     const [chartOptions, setChartOptions] = useState({});
 
@@ -72,7 +72,7 @@ export default function BarGraph({ transactions, selectedMonth }: BarGraphProps)
     }, [transactions, selectedMonth]); // transactionsとselectedMonthが変更されたときに再計算
 
     return (
-        <div className="card">
+        <div className="card mr-10 ml-10 w-1/2">
             <Chart type="bar" data={chartData} options={chartOptions} />
         </div>
     );

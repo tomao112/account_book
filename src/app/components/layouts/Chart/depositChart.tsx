@@ -72,7 +72,7 @@ export default function BarGraph({ transactions, selectedMonth }: BarGraphProps)
     }, [transactions, selectedMonth]); // transactionsとselectedMonthが変更されたときに再計算
 
     return (
-        <div className="card mr-10 ml-10 w-1/2">
+        <div className="card mr-10 ml-10">
             <Chart type="bar" data={chartData} options={chartOptions} />
         </div>
     );

@@ -1,10 +1,9 @@
 'use client'
 import { FC, useState, useEffect } from 'react';
 import { Transaction } from '@/app/components/layouts/income-expense/transactions';
-import MonthlySummary from '@/app/components/layouts/income-expense/MonthlySummary';
 import { supabase } from '@/app/lib/supabaseClient';
-import { calculateMonthSummary, getFilterTransactions, calculateMonthlySummaryAndCategoryTotals} from '@/app/components/util/transactionUtil';
 import Tab from '@/app/components/layouts/Chart/tab';
+import { calculateMonthlySummaryAndCategoryTotals} from '@/app/components/util/transactionUtil';
 
 interface TransactionListProps {
   transactions: Transaction[];
@@ -18,22 +17,14 @@ const TransactionList: FC<TransactionListProps> = () => {
   const [ transactions, setTransactions ] = useState<Transaction[]>([]);
   const [ categoryTotals, setCategoryTotals ] = useState<{ [key: string]: number }>({}); // カテゴリーごとの収支を管理
 
-    // 選択された月やトランザクションが変更されるたびに、フィルタリングされたトランザクションに基づいて月のサマリーを更新
-    useEffect(() => {
-      const filteredTransactions = getFilterTransactions(transactions, selectedMonth);
-      const summary = calculateMonthSummary(filteredTransactions);
-      setMonthlySummary(summary); // 'deposit' プロパティを追加してデフォルト値を設定
-    }, [selectedMonth, transactions]);
-
-
-  // 月の変更
-  const changeMonth = (increment: number): void => {
-    setSelectedMonth(prevMonth => {
-      const newMonth = new Date(prevMonth);
-      newMonth.setMonth(newMonth.getMonth() + increment);
-      return newMonth;
-    });
-  };
+	// 月の変更
+	const changeMonth = (increment: number): void => {
+		setSelectedMonth(prevMonth => {
+			const newMonth = new Date(prevMonth);
+			newMonth.setMonth(newMonth.getMonth() + increment);
+			return newMonth;
+		});
+	};
 
   useEffect(() => {
     const { summary, totals } = calculateMonthlySummaryAndCategoryTotals(transactions, selectedMonth);
@@ -121,10 +112,6 @@ useEffect(() => {
       </button>
     </div>
 
-    {/* 選択されている月の収支を表示 */}
-    <div>
-      <MonthlySummary summary={monthlySummary} />
-    </div>
 		<div>
 			<Tab transactions={transactions} selectedMonth={selectedMonth} />
 		</div>

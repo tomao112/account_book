@@ -1,4 +1,4 @@
-import React, { useState } from 'react'; 
+import React, { useEffect, useState } from 'react'; 
 import { TabMenu } from 'primereact/tabmenu';
 import { MenuItem } from 'primereact/menuitem';
 import { TabMenuTabChangeEvent } from 'primereact/tabmenu'; // 追加
@@ -8,6 +8,8 @@ import DepositBarGraph from '@/app/components/layouts/Chart/depositChart'; // �
 import budgetBarGraph from '@/app/components/layouts/Chart/budgetChart'; // ここでBarGraphコンポーネントをインポート
 import { Transaction } from '@/app/components/layouts/income-expense/transactions';
 import CategoryTotal from '@/app/components/layouts/Chart/CategoryTotal';
+import MonthlySummary from '../income-expense/MonthlySummary';
+import { calculateMonthSummary, getFilterTransactions } from '@/app/components/util/transactionUtil';
 
 
 interface BarGraphProps {
@@ -17,6 +19,7 @@ interface BarGraphProps {
 
 export default function Tab({ transactions, selectedMonth }: BarGraphProps) {
     const [activeIndex, setActiveIndex] = useState(0); // 選択されたタブのインデックス
+		const [ monthlySummary, setMonthlySummary ] = useState({ income: 0, expense: 0, deposit: 0});
 
     const items: MenuItem[] = [
         { label: '収入', icon: 'pi pi-home' },
@@ -28,14 +31,22 @@ export default function Tab({ transactions, selectedMonth }: BarGraphProps) {
         setActiveIndex(e.index);
     };
 
+		    // 選択された月やトランザクションが変更されるたびに、フィルタリングされたトランザクションに基づいて月のサマリーを更新
+				useEffect(() => {
+					const filteredTransactions = getFilterTransactions(transactions = [], selectedMonth);
+					const summary = calculateMonthSummary(filteredTransactions);
+					setMonthlySummary(summary); // 'deposit' プロパティを追加してデフォルト値を設定
+				}, [selectedMonth, transactions]);
+
 // コンポーネント内で使用
 return (
     <div>
-        <TabMenu model={items} activeIndex={activeIndex} onTabChange={handleTabChange} />
+        <TabMenu className='mr-10 ml-10 mb-5 mt-5 border border-pink-500 rounded-lg' model={items} activeIndex={activeIndex} onTabChange={handleTabChange} />
         <div>
             {activeIndex === 0 && (
                 <>
                     <IncomeBarGraph transactions={transactions} selectedMonth={selectedMonth} />
+										<MonthlySummary summary={monthlySummary} />
                     <CategoryTotal selectedMonth={selectedMonth} activeIndex={activeIndex}/>
                 </>
             )}
@@ -44,8 +55,11 @@ return (
         <div>
             {activeIndex === 1 && (
                 <>
+									
                     <ExpenseBarGraph transactions={transactions} selectedMonth={selectedMonth} />
+										<MonthlySummary summary={monthlySummary} />
                     <CategoryTotal selectedMonth={selectedMonth} activeIndex={activeIndex}/>
+									
                 </>
             )}
 						
@@ -66,7 +80,6 @@ return (
             )}
 						
         </div>
-
     </div>
 );
 }

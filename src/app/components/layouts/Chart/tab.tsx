@@ -67,7 +67,7 @@ return (
         <div>
             {activeIndex === 2 && (
                 <>
-                    <ExpenseBarGraph transactions={transactions} selectedMonth={selectedMonth} />
+                    <DepositBarGraph transactions={transactions} selectedMonth={selectedMonth} />
                     <MonthlySummary summary={monthlySummary} />
                     <CategoryTotal selectedMonth={selectedMonth} activeIndex={activeIndex}/>
                 </>

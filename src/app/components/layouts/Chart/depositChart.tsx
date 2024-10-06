@@ -15,17 +15,17 @@ export default function BarGraph({ transactions, selectedMonth }: BarGraphProps)
         // transactionsがnullまたはundefinedの場合は処理をスキップ
         if (!transactions) return;
 
-        // typeがexpenseのトランザクションのみをフィルタリングし、選択された月に基づいてフィルタリング
-        const expenseTransactions = transactions.filter(transaction => {
+        // typeがdepositのトランザクションのみをフィルタリングし、選択された月に基づいてフィルタリング
+        const depositTransactions = transactions.filter(transaction => {
             const transactionDate = new Date(transaction.date);
-            return  transaction.type === 'expense' &&
+            return  transaction.type === 'deposit' &&
                     transactionDate.getFullYear() === selectedMonth.getFullYear() &&
                     transactionDate.getMonth() === selectedMonth.getMonth();
         });
 
         // カテゴリーごとの合計を計算
         const categoryTotals: { [key: string]: number } = {};
-        expenseTransactions.forEach(transaction => {
+        depositTransactions.forEach(transaction => {
             if (categoryTotals[transaction.category]) {
                 categoryTotals[transaction.category] += transaction.amount;
             } else {
@@ -40,7 +40,7 @@ export default function BarGraph({ transactions, selectedMonth }: BarGraphProps)
             labels: labels,
             datasets: [
                 {
-                    label: '支出',
+                    label: '貯金',
                     data: data,
                     backgroundColor: [
                         'rgba(255, 159, 64, 0.2)',

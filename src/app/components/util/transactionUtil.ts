@@ -40,10 +40,39 @@ export const calculateMonthlyCategoryTotals = (transactions: Transaction[]) => {
     return categoryTotals;
 };
 
-// 新しい関数を追加
-export const calculateMonthlySummaryAndCategoryTotals = (transactions: Transaction[], selectedMonth: Date) => {
-    const filteredTransactions = getFilterTransactions(transactions, selectedMonth);
-    const summary = calculateMonthSummary(filteredTransactions);
-    const totals = calculateMonthlyCategoryTotals(filteredTransactions);
-    return { summary, totals };
-};
+export function calculateMonthlySummaryAndCategoryTotals(transactions: Transaction[], selectedMonth: Date) {
+    const categoryTotals: { [key: string]: { total: number; type: string } } = {};
+    let summary = { income: 0, expense: 0, deposit: 0 };
+
+    transactions.forEach(transaction => {
+        const transactionDate = new Date(transaction.date);
+        console.log('Processing Transaction:', transaction);
+        if (transactionDate.getFullYear() === selectedMonth.getFullYear() && transactionDate.getMonth() === selectedMonth.getMonth()) {
+            if (transaction.type === 'income') {
+                summary.income += transaction.amount;
+                if (categoryTotals[transaction.category]) {
+                    categoryTotals[transaction.category].total += transaction.amount;
+                } else {
+                    categoryTotals[transaction.category] = { total: transaction.amount, type: 'income' };
+                }
+            } else if (transaction.type === 'expense') {
+                summary.expense += transaction.amount;
+                if (categoryTotals[transaction.category]) {
+                    categoryTotals[transaction.category].total += transaction.amount;
+                } else {
+                    categoryTotals[transaction.category] = { total: transaction.amount, type: 'expense' };
+                }
+            } else if (transaction.type === 'deposit') {
+                summary.deposit += transaction.amount;
+                if (categoryTotals[transaction.category]) {
+                    categoryTotals[transaction.category].total += transaction.amount;
+                } else {
+                    categoryTotals[transaction.category] = { total: transaction.amount, type: 'deposit' };
+                }
+            }
+        }
+    });
+    console.log(summary);
+    return { summary, totals: categoryTotals };
+
+}

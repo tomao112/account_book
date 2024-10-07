@@ -25,7 +25,7 @@ export default function BarGraph({ transactions, selectedMonth }: BarGraphProps)
 
         // カテゴリーごとの合計を計算
         const categoryTotals: { [key: string]: number } = {};
-              incomeTransactions.forEach(transaction => {
+            incomeTransactions.forEach(transaction => {
             if (categoryTotals[transaction.category]) {
                 categoryTotals[transaction.category] += transaction.amount;
             } else {

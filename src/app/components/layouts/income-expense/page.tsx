@@ -27,7 +27,7 @@ export default function Home() {
   const [ selectedTransaction, setSelectedTransaction ] = useState<Transaction[]>([]);
   const [ isModelOpen, setIsModelOpen ] = useState(false);
   const [ isEditing, setIsEditing] = useState(false);
-  const [categoryTotals, setCategoryTotals] = useState<{ [key: string]: number }>({}); // カテゴリーごとの収支を管理
+  const [categoryTotals, setCategoryTotals] = useState<{ [key: string]: { total: number; type: string } }>({});
 
 
   // カレンダーの日付選択時にその日付のトランザクションを設定
@@ -47,7 +47,7 @@ export default function Home() {
       useEffect(() => {
         const { summary, totals } = calculateMonthlySummaryAndCategoryTotals(transactions, selectedMonth);
         setMonthlySummary(summary);
-        setCategoryTotals(totals);
+        setCategoryTotals(totals as unknown as { [key: string]: { total: number; type: string } });
     }, [selectedMonth, transactions]);
 
   // toransactionModelを閉じる

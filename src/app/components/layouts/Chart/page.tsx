@@ -15,7 +15,7 @@ const TransactionList: FC<TransactionListProps> = () => {
   const [ selectedMonth, setSelectedMonth ] = useState(() => new Date());
   const [ monthlySummary, setMonthlySummary ] = useState({ income: 0, expense: 0, deposit: 0});
   const [ transactions, setTransactions ] = useState<Transaction[]>([]);
-  const [ categoryTotals, setCategoryTotals ] = useState<{ [key: string]: number }>({}); // カテゴリーごとの収支を管理
+  const [categoryTotals, setCategoryTotals] = useState<{ [key: string]: { total: number; type: string } }>({});
 
 	// 月の変更
 	const changeMonth = (increment: number): void => {
@@ -29,7 +29,7 @@ const TransactionList: FC<TransactionListProps> = () => {
   useEffect(() => {
     const { summary, totals } = calculateMonthlySummaryAndCategoryTotals(transactions, selectedMonth);
     setMonthlySummary(summary);
-    setCategoryTotals(totals);
+    setCategoryTotals(totals as unknown as { [key: string]: { total: number; type: string } });
 }, [selectedMonth, transactions]);
 
   // トランザクションリストを取得
@@ -91,7 +91,12 @@ useEffect(() => {
         }
       });
 			console.log('Category Totals:', categoryTotals);
-      setCategoryTotals(categoryTotals); // 計算したカテゴリー合計を設定
+      // カテゴリー合計を適切な型に変換して設定
+      const formattedCategoryTotals = Object.entries(categoryTotals).reduce((acc, [key, value]) => {
+        acc[key] = { total: value, type: 'expense' };
+        return acc;
+      }, {} as { [key: string]: { total: number; type: string; }; });
+      setCategoryTotals(formattedCategoryTotals);
     }
   };
 

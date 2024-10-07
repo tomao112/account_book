@@ -9,7 +9,7 @@ import budgetBarGraph from '@/app/components/layouts/Chart/budgetChart'; // こ�
 import { Transaction } from '@/app/components/layouts/income-expense/transactions';
 import CategoryTotal from '@/app/components/layouts/Chart/CategoryTotal';
 import MonthlySummary from '../income-expense/MonthlySummary';
-import { calculateMonthSummary, getFilterTransactions } from '@/app/components/util/transactionUtil';
+import { calculateMonthlySummaryAndCategoryTotals, calculateMonthSummary, getFilterTransactions } from '@/app/components/util/transactionUtil';
 
 
 interface BarGraphProps {
@@ -19,7 +19,9 @@ interface BarGraphProps {
 
 export default function Tab({ transactions, selectedMonth }: BarGraphProps) {
     const [activeIndex, setActiveIndex] = useState(0); // 選択されたタブのインデックス
-		const [ monthlySummary, setMonthlySummary ] = useState({ income: 0, expense: 0, deposit: 0});
+	const [ monthlySummary, setMonthlySummary ] = useState({ income: 0, expense: 0, deposit: 0});
+    const [categoryTotals, setCategoryTotals] = useState<{ [key: string]: { total: number; type: string } }>({});
+
 
     const items: MenuItem[] = [
         { label: '収入', icon: 'pi pi-home' },
@@ -30,13 +32,13 @@ export default function Tab({ transactions, selectedMonth }: BarGraphProps) {
     const handleTabChange = (e: TabMenuTabChangeEvent) => {
         setActiveIndex(e.index);
     };
-
-		    // 選択された月やトランザクションが変更されるたびに、フィルタリングされたトランザクションに基づいて月のサマリーを更新
-				useEffect(() => {
-					const filteredTransactions = getFilterTransactions(transactions = [], selectedMonth);
-					const summary = calculateMonthSummary(filteredTransactions);
-					setMonthlySummary(summary); // 'deposit' プロパティを追加してデフォルト値を設定
-				}, [selectedMonth, transactions]);
+    useEffect(() => {
+        if (transactions) {
+            const { summary, totals } = calculateMonthlySummaryAndCategoryTotals(transactions, selectedMonth);
+            setMonthlySummary(summary);
+            setCategoryTotals(totals as { [key: string]: { total: number; type: string } });
+        }
+    }, [selectedMonth, transactions]);
 
 // コンポーネント内で使用
 return (

@@ -17,7 +17,7 @@ const TransactionList: FC<TransactionListProps> = ({ onEdit, onDelete }) => {
   const [ selectedMonth, setSelectedMonth ] = useState(() => new Date());
   const [ monthlySummary, setMonthlySummary ] = useState({ income: 0, expense: 0, deposit: 0});
   const [ transactions, setTransactions ] = useState<Transaction[]>([]);
-  const [categoryTotals, setCategoryTotals] = useState<{ [key: string]: number }>({}); // カテゴリーごとの収支を管理
+  const [categoryTotals, setCategoryTotals] = useState<{ [key: string]: { total: number; type: string } }>({});
 
   const handleCancelEdit = () => {
     setEditingTransaction(null);
@@ -48,7 +48,7 @@ const TransactionList: FC<TransactionListProps> = ({ onEdit, onDelete }) => {
   useEffect(() => {
     const { summary, totals } = calculateMonthlySummaryAndCategoryTotals(transactions, selectedMonth);
     setMonthlySummary(summary);
-    setCategoryTotals(totals);
+    setCategoryTotals(totals as unknown as { [key: string]: { total: number; type: string } });
 }, [selectedMonth, transactions]);
 
   // トランザクションリストを取得

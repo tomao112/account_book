@@ -33,3 +33,28 @@
   display: flex;
   justify-content: space-around;
 }
+
+.selected-row {
+    background-color: #e0f7fa; /* 選択された行の背景色 */
+}
+.p-datatable .p-datatable-tbody > tr {
+    border-bottom: 1px solid #ccc; /* 行のボーダー */
+}
+.p-inputtext {
+    width: 13rem; /* サーチボックスの幅 */
+    border: 1px solid gray;
+    border-radius: 0.5rem;
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+    margin-right: 3rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+/* ラジオボタンのサイズを大きくする */
+.large-radio {
+    width: 1rem; /* 幅を指定 */
+    height: 1rem; /* 高さを指定 */
+    transform: scale(1.3); /* スケールを変更してサイズを大きくする */
+    margin: 0; /* マージンをリセット */
+}

@@ -8,6 +8,7 @@ import { supabase } from '@/app/lib/supabaseClient';
 import { Transaction } from '@/app/components/layouts/income-expense/transactions';
 import { calculateMonthlySummaryAndCategoryTotals } from '@/app/components/util/transactionUtil';
 import { IoIosSearch } from "react-icons/io";
+import SpeedDialComponents from '@/app/components/layouts/Chart/speedDial'
 
 interface CategoryTotalProps {
     selectedMonth: Date; // 選択された月を受け取る
@@ -75,7 +76,7 @@ function CategoryTotal({ selectedMonth, activeIndex }: CategoryTotalProps) {
     };
 
     const actionBodyTemplate = () => {
-        return <Button type="button" icon="pi pi-cog" rounded></Button>;
+        return <div className='position top-4'><SpeedDialComponents /></div>;
     };
 
     // ラジオボタンのカスタムボディ
@@ -149,12 +150,15 @@ function CategoryTotal({ selectedMonth, activeIndex }: CategoryTotalProps) {
     return (
         <div className="card mr-10 ml-10 border">
             {header}
+
             <DataTable  value={filteredTotals} dataKey="0" emptyMessage="No categories found." rowClassName={rowClassName}>
                 <Column header={selectAllRadioButton} body={radioButtonBodyTemplate} style={{ width: '4rem' }} />
                 <Column field="0" header="Category" body={(rowData) => rowData[0]} sortable />
                 <Column field="1.total" header="Total" body={(rowData) => `¥${rowData[1].total.toLocaleString()}`} sortable />
                 <Column header="Action" body={actionBodyTemplate} />
+                
             </DataTable>
+
         </div>
     );
 }

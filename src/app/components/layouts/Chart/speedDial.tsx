@@ -27,7 +27,7 @@ export default function SpeedDialComponent() { // コンポーネント名を修
     return (
         <div className="card">
             <div style={{ position: 'relative' }}>
-                <SpeedDial model={items} direction="right" style={{ position: 'absolute', top: '-1.2rem', right: '2rem'  }} />
+              <SpeedDial model={items} direction="right" style={{ position: 'absolute', top: '-1.2rem', right: '2rem'  }} />
             </div>
         </div>
     );

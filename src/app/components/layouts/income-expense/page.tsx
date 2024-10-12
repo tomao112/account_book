@@ -17,7 +17,7 @@ export default function Home() {
   // monthlySummary 月ごとの収支を保持
   // selectedMonth 現在選択されている月を保持
   // editingTransaction 編集中のトランザクションを保持
-  // isModelOpen トランザクションモデルの表示状態
+  // isModelOpen トランザクションモデルの表示状態 
   // isEditing フォームの編集状態
   const [ transactions, setTransactions ] = useState<Transaction[]>([]);
   const [ selectedDate, setSelectedDate ] = useState<Date | null>(null);

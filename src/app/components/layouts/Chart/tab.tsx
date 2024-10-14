@@ -23,6 +23,7 @@ export default function Tab({ transactions, selectedMonth }: BarGraphProps) {
     const [categoryTotals, setCategoryTotals] = useState<{ [key: string]: { total: number; type: string } }>({});
 
 
+    // タブメニューのアイコン
     const items: MenuItem[] = [
         { label: '収入', icon: 'pi pi-home' },
         { label: '支出', icon: 'pi pi-chart-line' },
@@ -33,6 +34,7 @@ export default function Tab({ transactions, selectedMonth }: BarGraphProps) {
         setActiveIndex(e.index);
     };
 
+    // 月や値が変更されるたびに月ごとのカテゴリーごとの合計を計算し、更新
     useEffect(() => {
         if (transactions) {
             const { summary, totals } = calculateMonthlySummaryAndCategoryTotals(transactions, selectedMonth);

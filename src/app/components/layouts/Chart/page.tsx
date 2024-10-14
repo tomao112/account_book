@@ -26,6 +26,7 @@ const TransactionList: FC<TransactionListProps> = () => {
 		});
 	};
 
+    // 月や値が変更されるたびに月ごとのカテゴリーごとの合計を計算し、更新
   useEffect(() => {
     const { summary, totals } = calculateMonthlySummaryAndCategoryTotals(transactions, selectedMonth);
     setMonthlySummary(summary);

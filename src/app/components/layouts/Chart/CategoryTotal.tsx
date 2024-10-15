@@ -80,48 +80,48 @@ function CategoryTotal({ selectedMonth, activeIndex }: CategoryTotalProps) {
     };
 
     // ラジオボタンのカスタムボディ
-    const radioButtonBodyTemplate = (rowData: any) => {
-        const isSelected = selectedCategories.includes(rowData[0]);
-        return (
-            <div>
-                <input
-                    type="checkbox" // 複数選択を可能にするためにcheckboxに変更
-                    name="category" // 同じ名前でグループ化
-                    value={rowData[0]} // カテゴリー名を値として使用
-                    checked={isSelected} // 選択されたカテゴリーと比較
-                    onChange={() => {
-                        if (isSelected) {
-                            setSelectedCategories(selectedCategories.filter(category => category !== rowData[0])); // 選択解除
-                        } else {
-                            setSelectedCategories([...selectedCategories, rowData[0]]); // 選択追加
-                        }
-                    }} // 選択されたカテゴリーを更新
-                    className='large-radio'
-                />
-            </div>
-        );
-    };
+    // const radioButtonBodyTemplate = (rowData: any) => {
+    //     const isSelected = selectedCategories.includes(rowData[0]);
+    //     return (
+    //         <div>
+    //             <input
+    //                 type="checkbox" // 複数選択を可能にするためにcheckboxに変更
+    //                 name="category" // 同じ名前でグループ化
+    //                 value={rowData[0]} // カテゴリー名を値として使用
+    //                 checked={isSelected} // 選択されたカテゴリーと比較
+    //                 onChange={() => {
+    //                     if (isSelected) {
+    //                         setSelectedCategories(selectedCategories.filter(category => category !== rowData[0])); // 選択解除
+    //                     } else {
+    //                         setSelectedCategories([...selectedCategories, rowData[0]]); // 選択追加
+    //                     }
+    //                 }} // 選択されたカテゴリーを更新
+    //                 className='large-radio'
+    //             />
+    //         </div>
+    //     );
+    // };
 
        // 全選択ラジオボタン
-    const selectAllRadioButton = () => {
-        const allSelected = filteredTotals.length === selectedCategories.length;
-        return (
-            <div>
-                <input
-                    type="checkbox"
-                    checked={allSelected}
-                    onChange={() => {
-                        if (allSelected) {
-                            setSelectedCategories([]); // 全選択解除
-                        } else {
-                            setSelectedCategories(filteredTotals.map(row => row[0])); // 全選択
-                        }
-                    }}
-                    className='large-radio'
-                />
-            </div>
-        );
-    };
+    // const selectAllRadioButton = () => {
+    //     const allSelected = filteredTotals.length === selectedCategories.length;
+    //     return (
+    //         <div>
+    //             <input
+    //                 type="checkbox"
+    //                 checked={allSelected}
+    //                 onChange={() => {
+    //                     if (allSelected) {
+    //                         setSelectedCategories([]); // 全選択解除
+    //                     } else {
+    //                         setSelectedCategories(filteredTotals.map(row => row[0])); // 全選択
+    //                     }
+    //                 }}
+    //                 className='large-radio'
+    //             />
+    //         </div>
+    //     );
+    // };
 
     const onGlobalFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
@@ -131,7 +131,7 @@ function CategoryTotal({ selectedMonth, activeIndex }: CategoryTotalProps) {
     const renderHeader = () => {
         return (
             <div className="flex flex-wrap gap-2 justify-content-between align-items-center">
-                <h4 className="m-0">カテゴリーごとの月の収支</h4>
+                {/* <h4 className="m-0">カテゴリーごとの月の収支</h4> */}
                 <div style={{ marginLeft: 'auto', position: 'relative' }}>
                 <IoIosSearch style={{ position: 'absolute', left: '0.6rem', top: '50%', transform: 'translateY(-50%)', fontSize: '1.3rem', color: 'gray'}} />
                     <InputText value={globalFilterValue} onChange={onGlobalFilterChange} placeholder="カテゴリー検索" style={{ paddingLeft: '2.5rem' }}  />
@@ -152,11 +152,10 @@ function CategoryTotal({ selectedMonth, activeIndex }: CategoryTotalProps) {
             {header}
 
             <DataTable  value={filteredTotals} dataKey="0" emptyMessage="No categories found." rowClassName={rowClassName}>
-                <Column header={selectAllRadioButton} body={radioButtonBodyTemplate} style={{ width: '4rem' }} />
+                {/* <Column header={selectAllRadioButton} body={radioButtonBodyTemplate} style={{ width: '4rem' }} /> */}
                 <Column field="0" header="Category" body={(rowData) => rowData[0]} sortable />
                 <Column field="1.total" header="Total" body={(rowData) => `¥${rowData[1].total.toLocaleString()}`} sortable />
                 <Column header="Action" body={actionBodyTemplate} />
-                
             </DataTable>
 
         </div>

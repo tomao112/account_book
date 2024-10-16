@@ -12,6 +12,7 @@ export default function SpeedDialComponent() {
         {
             label: 'Add',  //表示名
             icon: 'pi pi-pencil',  //アイコン
+            style: { color: 'white'},
             command: () => {  //クリック時の実行換数
                 toast.current?.show({ severity: 'info', summary: 'Add', detail: 'Data Added' });
             }
@@ -19,6 +20,7 @@ export default function SpeedDialComponent() {
         {
             label: 'Update',
             icon: 'pi pi-refresh',
+            style: { color: 'white'},
             command: () => {
                 toast.current?.show({ severity: 'success', summary: 'Update', detail: 'Data Updated' });
             }

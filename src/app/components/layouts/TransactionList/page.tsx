@@ -4,6 +4,10 @@ import { Transaction } from '@/app/components/layouts/income-expense/transaction
 import MonthlySummary from '@/app/components/layouts/income-expense/MonthlySummary';
 import { supabase } from '@/app/lib/supabaseClient';
 import { calculateMonthSummary, getFilterTransactions, calculateMonthlySummaryAndCategoryTotals } from '@/app/components/util/transactionUtil';
+import EditButton from '@/app/components/layouts/TransactionList/EditButton';
+import DeleteButton from '@/app/components/layouts/TransactionList/DeleteButton';
+import SaveButton from '@/app/components/layouts/TransactionList/SaveButton';
+import CancelButton from '@/app/components/layouts/TransactionList/CancelButton';
 
 interface TransactionListProps {
   transactions: Transaction[];
@@ -88,6 +92,20 @@ const TransactionList: FC<TransactionListProps> = ({ onEdit, onDelete }) => {
       supabase.removeChannel(subscription);
     };
   }, []);
+
+  const handleDeleteTransaction = async (id: number) => {
+    const { error } = await supabase
+        .from('transactions')
+        .delete()
+        .eq('id', id);
+
+    if (error) {
+        console.error('Error deleting transaction:', error);
+    } else {
+        // トランザクションリストを更新
+        setTransactions(transactions.filter(transaction => transaction.id !== id));
+    }
+};
 
   return (
     <div className="overflow-x-auto">
@@ -195,41 +213,28 @@ const TransactionList: FC<TransactionListProps> = ({ onEdit, onDelete }) => {
                       <span>{transaction.date}</span>
                     )}
                   </td>
-                  <td className="border px-4 py-3 flex items-center">
+                  <td className="border px-4 py-3 flex items-center justify-center">
                     {editingTransaction?.id === transaction.id ? (
-                      <>
-                        <button
-                          onClick={() => handleSaveEdit(editingTransaction)}
-                          className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md"
-                        >
-                          Save
-                        </button>
-                        <button
+                      <div className='flex gap-3 items-center justify-center'>
+                        <SaveButton 
+                          onClick={() => 
+                          handleSaveEdit(editingTransaction)}
+                        />
+                        <CancelButton 
                           onClick={handleCancelEdit}
-                          className="bg-gray-500 hover:bg-gray-600 text-white px-3 py-1 rounded-md ml-2"
-                        >
-                          Cancel
-                        </button>
-                      </>
+                        />
+                      </div>
                     ) : (
-                      <>
-                        <button
-                          onClick={() => {
-                            setEditingTransaction(transaction); // 編集ボタンをクリックしたときにトランザクションを設定
-                          }}
-                          className="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded-md mr-2"
-                        >
-                          Edit
-                        </button>
-                        <button
-                          onClick={() => {
-                            onDelete(transaction.id); // 削除ボタンをクリックしたときに削除処理を呼び出す
-                          }}
-                          className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md"
-                        >
-                          Delete
-                        </button>
-                      </>
+                      <div className='flex gap-3 items-center justify-center'>
+                        <EditButton
+                            onClick={() => {
+                              setEditingTransaction(transaction); // 編集ボタンをクリックしたときにトランザクションを設定
+                            }} />
+                        <DeleteButton
+                        onClick={() => {
+                          handleDeleteTransaction(transaction.id) // 削除ボタンをクリックしたときに削除処理を呼び出す
+                        }} />
+                      </div>
                     )}
                   </td>
                 </tr>

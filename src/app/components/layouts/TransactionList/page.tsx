@@ -8,6 +8,8 @@ import EditButton from '@/app/components/layouts/TransactionList/EditButton';
 import DeleteButton from '@/app/components/layouts/TransactionList/DeleteButton';
 import SaveButton from '@/app/components/layouts/TransactionList/SaveButton';
 import CancelButton from '@/app/components/layouts/TransactionList/CancelButton';
+import { Calendar } from 'primereact/calendar';
+import styles from '@/app/components/layouts/TransactionList/MonthlySummary.module.css'
 
 interface TransactionListProps {
   transactions: Transaction[];
@@ -128,7 +130,7 @@ const TransactionList: FC<TransactionListProps> = ({ onEdit, onDelete }) => {
       <div className='ml-10 mr-10'>
         <table className="w-full border rounded-lg shadow-md">
           <thead>
-            <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+            <tr className="bg- text-gray-600 uppercase text-sm leading-normal">
               <th className="border px-4 py-3 text-left">金額</th>
               <th className="border px-4 py-3 text-left">支出/収入/貯金</th>
               <th className="border px-4 py-3 text-left">カテゴリー</th>
@@ -148,77 +150,76 @@ const TransactionList: FC<TransactionListProps> = ({ onEdit, onDelete }) => {
               })
               .map((transaction) => (
                 <tr key={transaction.id} className="border-b hover:bg-gray-100">
-                  <td className="border px-4 py-3">
+                  <td className="border px-4 py-2 w-1/6"> {/* 固定幅を設定 */}
                     {editingTransaction?.id === transaction.id ? (
                       <input
                         type="number"
                         value={editingTransaction.amount}
                         onChange={(e) => setEditingTransaction({ ...editingTransaction, amount: parseFloat(e.target.value) })}
-                        className="w-full px-2 py-1 border rounded-md"
+                        className="w-full px-4 py-2 border rounded-md"
                       />
                     ) : (
-                      <span>{transaction.amount}</span>
+                      <span className="w-full">{transaction.amount}</span>
                     )}
                   </td>
-                  <td className="border px-4 py-3">
+                  <td className="border px-4 py-2 w-1/6">
                     {editingTransaction?.id === transaction.id ? (
                       <select
                         value={editingTransaction.type}
                         onChange={(e) => setEditingTransaction({ ...editingTransaction, type: e.target.value })}
-                        className="w-full px-2 py-1 border rounded-md"
+                        className="w-full px-4 py-2 border rounded-md"
                       >
                         <option value="expense">支出</option>
                         <option value="income">収入</option>
                         <option value="deposit">貯金</option>
                       </select>
                     ) : (
-                      <span>{ transaction.type === 'expense' ? '支出' :
-                              transaction.type === 'income' ? '収入' :
-                              '貯金'}</span>
+                      <span className="w-full">{transaction.type === 'expense' ? '支出' : transaction.type === 'income' ? '収入' : '貯金'}</span>
                     )}
                   </td>
-                  <td className="border px-4 py-3">
+                  <td className="border px-4 py-2 w-1/6">
                     {editingTransaction?.id === transaction.id ? (
                       <input
                         type="text"
                         value={editingTransaction.category}
                         onChange={(e) => setEditingTransaction({ ...editingTransaction, category: e.target.value })}
-                        className="w-full px-2 py-1 border rounded-md"
+                        className="w-full px-4 py-2 border rounded-md"
                       />
                     ) : (
-                      <span>{transaction.category}</span>
+                      <span className="w-full">{transaction.category}</span>
                     )}
                   </td>
-                  <td className="border px-4 py-3">
+                  <td className="border px-4 py-2 w-1/6">
                     {editingTransaction?.id === transaction.id ? (
                       <input
                         type="text"
                         value={editingTransaction.note}
                         onChange={(e) => setEditingTransaction({ ...editingTransaction, note: e.target.value })}
-                        className="w-full px-2 py-1 border rounded-md"
+                        className="w-full px-2 py-2 border rounded-md"
                       />
                     ) : (
-                      <span>{transaction.note}</span>
+                      <span className="w-full">{transaction.note}</span>
                     )}
                   </td>
-                  <td className="border px-4 py-3">
+                  <td className="px-4 py-2 w-1/6">
                     {editingTransaction?.id === transaction.id ? (
-                      <input
-                        type="text"
-                        value={editingTransaction.date}
-                        onChange={(e) => setEditingTransaction({ ...editingTransaction, date: e.target.value })}
-                        className="w-full px-2 py-1 border rounded-md"
-                      />
+                      <Calendar 
+                        value={new Date(editingTransaction.date)}
+                        onChange={(e) => setEditingTransaction({ ...editingTransaction, date: e.value ? e.value.toLocaleDateString('en-CA') : '' })}
+                        className="w-full"
+                        // style={{ color: 'white' }}
+                        // showIcon
+                        dateFormat='yy/mm/dd'
+                        placeholder='日付を選択'/>
                     ) : (
-                      <span>{transaction.date}</span>
+                      <span className="w-full">{transaction.date}</span>
                     )}
                   </td>
-                  <td className="border px-4 py-3 flex items-center justify-center">
+                  <td className="px-4 py-2 flex items-center justify-center border-l">
                     {editingTransaction?.id === transaction.id ? (
                       <div className='flex gap-3 items-center justify-center'>
                         <SaveButton 
-                          onClick={() => 
-                          handleSaveEdit(editingTransaction)}
+                          onClick={() => handleSaveEdit(editingTransaction)}
                         />
                         <CancelButton 
                           onClick={handleCancelEdit}
@@ -227,13 +228,13 @@ const TransactionList: FC<TransactionListProps> = ({ onEdit, onDelete }) => {
                     ) : (
                       <div className='flex gap-3 items-center justify-center'>
                         <EditButton
-                            onClick={() => {
-                              setEditingTransaction(transaction); // 編集ボタンをクリックしたときにトランザクションを設定
-                            }} />
+                          onClick={() => {
+                            setEditingTransaction(transaction); // 編集ボタンをクリックしたときにトランザクションを設定
+                          }} />
                         <DeleteButton
-                        onClick={() => {
-                          handleDeleteTransaction(transaction.id) // 削除ボタンをクリックしたときに削除処理を呼び出す
-                        }} />
+                          onClick={() => {
+                            handleDeleteTransaction(transaction.id); // 削除ボタンをクリックしたときに削除処理を呼び出す
+                          }} />
                       </div>
                     )}
                   </td>

@@ -134,7 +134,7 @@ function CategoryTotal({ selectedMonth, activeIndex }: CategoryTotalProps) {
                 {/* <h4 className="m-0">カテゴリーごとの月の収支</h4> */}
                 <div style={{ marginLeft: 'auto', position: 'relative' }}>
                 <IoIosSearch style={{ position: 'absolute', left: '0.6rem', top: '50%', transform: 'translateY(-50%)', fontSize: '1.3rem', color: 'gray'}} />
-                    <InputText value={globalFilterValue} onChange={onGlobalFilterChange} placeholder="カテゴリー検索" style={{ paddingLeft: '2.5rem' }}  />
+                    <InputText value={globalFilterValue} onChange={onGlobalFilterChange} placeholder="カテゴリー検索" style={{ paddingLeft: '2.5rem', borderColor: '#d3d3d3' }}  />
                 </div>
             </div>
         );

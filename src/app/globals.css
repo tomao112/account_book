@@ -34,12 +34,16 @@
   justify-content: space-around;
 }
 
+/*  */
 .selected-row {
     background-color: #e0f7fa; /* 選択された行の背景色 */
 }
+/* 日別ページ */
 .p-datatable .p-datatable-tbody > tr {
     border-bottom: 1px solid #ccc; /* 行のボーダー */
 }
+
+/* categoryTotal.tsx */
 .p-inputtext {
     width: 13rem; /* サーチボックスの幅 */
     border: 1px solid gray;
@@ -78,16 +82,3 @@
   border-radius: 50%; /* 丸くする */
   background-color: rgb(144, 195, 207); /* 丸の背景色を黒に設定 */
 }
-
-/* .p-calendar {
-  border: 1px solid #d3d3d3;
-  border-radius: 0.5rem;
-} */
-
-/* .p-inputtext {
-  margin: initial;
-  width: 6rem;
-  padding: 0.5rem 0.5rem;
-  border: none;
-} */
-

@@ -3,6 +3,8 @@ import React from 'react';
 
 const Header = () => {
 	return (
+		// デザイン考案中
+		// ヘッダーにアイコン、ハンバーガーを表示させるように
 		<div>
 			<div>
 				<Link href={'/'}>home</Link>

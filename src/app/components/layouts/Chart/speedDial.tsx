@@ -12,7 +12,7 @@ export default function SpeedDialComponent() {
         {
             label: 'Add',  //表示名
             icon: 'pi pi-pencil',  //アイコン
-            style: { color: 'white'},
+            style: { color: 'white', fontSize: '1rem'},
             command: () => {  //クリック時の実行換数
                 toast.current?.show({ severity: 'info', summary: 'Add', detail: 'Data Added' });
             }
@@ -29,8 +29,10 @@ export default function SpeedDialComponent() {
 
     return (
         <div className="card">
-            <div style={{ position: 'relative' }}>
-                <SpeedDial model={items} direction="right" style={{ position: 'absolute', top: '-1.2rem', right: '2rem'  }} />
+            <div>
+                <SpeedDial model={items} direction="right" style={{ position: 'absolute', top: '-2.2rem', right: '4.43rem',   }} 
+                    buttonStyle={{ width: '2.5rem', height: '2.5rem', border: '1px solid rgb(144, 195, 207)'}}
+                    />
             </div>
         </div>
     );

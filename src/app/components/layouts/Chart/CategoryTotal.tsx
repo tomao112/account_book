@@ -76,7 +76,7 @@ function CategoryTotal({ selectedMonth, activeIndex }: CategoryTotalProps) {
     };
 
     const actionBodyTemplate = () => {
-        return <div className='position top-4'><SpeedDialComponents /></div>;
+        return <div className='relative top-4'><SpeedDialComponents /></div>;
     };
 
     // ラジオボタンのカスタムボディ

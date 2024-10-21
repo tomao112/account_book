@@ -38,6 +38,7 @@
 .selected-row {
     background-color: #e0f7fa; /* 選択された行の背景色 */
 }
+
 /* 日別ページ */
 .p-datatable .p-datatable-tbody > tr {
     border-bottom: 1px solid #ccc; /* 行のボーダー */
@@ -55,28 +56,8 @@
     margin-bottom: 1rem;
 }
 
-/* ラジオボタンのサイズを大きくする */
-.large-radio {
-    width: 1rem; /* 幅を指定 */
-    height: 1rem; /* 高さを指定 */
-    transform: scale(1.3); /* スケールを変更してサイズを大きくする */
-    margin: 0; /* マージンをリセット */
-}
-
-/* speedDial.css */
-.custom-icon {
-  color: white; /* アイコンの色を変更 */
-  font-size: 1rem; /* アイコンのサイズを変更 */
-}
-
-.p-speeddial-button {
-  width: 2.5rem;
-  height: 2.5rem;
-  border: 1px solid rgb(144, 195, 207);
-  /* background-color: transparent !important ; */
-}
-
-.p-speeddial .p-speeddial-action {
+/* speedDial.tsx */
+.p-speeddial-action {
   width: 2.5rem; /* 丸のサイズを変更 */
   height: 2.5rem; /* 丸のサイズを変更 */
   border-radius: 50%; /* 丸くする */

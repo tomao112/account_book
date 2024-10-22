@@ -5,7 +5,7 @@ import { TabMenuTabChangeEvent } from 'primereact/tabmenu'; // 追加
 import ExpenseBarGraph from '@/app/components/layouts/Chart/expenseChart'; // ここでBarGraphコンポーネントをインポート
 import IncomeBarGraph from '@/app/components/layouts/Chart/incomeChart'; // ここでBarGraphコンポーネントをインポート
 import DepositBarGraph from '@/app/components/layouts/Chart/depositChart'; // ここでBarGraphコンポーネントをインポート
-import budgetBarGraph from '@/app/components/layouts/Chart/budgetChart'; // ここでBarGraphコンポーネントをインポート
+import BudgetPage from '@/app/components/layouts/Chart/budgetChart'; // ここでBarGraphコンポーネントをインポート
 import { Transaction } from '@/app/components/layouts/income-expense/transactions';
 import CategoryTotal from '@/app/components/layouts/Chart/CategoryTotal';
 import MonthlySummary from '../income-expense/MonthlySummary';
@@ -46,7 +46,7 @@ export default function Tab({ transactions, selectedMonth }: BarGraphProps) {
 // コンポーネント内で使用
 return (
     <div>
-        <TabMenu className='mr-10 ml-10 mb-5 mt-5 border border-gray-500 rounded-lg' model={items} activeIndex={activeIndex} onTabChange={handleTabChange} />
+        <TabMenu className='mr-10 ml-10 mb-5 mt-5 border rounded-lg' model={items} activeIndex={activeIndex} onTabChange={handleTabChange} />
         <div>
             {activeIndex === 0 && (
                 <>
@@ -82,7 +82,7 @@ return (
         <div>
             {activeIndex === 3 && (
                 <>
-                    予算
+                    <BudgetPage />
                 </>
             )}
 						

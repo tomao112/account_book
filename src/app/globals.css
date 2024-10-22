@@ -39,11 +39,6 @@
     background-color: #e0f7fa; /* 選択された行の背景色 */
 }
 
-/* 日別ページ */
-.p-datatable .p-datatable-tbody > tr {
-    border-bottom: 1px solid #ccc; /* 行のボーダー */
-}
-
 /* categoryTotal.tsx */
 .p-inputtext {
     width: 13rem; /* サーチボックスの幅 */

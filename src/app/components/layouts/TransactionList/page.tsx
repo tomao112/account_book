@@ -111,14 +111,14 @@ const TransactionList: FC<TransactionListProps> = ({ onEdit, onDelete }) => {
 
   return (
     <div className="overflow-x-auto">
-      <div className="flex justify-end mr-20 mt-5 items-center">
-        <button onClick={() => changeMonth(-1)} className="border text-black px-2 py-1 rounded">
+      <div className="flex ml-10 mt-5 items-center">
+        <button onClick={() => changeMonth(-1)} className="border text-black font-semibold px-2 py-1 rounded-bl rounded-tl bg-white">
           &lt;
         </button>
-        <h2 className="pr-2 pl-2">
+        <h2 className="border pr-2 pl-2 bg-white pt-1 pb-1">
           {selectedMonth.getFullYear()}-{selectedMonth.getMonth() + 1}
         </h2>
-        <button onClick={() => changeMonth(+1)} className="border text-black px-2 py-1 rounded">
+        <button onClick={() => changeMonth(+1)} className="border text-black font-semibold px-2 py-1 rounded-br rounded-tr bg-white">
           &gt;
         </button>
       </div>
@@ -127,10 +127,10 @@ const TransactionList: FC<TransactionListProps> = ({ onEdit, onDelete }) => {
         <MonthlySummary summary={monthlySummary} />
       </div>
 
-      <div className='ml-10 mr-10'>
-        <table className="w-full border rounded-lg shadow-md">
+      <div className='ml-10 mr-10 bg-white'>
+        <table className="w-full ">
           <thead>
-            <tr className="bg- text-gray-600 uppercase text-sm leading-normal">
+            <tr className="bg-gray-100 text-gray-600 uppercase text-sm leading-normal">
               <th className="border px-4 py-3 text-left">金額</th>
               <th className="border px-4 py-3 text-left">支出/収入/貯金</th>
               <th className="border px-4 py-3 text-left">カテゴリー</th>

@@ -1,79 +1,133 @@
+// src/app/components/layouts/BudgetPage.tsx
+'use client'
 import React, { useState, useEffect } from 'react';
-import { Chart } from 'primereact/chart';
-import { Transaction } from '@/app/components/layouts/income-expense/transactions';
+import { InputText } from 'primereact/inputtext';
+import { Button } from 'primereact/button';
+import { ProgressBar } from 'primereact/progressbar';
+import { Toast } from 'primereact/toast';
+import { supabase } from '@/app/lib/supabaseClient';
 
-interface BarGraphProps {
-	transactions: Transaction[] | null;
-  selectedMonth: Date; // 選択された月を受け取る
+interface Budget {
+    id: number;
+    category: string;
+    amount: number;
 }
 
-export default function BarGraph({ transactions, selectedMonth }: BarGraphProps) {
-    const [chartData, setChartData] = useState({});
-    const [chartOptions, setChartOptions] = useState({});
+interface Expense {
+    category: string;
+    amount: number;
+}
+
+const BudgetPage: React.FC = () => {
+    const [budgets, setBudgets] = useState<Budget[]>([]);
+    const [expenses, setExpenses] = useState<Expense[]>([]);
+    const [budgetInput, setBudgetInput] = useState<{ category: string; amount: number }>({ category: '', amount: 0 });
+    const [expenseInput, setExpenseInput] = useState<{ category: string; amount: number }>({ category: '', amount: 0 });
+    const toast = React.useRef<Toast>(null);
 
     useEffect(() => {
-        // transactionsがnullまたはundefinedの場合は処理をスキップ
-        if (!transactions) return;
+        fetchBudgets();
+    }, []);
 
-        // typeがexpenseのトランザクションのみをフィルタリングし、選択された月に基づいてフィルタリング
-        const expenseTransactions = transactions.filter(transaction => {
-            const transactionDate = new Date(transaction.date);
-            return  transaction.type === 'expense' &&
-                    transactionDate.getFullYear() === selectedMonth.getFullYear() &&
-                    transactionDate.getMonth() === selectedMonth.getMonth();
-        });
-
-        // カテゴリーごとの合計を計算
-        const categoryTotals: { [key: string]: number } = {};
-        expenseTransactions.forEach(transaction => {
-            if (categoryTotals[transaction.category]) {
-                categoryTotals[transaction.category] += transaction.amount;
+    const fetchBudgets = async () => {
+        try {
+            const { data, error } = await supabase.from('budgets').select('*');
+            if (error) throw error;
+            if (data) {
+                setBudgets(data as Budget[]);
+            }
+        } catch (error) {
+            if (error instanceof Error) {
+                console.error('Error fetching budgets:', error.message);
             } else {
-                categoryTotals[transaction.category] = transaction.amount;
+                console.error('Unknown error:', error);
             }
-        });
+        }
+    };
 
-        const labels = Object.keys(categoryTotals);
-        const data = Object.values(categoryTotals);
+    const handleBudgetChange = (e: React.ChangeEvent<HTMLInputElement>, field: 'category' | 'amount') => {
+        setBudgetInput({ ...budgetInput, [field]: field === 'amount' ? Number(e.target.value) : e.target.value });
+    };
 
-        const BarGraphData = {
-            labels: labels,
-            datasets: [
-                {
-                    label: '支出',
-                    data: data,
-                    backgroundColor: [
-                        'rgba(255, 159, 64, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(153, 102, 255, 0.2)'
-                    ],
-                    borderColor: [
-                        'rgb(255, 159, 64)',
-                        'rgb(75, 192, 192)',
-                        'rgb(54, 162, 235)',
-                        'rgb(153, 102, 255)'
-                    ],
-                    borderWidth: 1
+    const handleExpenseChange = (e: React.ChangeEvent<HTMLInputElement>, field: 'category' | 'amount') => {
+        setExpenseInput({ ...expenseInput, [field]: field === 'amount' ? Number(e.target.value) : e.target.value });
+    };
+
+    const addBudget = async () => {
+        if (budgetInput.category && budgetInput.amount > 0) {
+            try {
+                const { data, error } = await supabase.from('budgets').insert([{ category: budgetInput.category, amount: budgetInput.amount }]);
+                if (error) throw error;
+                if (data && (data as Budget[]).length > 0) { // 型アサーションを使用
+                    setBudgets([...budgets, { id: (data[0] as Budget).id, ...budgetInput }]);
+                    setBudgetInput({ category: '', amount: 0 });
+                    toast.current?.show({ severity: 'success', summary: 'Budget Added', detail: `Added budget for ${budgetInput.category}: ${budgetInput.amount}` });
                 }
-            ]
-        };
-
-        const options = {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
+            } catch (error) {
+                console.error('Error adding budget:', error);
             }
-        };
+        }
+    };
 
-        setChartData(BarGraphData);
-        setChartOptions(options);
-    }, [transactions, selectedMonth]); // transactionsとselectedMonthが変更されたときに再計算
+    const addExpense = () => {
+        if (expenseInput.category && expenseInput.amount > 0) {
+            setExpenses([...expenses, expenseInput]);
+            setExpenseInput({ category: '', amount: 0 });
+            toast.current?.show({ severity: 'success', summary: 'Expense Added', detail: `Added expense for ${expenseInput.category}: ${expenseInput.amount}` });
+        }
+    };
+
+    const getRemainingBudget = (category: string) => {
+        const budget = budgets.find(b => b.category === category);
+        const totalExpenses = expenses.filter(e => e.category === category).reduce((acc, curr) => acc + curr.amount, 0);
+        return budget ? budget.amount - totalExpenses : 0; // budgetがundefinedの場合は0を返す
+    };
 
     return (
-        <div className="card mr-10 ml-10">
-            <Chart type="bar" data={chartData} options={chartOptions} />
+        <div className="p-4">
+            <Toast ref={toast} />
+            <h2>予算設定</h2>
+            <div className="flex flex-column gap-2">
+                <InputText 
+                    value={budgetInput.category} 
+                    onChange={(e) => handleBudgetChange(e, 'category')} 
+                    placeholder="カテゴリーを設定" 
+                />
+                <InputText 
+                    type="number" 
+                    value={budgetInput.amount.toString()} 
+                    onChange={(e) => handleBudgetChange(e, 'amount')} 
+                    placeholder="予算を設定" 
+                />
+                <Button label="予算を追加" onClick={addBudget} />
+            </div>
+
+            <h2 className="mt-4">支出管理</h2>
+            <div className="flex flex-column gap-2">
+                <InputText 
+                    value={expenseInput.category} 
+                    onChange={(e) => handleExpenseChange(e, 'category')} 
+                    placeholder="カテゴリーを選択" 
+                />
+                <InputText 
+                    type="number" 
+                    value={expenseInput.amount.toString()} 
+                    onChange={(e) => handleExpenseChange(e, 'amount')} 
+                    placeholder="支出を入力" 
+                />
+                <Button label="支出を追加" onClick={addExpense} />
+            </div>
+
+            <h2 className="mt-4">予算の残り</h2>
+            {budgets.map((budget) => (
+                <div key={budget.id} className="mt-2">
+                    <h3>{budget.category}</h3>
+                    <ProgressBar value={(getRemainingBudget(budget.category) / budget.amount) * 100} />
+                    <p>残りの予算: {getRemainingBudget(budget.category)} / {budget.amount}</p>
+                </div>
+            ))}
         </div>
     );
-}
+};
+
+export default BudgetPage;

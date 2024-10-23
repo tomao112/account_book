@@ -5,6 +5,7 @@ import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
 import { ProgressBar } from 'primereact/progressbar';
 import { Toast } from 'primereact/toast';
+import { Dropdown } from 'primereact/dropdown';
 import { supabase } from '@/app/lib/supabaseClient';
 
 interface Budget {
@@ -21,12 +22,14 @@ interface Expense {
 const BudgetPage: React.FC = () => {
     const [budgets, setBudgets] = useState<Budget[]>([]);
     const [expenses, setExpenses] = useState<Expense[]>([]);
+    const [categories, setCategories] = useState<string[]>([]);
     const [budgetInput, setBudgetInput] = useState<{ category: string; amount: number }>({ category: '', amount: 0 });
     const [expenseInput, setExpenseInput] = useState<{ category: string; amount: number }>({ category: '', amount: 0 });
     const toast = React.useRef<Toast>(null);
 
     useEffect(() => {
         fetchBudgets();
+        fetchCategories();
     }, []);
 
     const fetchBudgets = async () => {
@@ -39,6 +42,24 @@ const BudgetPage: React.FC = () => {
         } catch (error) {
             if (error instanceof Error) {
                 console.error('Error fetching budgets:', error.message);
+            } else {
+                console.error('Unknown error:', error);
+            }
+        }
+    };
+
+    const fetchCategories = async () => {
+        try {
+            const { data, error } = await supabase.from('budgets').select('category');
+            if (error) throw error;
+            if (data) {
+                // Setを使用してユニークなカテゴリーを取得
+                const uniqueCategories = Array.from(new Set(data.map((d: { category: string }) => d.category)));
+                setCategories(uniqueCategories);
+            }
+        } catch (error) {
+            if (error instanceof Error) {
+                console.error('Error fetching categories:', error.message);
             } else {
                 console.error('Unknown error:', error);
             }
@@ -58,13 +79,17 @@ const BudgetPage: React.FC = () => {
             try {
                 const { data, error } = await supabase.from('budgets').insert([{ category: budgetInput.category, amount: budgetInput.amount }]);
                 if (error) throw error;
-                if (data && (data as Budget[]).length > 0) { // 型アサーションを使用
+                if (data && (data as Budget[]).length > 0) {
                     setBudgets([...budgets, { id: (data[0] as Budget).id, ...budgetInput }]);
                     setBudgetInput({ category: '', amount: 0 });
                     toast.current?.show({ severity: 'success', summary: 'Budget Added', detail: `Added budget for ${budgetInput.category}: ${budgetInput.amount}` });
                 }
             } catch (error) {
-                console.error('Error adding budget:', error);
+                if (error instanceof Error) {
+                    console.error('Error adding budget:', error.message);
+                } else {
+                    console.error('Unknown error:', error);
+                }
             }
         }
     };
@@ -80,7 +105,7 @@ const BudgetPage: React.FC = () => {
     const getRemainingBudget = (category: string) => {
         const budget = budgets.find(b => b.category === category);
         const totalExpenses = expenses.filter(e => e.category === category).reduce((acc, curr) => acc + curr.amount, 0);
-        return budget ? budget.amount - totalExpenses : 0; // budgetがundefinedの場合は0を返す
+        return budget ? budget.amount - totalExpenses : 0;
     };
 
     return (
@@ -104,9 +129,10 @@ const BudgetPage: React.FC = () => {
 
             <h2 className="mt-4">支出管理</h2>
             <div className="flex flex-column gap-2">
-                <InputText 
+                <Dropdown 
                     value={expenseInput.category} 
-                    onChange={(e) => handleExpenseChange(e, 'category')} 
+                    options={categories} 
+                    onChange={(e) => setExpenseInput({ ...expenseInput, category: e.value })} 
                     placeholder="カテゴリーを選択" 
                 />
                 <InputText 

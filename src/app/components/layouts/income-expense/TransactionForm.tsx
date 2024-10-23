@@ -64,7 +64,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ selectedDate, editing
     })
   };
 
-  // 初期カテゴリ、状態管理
+  // 初期カテゴリ、状態管理　新規でカテゴリを追加したときにDBに登録するように修正する
   const [ categories, setCategories ] = useState<string[]>([
     '食費',
     '光熱費',

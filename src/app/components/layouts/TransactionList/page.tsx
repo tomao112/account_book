@@ -207,7 +207,7 @@ const TransactionList: FC<TransactionListProps> = ({ onEdit, onDelete }) => {
                         value={new Date(editingTransaction.date)}
                         onChange={(e) => setEditingTransaction({ ...editingTransaction, date: e.value ? e.value.toLocaleDateString('en-CA') : '' })}
                         className="w-full"
-                        inputStyle={{ width: '6rem', borderColor: '#d3d3d3', borderRadius: '0.5rem', margin: 'initial', padding: '0.5rem' }}
+                        inputStyle={{ width: '6rem', borderColor: '#d3d3d3', borderRadius: '0.5rem', margin: 'initial', padding: '0.5rem', border: '1px solid #d3d3d3' }}
                         // showIcon
                         dateFormat='yy/mm/dd'
                         placeholder='日付を選択'/>

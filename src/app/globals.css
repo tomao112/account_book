@@ -19,6 +19,11 @@
   @apply translate-x-full; /* スライドアウトの状態 */
 }
 
+body {
+  height: 100vh;
+  width: 100%;
+}
+
 /* sidebar.tsx */
 .p-sidebar {
   width: 16rem !important; /* 幅を設定 */
@@ -39,22 +44,22 @@
     background-color: #e0f7fa; /* 選択された行の背景色 */
 }
 
-/* categoryTotal.tsx */
-.p-inputtext {
-    width: 13rem; /* サーチボックスの幅 */
-    border: 1px solid gray;
-    border-radius: 0.5rem;
-    font-size: 0.9rem;
-    padding: 0.5rem 1rem;
-    margin-right: 3rem;
-    margin-top: 1rem;
-    margin-bottom: 1rem;
-}
-
 /* speedDial.tsx */
 .p-speeddial-action {
   width: 2.5rem; /* 丸のサイズを変更 */
   height: 2.5rem; /* 丸のサイズを変更 */
   border-radius: 50%; /* 丸くする */
   background-color: rgb(144, 195, 207); /* 丸の背景色を黒に設定 */
+}
+
+/* styles.css */
+.p-datepicker-trigger {
+  color: gray;
+  font-size: 1.2rem; /* アイコンのサイズを変更 */
+  margin-left: 0.5rem; /* アイコンと入力フィールドの間にマージンを追加 */
+  margin-right: 0.5rem; /* アイコンと入力フィールドの間にマージンを追加 */
+}
+
+.p-datepicker-trigger:hover {
+  color: #515253; /* ホバー時のアイコンの色を変更 */
 }

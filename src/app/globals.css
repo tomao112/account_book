@@ -63,3 +63,65 @@ body {
 .p-datepicker-trigger:hover {
   color: #515253; /* ホバー時のアイコンの色を変更 */
 }
+
+/* styles.css */
+.p-calendar {
+  background-color: #f9f9f9; /* カレンダーの背景色 */
+  border-radius: 8px; /* カレンダーの角を丸く */
+}
+
+.p-datepicker {
+  font-size: 1rem; /* カレンダーのフォントサイズ */
+}
+
+.p-datepicker-header {
+  background-color: #87add6; /* ヘッダーの背景色 */
+  color: white; /* ヘッダーの文字色 */
+}
+
+.p-datepicker-today {
+
+  color: #007bff; /* 今日の日付の文字色 */
+}
+
+.p-datepicker-today:hover {
+
+}
+
+/* styles.css */
+.bg-muted-green {
+  background-color: #8de7a0; /* オリーブグリーン */
+}
+
+.bg-muted-blue {
+  background-color: #a2d6f7; /* オリーブグリーン */
+}
+
+.bg-muted-yellow {
+  background-color: #ffc46c; /* オリーブグリーン */
+}
+
+.bg-muted-gray {
+  background-color: #c9c9c9;
+}
+
+.bg-muted-red {
+  background-color: #f7a2a2; /* オリーブグリーン */
+}
+
+.text-muted-green {
+  color: #8bdd9d;
+}
+
+.text-muted-red {
+  color: #ec7e7e;
+}
+
+.text-muted-blue {
+  color: #8abbf3;
+}
+
+.text-muted-green {
+  color: #8bdd9d;
+}
+

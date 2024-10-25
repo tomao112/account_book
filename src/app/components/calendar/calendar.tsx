@@ -103,17 +103,17 @@ const Calendar: React.FC<CalendarProps> = ({ selectedMonth, transactions, onDate
               >
                 <div className="text-sm">{day.getDate()}</div>
                 {income > 0 ? (
-                  <div className="text-sm text-green-500">¥{income.toLocaleString()}</div>
+                  <div className="text-sm text-muted-green">¥{income.toLocaleString()}</div>
                 ) : (
                   <div className="text-sm">&nbsp;</div>
                 )}
                 {expense > 0 ? (
-                  <div className="text-sm text-red-500">¥{expense.toLocaleString()}</div>
+                  <div className="text-sm text-muted-red">¥{expense.toLocaleString()}</div>
                 ) : (
                   <div className="text-sm">&nbsp;</div>
                 )}
                 {deposit > 0 ? (
-                  <div className="text-sm text-blue-500">¥{deposit.toLocaleString()}</div>
+                  <div className="text-sm text-muted-blue">¥{deposit.toLocaleString()}</div>
                 ) : (
                   <div className="text-sm">&nbsp;</div>
                 )}

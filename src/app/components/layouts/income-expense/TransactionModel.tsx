@@ -46,7 +46,7 @@ const TransactionModel: React.FC<TransactionModelProps> = ({
 		// 一時的に非表示のコード
 
 		<div className={`${isClosing ? '-z-10 hidden' : 'z-50 fixed inset-0 bg-black bg-opacity-50 flex justify-end'}`}>
-			<div className={`bg-gray-100 p-6 z-60 w-2/5 slide-in ${isClosing ? 'slide-out-active' : 'slide-in-active'}`}>
+			<div className={`bg-neutral-100 p-6 z-60 w-2/5 slide-in ${isClosing ? 'slide-out-active' : 'slide-in-active'}`}>
 				<h2 className="text-base text-center">
 						{date ? date.getMonth() + 1 : ''}月{date?.getDate()}日(〇)
 				</h2>
@@ -54,11 +54,11 @@ const TransactionModel: React.FC<TransactionModelProps> = ({
 						×
 					</button>
 				<div className="flex items-center justify-around mb-3">
-					<button onClick={onAddNew} className="bg-green-400 text-white px-4 py-2 rounded-full">
+					<button onClick={onAddNew} className="bg-muted-green border-2 text-white px-4 py-2 rounded-full">
 						+ 内訳
 					</button>
 					{/* メモ機能追加予定 */}
-					<button onClick={onClose} className="bg-yellow-500 text-white px-4 py-2 rounded-full">
+					<button onClick={onClose} className="bg-muted-yellow border-2 text-white px-4 py-2 rounded-full">
 						+メモ
 					</button>
 				</div>

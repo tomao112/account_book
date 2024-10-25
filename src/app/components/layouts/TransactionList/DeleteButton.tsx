@@ -9,7 +9,7 @@ interface DeleteButtonProps {
 const IconOnlyButton: React.FC<DeleteButtonProps> = ({ onClick }) => {
     return (
         <div className="card">
-            <div className="flex flex-wrap justify-content-center gap-3 border-2 rounded-full bg-red-400">
+            <div className="flex flex-wrap justify-content-center gap-3 border-2 rounded-full bg-muted-red">
                 <Button onClick={onClick} style={{ color: 'white' }} icon="pi pi-trash" rounded outlined aria-label="Filter" />
             </div>
         </div>

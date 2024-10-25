@@ -1,6 +1,10 @@
 import { useEffect, useState } from 'react';
 import { Transaction } from './transactions';
 import { Calendar } from 'primereact/calendar';
+// グローバルなスタイルファイルや_app.tsxなどでインポート
+import 'primereact/resources/themes/saga-blue/theme.css'; // 例: Saga Blueテーマ
+import 'primereact/resources/primereact.min.css'; // PrimeReactの基本スタイル
+import 'primeicons/primeicons.css'; // PrimeIcons
 
 interface TransactionFormProps {
 	selectedDate: Date | null;
@@ -104,7 +108,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ selectedDate, editing
 
   return (
     <div className='fixed inset-0 bg-black bg-opacity-50 flex justify-end'>
-      <div className='bg-white p-6 z-60 w-2/5'>
+      <div className='bg-neutral-100 p-6 z-60 w-2/5'>
       <p className='text-center'>入力</p>
         <form onSubmit={handleSubmit} className="mb-6">
           <div className="mb-4">
@@ -172,10 +176,10 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ selectedDate, editing
             />
           </div>
           <div className="flex justify-between">
-            <button type="submit" className="bg-blue-400 text-white px-4 py-2 rounded-full">
+            <button type="submit" className="bg-muted-blue border-2 text-white px-4 py-2 rounded-full">
               {editingTransaction ? '更新' : '追加'}
             </button>
-            <button type='button' onClick={onCancel} className="bg-gray-400 text-white px-4 py-2 rounded-full">
+            <button type='button' onClick={onCancel} className="bg-muted-gray border-2 text-white px-4 py-2 rounded-full">
               キャンセル
             </button>
           </div>
@@ -189,11 +193,11 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ selectedDate, editing
           className='mt-1 p-2 w-full border'
           />
           <div className='flex gap-3 mt-3'>
-            <button type="button" onClick={handleSaveCategory} className="mt-2 bg-green-400 text-white px-4 py-2 rounded-full">
+            <button type="button" onClick={handleSaveCategory} className="mt-2 bg-muted-green border-2 text-white px-4 py-2 rounded-full">
               保存
             </button>
-            <button type='button' onClick={() => handleEditCategory(transaction.category)} className='mt-2 bg-yellow-400 text-white px-4 py-2 rounded-full'>編集</button>
-            <button type='button' onClick={handleAddCategory} className="mt-2 bg-blue-400 text-white px-4 py-2 rounded-full">追加</button>
+            <button type='button' onClick={() => handleEditCategory(transaction.category)} className='mt-2 bg-muted-yellow border-2 text-white px-4 py-2 rounded-full'>編集</button>
+            <button type='button' onClick={handleAddCategory} className="mt-2 bg-muted-blue border-2 text-white px-4 py-2 rounded-full">追加</button>
           </div>
         </div>
       </div>

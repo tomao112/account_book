@@ -75,6 +75,12 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ selectedDate, editing
     '光熱費',
     '娯楽',
     '交通費',
+    'レジャー',
+    'スーパー/コンビニ',
+    'ファッション/美容',
+    '日用品',
+    '住居/通信',
+    '健康/教育',
     'その他',
   ]);
 
@@ -184,7 +190,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ selectedDate, editing
             </button>
           </div>
         </form>
-        <div className='border-t-4 pt-4 mt-5'>
+        {/* <div className='border-t-4 pt-4 mt-5'>
           <p className='pb-1'>新規カテゴリーを追加</p>
           <input
           type="text"
@@ -199,7 +205,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ selectedDate, editing
             <button type='button' onClick={() => handleEditCategory(transaction.category)} className='mt-2 bg-muted-yellow border-2 text-white px-4 py-2 rounded-full'>編集</button>
             <button type='button' onClick={handleAddCategory} className="mt-2 bg-muted-blue border-2 text-white px-4 py-2 rounded-full">追加</button>
           </div>
-        </div>
+        </div> */}
       </div>
       
     </div>

@@ -83,14 +83,14 @@ const Calendar: React.FC<CalendarProps> = ({ selectedMonth, transactions, onDate
     return (
         <div className="grid grid-cols-7 pr-10 pl-10 pb-10">
           {['日', '月', '火', '水', '木', '金', '土'].map((day, index) => (
-          <div key={index} className={`text-center border p-1 ${day === '土' ? 'text-blue-500' : day === '日' ? 'text-red-500' : 'text-black'}`}>
+          <div key={index} className={`text-center border p-1 ${day === '土' ? 'text-blue-500' : day === '日' ? 'text-red-500' : 'text-gray-500'}`}>
             {day}
           </div>
           ))}
           {days.map((day, index) => {
             const isSaturday = day.getDay() === 6; // 土曜日
             const isSunday = day.getDay() === 0; // 日曜日
-            const dayClass = isSaturday ? 'text-blue-500' : isSunday ? 'text-red-500' : 'text-black';
+            const dayClass = isSaturday ? 'text-blue-500' : isSunday ? 'text-red-500' : 'text-gray-500';
           
             const { income, expense, deposit, total, dayTransactions } = calculateDayTotal(day, transactions);
             // const dayTotal = calculateDayTotal(day, transactions);

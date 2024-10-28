@@ -13,19 +13,19 @@ const MonthlySummary: React.FC<MonthlySummaryProps> = ({ summary }) => {
       {/* <h2>月の収支</h2> */}
       <div className="text-center">
         <p className="text-xs text-gray-500">収入</p>
-        <p className="text-sm text-muted-green">￥{summary.income.toLocaleString()}円</p>
+        <p className="text-sm text-muted-green">￥{summary.income.toLocaleString()}</p>
       </div>
       <div className="text-center">
         <p className="text-xs text-gray-500">支出</p>
-        <p className="text-sm text-muted-red">￥{summary.expense.toLocaleString()}円</p>
+        <p className="text-sm text-muted-red">￥{summary.expense.toLocaleString()}</p>
       </div>
       <div className="text-center">
         <p className="text-xs text-gray-500">貯金</p>
-        <p className="text-sm text-muted-blue">￥{summary.deposit.toLocaleString()}円</p>
+        <p className="text-sm text-muted-blue">￥{summary.deposit.toLocaleString()}</p>
       </div>
       <div className="text-center">
         <p className="text-xs text-gray-500">差額</p>
-        <p className="text-sm text-gray-600">￥{summary.income - summary.expense - summary.deposit}円</p>
+        <p className="text-sm text-gray-600">￥{summary.income - summary.expense - summary.deposit}</p>
       </div>
     </div>
   );

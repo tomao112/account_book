@@ -109,16 +109,31 @@ const TransactionList: FC<TransactionListProps> = ({ onEdit, onDelete }) => {
     }
 };
 
+// カテゴリ配列
+const categories = [
+  '食費',
+  '光熱費',
+  '娯楽',
+  '交通費',
+  'レジャー',
+  'スーパー/コンビニ',
+  'ファッション/美容',
+  '日用品',
+  '住居/通信',
+  '健康/教育',
+  'その他',
+];
+
   return (
     <div className="overflow-x-auto">
       <div className="flex ml-10 mt-5 items-center">
-        <button onClick={() => changeMonth(-1)} className="border text-black font-semibold px-2 py-1 rounded-bl rounded-tl bg-white">
+        <button onClick={() => changeMonth(-1)} className="border text-black font-semibold px-2 py-1 rounded bg-white">
           &lt;
         </button>
-        <h2 className="border pr-2 pl-2 bg-white pt-1 pb-1">
+        <h2 className="pr-2 pl-2 bg-white pt-1 pb-1">
           {selectedMonth.getFullYear()}-{selectedMonth.getMonth() + 1}
         </h2>
-        <button onClick={() => changeMonth(+1)} className="border text-black font-semibold px-2 py-1 rounded-br rounded-tr bg-white">
+        <button onClick={() => changeMonth(+1)} className="border text-black font-semibold px-2 py-1 rounded bg-white">
           &gt;
         </button>
       </div>
@@ -178,17 +193,23 @@ const TransactionList: FC<TransactionListProps> = ({ onEdit, onDelete }) => {
                     )}
                   </td>
                   <td className="border px-4 py-2 w-1/6">
-                    {editingTransaction?.id === transaction.id ? (
-                      <input
-                        type="text"
-                        value={editingTransaction.category}
-                        onChange={(e) => setEditingTransaction({ ...editingTransaction, category: e.target.value })}
-                        className="w-full px-4 py-2 border rounded-md"
-                      />
-                    ) : (
-                      <span className="w-full">{transaction.category}</span>
-                    )}
-                  </td>
+    {editingTransaction?.id === transaction.id ? (
+        <select
+            value={editingTransaction.category}
+            onChange={(e) => setEditingTransaction({ ...editingTransaction, category: e.target.value })}
+            className="w-full px-4 py-2 border rounded-md"
+        >
+            <option value="">選択してください</option>
+            {categories.map((category) => (
+                <option key={category} value={category}>
+                    {category}
+                </option>
+            ))}
+        </select>
+    ) : (
+        <span className="w-full">{transaction.category}</span>
+    )}
+</td>
                   <td className="border px-4 py-2 w-1/6">
                     {editingTransaction?.id === transaction.id ? (
                       <input

@@ -71,14 +71,18 @@ const TransactionModel: React.FC<TransactionModelProps> = ({
 					</button> */}
 				</div>
 				<div className="bg-white text-sm flex justify-between p-3 w-full rounded-lg mb-10">
-					<p className="text-muted-green">収入:{income}</p>
-					<p className="text-muted-red">支出:{expense}</p>
+					<p className="text-muted-green">収入:{income}円</p>
+					<p className="text-muted-red">支出:{expense}円</p>
 					</div>
 				{transactions.map(t => (
 					<div key={t.id} className="mb-2">
 						<button onClick={() => onEdit(t)} className="bg-white text-sm flex justify-between p-5 w-full rounded-lg">
 							<span>{t.category.length > 5 ? `${t.category.slice(0, 20)}...` : t.category}</span>
-							<span className="">{t.amount}円</span>
+							<span className="">
+								{t.type === 'expense' && `支出: ${t.amount}円`}
+                {t.type === 'income' && `収入: ${t.amount}円`}
+                {t.type === 'budget' && `予算: ${t.amount}円`}
+							</span>
 						</button>
 					</div>
 				))}

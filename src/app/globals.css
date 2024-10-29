@@ -28,6 +28,11 @@ body {
 .p-sidebar {
   width: 16rem !important; /* 幅を設定 */
 }
+/* styles.css */
+.p-button:focus {
+  outline: none; /* フォーカス時のアウトラインを解除 */
+  box-shadow: none; /* フォーカス時のボックスシャドウを解除 */
+}
 
 /* tab.tsx */
 .tab-Card {
@@ -80,12 +85,7 @@ body {
 }
 
 .p-datepicker-today {
-
   color: #007bff; /* 今日の日付の文字色 */
-}
-
-.p-datepicker-today:hover {
-
 }
 
 /* 一時的にglobal.cssに記述　レイアウトを考案中 */
@@ -125,3 +125,69 @@ body {
   color: #8bdd9d;
 }
 
+/* styles.css */
+.custom-select-button {
+  margin-top: 0.5rem;
+  display: flex;
+  justify-content: space-around;
+}
+
+.custom-select-button .p-button {
+  border: 1px solid gray;
+  color: rgb(175, 175, 175);
+  /* background-color: gray; */
+  padding: 0.3rem 2rem;
+  border-radius: 0.5rem;
+}
+
+
+/* styles.css */
+.custom-select-button .expense-option.p-highlight {
+  background-color: #fc8b8b; /* 支出オプションの選択時の背景色 */
+  color: rgb(255, 255, 255); /* 支出オプションの選択時のテキスト色 */
+  box-shadow: 0 0 5px 2px rgba(255, 0, 0, 0.5); /* 支出オプションの選択時のボックスシャドウ */
+}
+
+.custom-select-button .income-option.p-highlight {
+  background-color: #9de6a6; /* 収入オプションの選択時の背景色 */
+  color: rgb(255, 255, 255); /* 収入オプションの選択時のテキスト色 */
+  box-shadow: 0 0 5px 2px rgba(0, 255, 0, 0.5); /* 収入オプションの選択時のボックスシャドウ */
+}
+
+.custom-select-button .deposit-option.p-highlight {
+  background-color: #addaff; /* 貯金オプションの選択時の背景色 */
+  color: rgb(255, 255, 255); /* 貯金オプションの選択時のテキスト色 */
+  box-shadow: 0 0 5px 2px #addaff; /* 貯金オプションの選択時のボックスシャドウ */
+}
+
+
+
+
+
+
+
+/* 内部のdivやspanにスタイルを適用 */
+.custom-select-button .p-button-label {
+  font-size: 1rem; /* ボタンラベルのフォントサイズ */
+}
+
+.custom-select-button .p-button-icon {
+  margin-right: 0.5rem; /* アイコンとテキストの間にマージンを追加 */
+}
+
+/* styles.css */
+.p-selectbutton .p-button:focus {
+  outline: none; /* フォーカス時のアウトラインを解除 */
+  box-shadow: none;
+}
+
+/* styles.css */
+input:focus {
+  border-color: #007bff; /* フォーカス時のボーダー色を青に変更 */
+  outline: none; /* デフォルトのアウトラインを解除 */
+}
+
+select:focus {
+  border-color: #007bff;
+  outline: none;
+}

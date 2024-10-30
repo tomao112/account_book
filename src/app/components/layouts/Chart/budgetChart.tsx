@@ -1,159 +1,123 @@
-// src/app/components/layouts/BudgetPage.tsx
-'use client'
-import React, { useState, useEffect } from 'react';
-import { InputText } from 'primereact/inputtext';
-import { Button } from 'primereact/button';
-import { ProgressBar } from 'primereact/progressbar';
-import { Toast } from 'primereact/toast';
-import { Dropdown } from 'primereact/dropdown';
-import { supabase } from '@/app/lib/supabaseClient';
+// // account_book/src/app/components/layouts/Budget/page.tsx
 
-interface Budget {
-    id: number;
-    category: string;
-    amount: number;
-}
+// import React, { useState, useEffect } from 'react';
+// import { supabase } from '@/app/lib/supabaseClient'; // Supabaseクライアントをインポート
 
-interface Expense {
-    category: string;
-    amount: number;
-}
+// interface Budget {
+//     category: string;
+//     amount: number;
+//     month: string;
+// }
 
-const BudgetPage: React.FC = () => {
-    const [budgets, setBudgets] = useState<Budget[]>([]);
-    const [expenses, setExpenses] = useState<Expense[]>([]);
-    const [categories, setCategories] = useState<string[]>([]);
-    const [budgetInput, setBudgetInput] = useState<{ category: string; amount: number }>({ category: '', amount: 0 });
-    const [expenseInput, setExpenseInput] = useState<{ category: string; amount: number }>({ category: '', amount: 0 });
-    const toast = React.useRef<Toast>(null);
+// const BudgetPage: React.FC = () => {
+//     const [selectedCategory, setSelectedCategory] = useState<string>('');
+//     const [budget, setBudget] = useState<number | ''>('');
+//     const [currentMonth, setCurrentMonth] = useState<string>('');
+//     const [budgets, setBudgets] = useState<Budget[]>([]);
 
-    useEffect(() => {
-        fetchBudgets();
-        fetchCategories();
-    }, []);
+//     useEffect(() => {
+//         // 現在の月を取得して設定
+//         const now = new Date();
+//         const month = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+//         setCurrentMonth(month);
+//     }, []);
 
-    const fetchBudgets = async () => {
-        try {
-            const { data, error } = await supabase.from('budgets').select('*');
-            if (error) throw error;
-            if (data) {
-                setBudgets(data as Budget[]);
-            }
-        } catch (error) {
-            if (error instanceof Error) {
-                console.error('Error fetching budgets:', error.message);
-            } else {
-                console.error('Unknown error:', error);
-            }
-        }
-    };
+//     const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+//         setSelectedCategory(e.target.value);
+//     };
 
-    const fetchCategories = async () => {
-        try {
-            const { data, error } = await supabase.from('budgets').select('category');
-            if (error) throw error;
-            if (data) {
-                // Setを使用してユニークなカテゴリーを取得
-                const uniqueCategories = Array.from(new Set(data.map((d: { category: string }) => d.category)));
-                setCategories(uniqueCategories);
-            }
-        } catch (error) {
-            if (error instanceof Error) {
-                console.error('Error fetching categories:', error.message);
-            } else {
-                console.error('Unknown error:', error);
-            }
-        }
-    };
+//     const handleBudgetChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+//         setBudget(e.target.value ? parseFloat(e.target.value) : '');
+//     };
 
-    const handleBudgetChange = (e: React.ChangeEvent<HTMLInputElement>, field: 'category' | 'amount') => {
-        setBudgetInput({ ...budgetInput, [field]: field === 'amount' ? Number(e.target.value) : e.target.value });
-    };
+//     const handleSubmit = async (e: React.FormEvent) => {
+//         e.preventDefault();
+//         if (!selectedCategory || budget === '') {
+//             alert('カテゴリと予算を入力してください。');
+//             return;
+//         }
 
-    const handleExpenseChange = (e: React.ChangeEvent<HTMLInputElement>, field: 'category' | 'amount') => {
-        setExpenseInput({ ...expenseInput, [field]: field === 'amount' ? Number(e.target.value) : e.target.value });
-    };
+//         // 予算をデータベースに登録
+//         const { data, error } = await supabase.from('budget').insert([
+//             { category: selectedCategory, budget: budget } // フィールド名を確認
+//         ]);
 
-    const addBudget = async () => {
-        if (budgetInput.category && budgetInput.amount > 0) {
-            try {
-                const { data, error } = await supabase.from('budgets').insert([{ category: budgetInput.category, amount: budgetInput.amount }]);
-                if (error) throw error;
-                if (data && (data as Budget[]).length > 0) {
-                    setBudgets([...budgets, { id: (data[0] as Budget).id, ...budgetInput }]);
-                    setBudgetInput({ category: '', amount: 0 });
-                    toast.current?.show({ severity: 'success', summary: 'Budget Added', detail: `Added budget for ${budgetInput.category}: ${budgetInput.amount}` });
-                }
-            } catch (error) {
-                if (error instanceof Error) {
-                    console.error('Error adding budget:', error.message);
-                } else {
-                    console.error('Unknown error:', error);
-                }
-            }
-        }
-    };
+//         if (error) {
+//             console.error('Error inserting budget:', error.message);
+//             return;
+//         }
 
-    const addExpense = () => {
-        if (expenseInput.category && expenseInput.amount > 0) {
-            setExpenses([...expenses, expenseInput]);
-            setExpenseInput({ category: '', amount: 0 });
-            toast.current?.show({ severity: 'success', summary: 'Expense Added', detail: `Added expense for ${expenseInput.category}: ${expenseInput.amount}` });
-        }
-    };
+//         // ローカルの予算リストに追加
+//         setBudgets([...budgets, { category: selectedCategory, amount: budget as number, month: currentMonth }]);
 
-    const getRemainingBudget = (category: string) => {
-        const budget = budgets.find(b => b.category === category);
-        const totalExpenses = expenses.filter(e => e.category === category).reduce((acc, curr) => acc + curr.amount, 0);
-        return budget ? budget.amount - totalExpenses : 0;
-    };
+//         // フォームをリセット
+//         setSelectedCategory('');
+//         setBudget('');
+//     };
 
-    return (
-        <div className="p-4">
-            <Toast ref={toast} />
-            <h2>予算設定</h2>
-            <div className="flex flex-column gap-2">
-                <InputText 
-                    value={budgetInput.category} 
-                    onChange={(e) => handleBudgetChange(e, 'category')} 
-                    placeholder="カテゴリーを設定" 
-                />
-                <InputText 
-                    type="number" 
-                    value={budgetInput.amount.toString()} 
-                    onChange={(e) => handleBudgetChange(e, 'amount')} 
-                    placeholder="予算を設定" 
-                />
-                <Button label="予算を追加" onClick={addBudget} />
-            </div>
+//     // カテゴリ配列
+//     const categories = [
+//         '食費',
+//         '光熱費',
+//         '娯楽',
+//         '交通費',
+//         'レジャー',
+//         'スーパー/コンビニ',
+//         'ファッション/美容',
+//         '日用品',
+//         '住居/通信',
+//         '健康/教育',
+//         'その他',
+//     ];
 
-            <h2 className="mt-4">支出管理</h2>
-            <div className="flex flex-column gap-2">
-                <Dropdown 
-                    value={expenseInput.category} 
-                    options={categories} 
-                    onChange={(e) => setExpenseInput({ ...expenseInput, category: e.value })} 
-                    placeholder="カテゴリーを選択" 
-                />
-                <InputText 
-                    type="number" 
-                    value={expenseInput.amount.toString()} 
-                    onChange={(e) => handleExpenseChange(e, 'amount')} 
-                    placeholder="支出を入力" 
-                />
-                <Button label="支出を追加" onClick={addExpense} />
-            </div>
+//     return (
+//         <div className="p-6">
+//             <h1 className="text-2xl mb-4">予算設定</h1>
+//             <form onSubmit={handleSubmit} className="space-y-4">
+//                 <div>
+//                     <label className="block text-gray-700">カテゴリ</label>
+//                     <select
+//                         value={selectedCategory}
+//                         onChange={handleCategoryChange}
+//                         className="mt-1 p-2 w-full border rounded-md"
+//                         required
+//                     >
+//                         <option value="">選択してください</option>
+//                         {categories.map((category) => (
+//                             <option key={category} value={category}>
+//                                 {category}
+//                             </option>
+//                         ))}
+//                     </select>
+//                 </div>
+//                 <div>
+//                     <label className="block text-gray-700">予算</label>
+//                     <input
+//                         type="number"
+//                         value={budget}
+//                         onChange={handleBudgetChange}
+//                         className="mt-1 p-2 w-full border rounded-md"
+//                         required
+//                     />
+//                 </div>
+//                 <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
+//                     保存
+//                 </button>
+//             </form>
 
-            <h2 className="mt-4">予算の残り</h2>
-            {budgets.map((budget) => (
-                <div key={budget.id} className="mt-2">
-                    <h3>{budget.category}</h3>
-                    <ProgressBar value={(getRemainingBudget(budget.category) / budget.amount) * 100} />
-                    <p>残りの予算: {getRemainingBudget(budget.category)} / {budget.amount}</p>
-                </div>
-            ))}
-        </div>
-    );
-};
+//             <div className="mt-6">
+//                 <h2 className="text-xl mb-2">現在の月の予算</h2>
+//                 <ul className="space-y-2">
+//                     {budgets.map((budget, index) => (
+//                         <li key={index} className="flex justify-between p-2 border rounded-md">
+//                             <span>{budget.month} - {budget.category}</span>
+//                             <span>¥{budget.amount.toLocaleString()}</span>
+//                         </li>
+//                     ))}
+//                 </ul>
+//             </div>
+//         </div>
+//     );
+// };
 
-export default BudgetPage;
+// export default BudgetPage;

@@ -193,23 +193,23 @@ const categories = [
                     )}
                   </td>
                   <td className="border px-4 py-2 w-1/6">
-    {editingTransaction?.id === transaction.id ? (
-        <select
-            value={editingTransaction.category}
-            onChange={(e) => setEditingTransaction({ ...editingTransaction, category: e.target.value })}
-            className="w-full px-4 py-2 border rounded-md"
-        >
-            <option value="">選択してください</option>
-            {categories.map((category) => (
-                <option key={category} value={category}>
-                    {category}
-                </option>
-            ))}
-        </select>
-    ) : (
-        <span className="w-full">{transaction.category}</span>
-    )}
-</td>
+                      {editingTransaction?.id === transaction.id ? (
+                          <select
+                              value={editingTransaction.category}
+                              onChange={(e) => setEditingTransaction({ ...editingTransaction, category: e.target.value })}
+                              className="w-full px-4 py-2 border rounded-md"
+                          >
+                              <option value="">選択してください</option>
+                              {categories.map((category) => (
+                                  <option key={category} value={category}>
+                                      {category}
+                                  </option>
+                              ))}
+                          </select>
+                      ) : (
+                          <span className="w-full">{transaction.category}</span>
+                      )}
+                  </td>
                   <td className="border px-4 py-2 w-1/6">
                     {editingTransaction?.id === transaction.id ? (
                       <input

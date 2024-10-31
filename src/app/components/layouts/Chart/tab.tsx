@@ -5,7 +5,7 @@ import { TabMenuTabChangeEvent } from 'primereact/tabmenu'; // 追加
 import ExpenseBarGraph from '@/app/components/layouts/Chart/expenseChart'; // ここでBarGraphコンポーネントをインポート
 import IncomeBarGraph from '@/app/components/layouts/Chart/incomeChart'; // ここでBarGraphコンポーネントをインポート
 import DepositBarGraph from '@/app/components/layouts/Chart/depositChart'; // ここでBarGraphコンポーネントをインポート
-import BudgetPage from '@/app/components/layouts/Chart/budgetChart'; // ここでBarGraphコンポーネントをインポート
+// import BudgetPage from '@/app/components/layouts/Chart/budgetChart'; // ここでBarGraphコンポーネントをインポート
 import { Transaction } from '@/app/components/layouts/income-expense/transactions';
 import CategoryTotal from '@/app/components/layouts/Chart/CategoryTotal';
 import MonthlySummary from '../income-expense/MonthlySummary';
@@ -28,7 +28,7 @@ export default function Tab({ transactions, selectedMonth }: BarGraphProps) {
         { label: '収入', icon: 'pi pi-home' },
         { label: '支出', icon: 'pi pi-chart-line' },
         { label: '貯金', icon: 'pi pi-list' },
-        { label: '予算', icon: 'pi pi-inbox' }
+        // { label: '予算', icon: 'pi pi-inbox' }
     ];
     const handleTabChange = (e: TabMenuTabChangeEvent) => {
         setActiveIndex(e.index);
@@ -79,14 +79,13 @@ return (
             )}
 						
         </div>
-        <div>
+        {/* <div>
             {activeIndex === 3 && (
                 <>
                     <BudgetPage />
                 </>
-            )}
-						
-        </div>
+            )}		
+        </div> */}
     </div>
 );
 }

@@ -9,7 +9,7 @@ interface MonthlySummaryProps {
 const MonthlySummary: React.FC<MonthlySummaryProps> = ({ summary }) => {
 
   return (
-    <div className="flex justify-around mt-4 border rounded-tr-lg rounded-tl-lg mr-10 ml-10 pt-2 pb-1 bg-white">
+    <div className="flex justify-around mt-4 border rounded-tr-lg rounded-tl-lg mr-32 ml-32 pt-2 pb-1 bg-white">
       {/* <h2>月の収支</h2> */}
       <div className="text-center">
         <p className="text-xs text-gray-500">収入</p>

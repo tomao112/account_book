@@ -142,7 +142,7 @@ const categories = [
         <MonthlySummary summary={monthlySummary} />
       </div>
 
-      <div className='ml-10 mr-10 bg-white'>
+      <div className='ml-32 mr-32 h-screen bg-white'>
         <table className="w-full ">
           <thead>
             <tr className="bg-gray-100 text-gray-600 uppercase text-sm leading-normal">
@@ -236,7 +236,7 @@ const categories = [
                       <span className="w-full">{transaction.date}</span>
                     )}
                   </td>
-                  <td className="px-4 py-2 flex items-center justify-center border-l">
+                  <td className="px-4 py-2 flex items-center justify-center border-l border-r">
                     {editingTransaction?.id === transaction.id ? (
                       <div className='flex gap-3 items-center justify-center'>
                         <SaveButton 

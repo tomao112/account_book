@@ -126,7 +126,7 @@ const categories = [
 
   return (
     <div className="overflow-x-auto">
-      <div className="flex ml-10 mt-5 items-center">
+      <div className="flex justify-end mr-20 mt-5 items-center">
         <button onClick={() => changeMonth(-1)} className="border text-black font-semibold px-2 py-1 rounded bg-white">
           &lt;
         </button>

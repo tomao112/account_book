@@ -79,50 +79,6 @@ function CategoryTotal({ selectedMonth, activeIndex }: CategoryTotalProps) {
         return <div className='relative top-4'><SpeedDialComponents /></div>;
     };
 
-    // ラジオボタンのカスタムボディ
-    // const radioButtonBodyTemplate = (rowData: any) => {
-    //     const isSelected = selectedCategories.includes(rowData[0]);
-    //     return (
-    //         <div>
-    //             <input
-    //                 type="checkbox" // 複数選択を可能にするためにcheckboxに変更
-    //                 name="category" // 同じ名前でグループ化
-    //                 value={rowData[0]} // カテゴリー名を値として使用
-    //                 checked={isSelected} // 選択されたカテゴリーと比較
-    //                 onChange={() => {
-    //                     if (isSelected) {
-    //                         setSelectedCategories(selectedCategories.filter(category => category !== rowData[0])); // 選択解除
-    //                     } else {
-    //                         setSelectedCategories([...selectedCategories, rowData[0]]); // 選択追加
-    //                     }
-    //                 }} // 選択されたカテゴリーを更新
-    //                 className='large-radio'
-    //             />
-    //         </div>
-    //     );
-    // };
-
-       // 全選択ラジオボタン
-    // const selectAllRadioButton = () => {
-    //     const allSelected = filteredTotals.length === selectedCategories.length;
-    //     return (
-    //         <div>
-    //             <input
-    //                 type="checkbox"
-    //                 checked={allSelected}
-    //                 onChange={() => {
-    //                     if (allSelected) {
-    //                         setSelectedCategories([]); // 全選択解除
-    //                     } else {
-    //                         setSelectedCategories(filteredTotals.map(row => row[0])); // 全選択
-    //                     }
-    //                 }}
-    //                 className='large-radio'
-    //             />
-    //         </div>
-    //     );
-    // };
-
     const onGlobalFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
         setGlobalFilterValue(value);

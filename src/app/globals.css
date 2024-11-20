@@ -46,7 +46,7 @@ body {
 
 /*  */
 .selected-row {
-    background-color: #e0f7fa; /* 選択された行の背景色 */
+  background-color: #e0f7fa; /* 選択された行の背景色 */
 }
 
 /* speedDial.tsx */
@@ -140,7 +140,6 @@ body {
   border-radius: 0.5rem;
 }
 
-
 /* styles.css */
 .custom-select-button .expense-option.p-highlight {
   background-color: #fc8b8b; /* 支出オプションの選択時の背景色 */
@@ -159,12 +158,6 @@ body {
   color: rgb(255, 255, 255); /* 貯金オプションの選択時のテキスト色 */
   box-shadow: 0 0 5px 2px #addaff; /* 貯金オプションの選択時のボックスシャドウ */
 }
-
-
-
-
-
-
 
 /* 内部のdivやspanにスタイルを適用 */
 .custom-select-button .p-button-label {
@@ -190,4 +183,20 @@ input:focus {
 select:focus {
   border-color: #007bff;
   outline: none;
+}
+
+/* styles.css または適切なCSSファイルに追加 */
+.tooltip-custom {
+  @apply bg-gray-500 text-white rounded p-2; /* 背景をグレー、文字色を白、角を丸く、パディングを追加 */
+}
+
+.tooltip-custom::after {
+  content: "";
+  position: absolute;
+  top: 50%; /* ツールチップの下に配置 */
+  right: 100%; /* 中央に配置 */
+  margin-top: -0.3rem; /* 三角形を中央に配置 */
+  border-width: 0.35rem; /* 三角形のサイズ */
+  border-style: solid;
+  border-color: transparent #6b7280 transparent transparent; /* 吹き出しの色 */
 }

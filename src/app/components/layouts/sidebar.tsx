@@ -12,6 +12,9 @@ export default function Headless() {
         <div className='w-20 flex flex-col'>
             <Tooltip target=".tooltip" className="tooltip-custom" />
             <div className='flex items-center justify-center flex-col gap-5'>
+							<Link className='tooltip w-14 h-14 flex items-center justify-center' data-pr-tooltip='home' href={"./"}>
+								<span className='pi pi-home mt-2' style={{ fontSize: '1.75rem', color: '#495057' }}></span>
+							</Link>
 							<Link className='tooltip w-14 h-14 flex items-center justify-center' data-pr-tooltip="daily" href={"./TransactionList"}>
                 <span className='pi pi-book mt-2' style={{ fontSize: '1.75rem', color: '#495057' }}></span>
 							</Link>

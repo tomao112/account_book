@@ -142,7 +142,7 @@ const categories = [
         <MonthlySummary summary={monthlySummary} />
       </div>
 
-      <div className='ml-32 mr-32 h-screen bg-white'>
+      <div className='ml-32 mr-32 bg-white'>
         <table className="w-full ">
           <thead>
             <tr className="bg-gray-100 text-gray-600 uppercase text-sm leading-normal">

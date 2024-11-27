@@ -168,7 +168,7 @@ export default function Home() {
 
   return (
     <main>
-      <div>
+      <div className=''>
         <div className="flex justify-end mr-20 mt-5 items-center">
           <button onClick={() => changeMonth(-1)} className="border text-black px-2 py-1 rounded">
             &lt;
@@ -180,7 +180,7 @@ export default function Home() {
             &gt;
           </button>
         </div>
-        <div>
+        <div className='flex justify-center'>
           <MonthlySummary summary={monthlySummary} />
         </div>
         <Calendar 
@@ -196,9 +196,6 @@ export default function Home() {
             date={selectedDate}
             transactions={selectedTransaction}
           />
-        {/* <div className="col-span-8">
-          <TransactionList transactions={getFilterTransactions()} onEdit={handleEdit} onDelete={handleDelete} />
-        </div> */}
       </div>
       <div className="container mx-auto p-4">
       {isEditing && (

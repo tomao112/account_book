@@ -104,7 +104,7 @@ function CategoryTotal({ selectedMonth, activeIndex }: CategoryTotalProps) {
     };
 
     return (
-        <div className="card mr-32 ml-32 mb-10 border">
+        <div className="card mr-32 ml-32 mb-10 border w-2/4">
             {header}
             <DataTable  value={filteredTotals} dataKey="0" emptyMessage="No categories found." rowClassName={rowClassName}>
                 {/* <Column header={selectAllRadioButton} body={radioButtonBodyTemplate} style={{ width: '4rem' }} /> */}

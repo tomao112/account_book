@@ -9,7 +9,7 @@ import Link from 'next/link';
 export default function Headless() {
 
     return (
-        <div className='w-20 flex flex-col'>
+        <div className='w-20 flex flex-col h-screen'>
             <Tooltip target=".tooltip" className="tooltip-custom" />
             <div className='flex items-center justify-center flex-col gap-5'>
 							<Link className='tooltip w-14 h-14 flex items-center justify-center' data-pr-tooltip="daily" href={"./TransactionList"}>

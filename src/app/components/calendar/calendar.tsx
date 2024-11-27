@@ -81,7 +81,7 @@ const Calendar: React.FC<CalendarProps> = ({ selectedMonth, transactions, onDate
   const renderCalendar = () => {
     const days = generateCalendarDays(selectedMonth);
     return (
-        <div className="grid grid-cols-7 pr-32 pl-32 pb-10">
+        <div className="grid grid-cols-7 pb-10 w-2/4">
           {['日', '月', '火', '水', '木', '金', '土'].map((day, index) => (
           <div key={index} className={`text-center border p-1 ${day === '土' ? 'text-blue-500' : day === '日' ? 'text-red-500' : 'text-gray-500'}`}>
             {day}
@@ -130,7 +130,7 @@ const Calendar: React.FC<CalendarProps> = ({ selectedMonth, transactions, onDate
   };
 
   return (
-    <div>
+    <div className='flex justify-center'>
       {renderCalendar()}
     </div>
   );

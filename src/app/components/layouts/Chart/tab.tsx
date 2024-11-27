@@ -46,7 +46,7 @@ export default function Tab({ transactions, selectedMonth }: BarGraphProps) {
 // コンポーネント内で使用
 return (
     <div>
-        <TabMenu className='mr-32 ml-32 mb-5 mt-5 border rounded-lg' model={items} activeIndex={activeIndex} onTabChange={handleTabChange} />
+        <TabMenu className='mr-32 ml-32 mb-5 mt-5 border rounded-lg w-2/4' model={items} activeIndex={activeIndex} onTabChange={handleTabChange} />
         <div>
             {activeIndex === 0 && (
                 <>
@@ -55,7 +55,6 @@ return (
                     <CategoryTotal selectedMonth={selectedMonth} activeIndex={activeIndex}/>
                 </>
             )}
-						
         </div>
         <div>
             {activeIndex === 1 && (

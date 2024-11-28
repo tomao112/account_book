@@ -72,7 +72,7 @@ export default function ExpenseBarGraph({ transactions, selectedMonth }: BarGrap
     }, [transactions, selectedMonth]); // transactionsとselectedMonthが変更されたときに再計算
 
     return (
-        <div className="card mr-32 ml-32 border rounded-lg p-8 w-2/4">
+        <div className="card border rounded-lg p-8 w-1/2 shadow-sm">
             <Chart type="bar" data={chartData} options={chartOptions} />
         </div>
     );

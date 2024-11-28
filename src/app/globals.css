@@ -125,6 +125,21 @@ body {
   color: #8bdd9d;
 }
 
+.border-muted-red {
+  border-bottom: 2px solid #ec7e7e;
+  width: 10rem;
+}
+
+.border-muted-blue {
+  border-bottom: 2px solid #8abbf3;
+  width: 10rem;
+}
+
+.border-muted-green {
+  border-bottom: 2px solid #8bdd9d;
+  width: 10rem;
+}
+
 /* styles.css */
 .custom-select-button {
   margin-top: 0.5rem;

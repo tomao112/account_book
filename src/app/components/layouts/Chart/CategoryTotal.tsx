@@ -75,9 +75,9 @@ function CategoryTotal({ selectedMonth, activeIndex }: CategoryTotalProps) {
         }
     };
 
-    const actionBodyTemplate = () => {
-        return <div className='relative top-4'><SpeedDialComponents /></div>;
-    };
+    // const actionBodyTemplate = () => {
+    //     return <div className='relative top-4'><SpeedDialComponents /></div>;
+    // };
 
     const onGlobalFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
@@ -103,18 +103,53 @@ function CategoryTotal({ selectedMonth, activeIndex }: CategoryTotalProps) {
         return selectedCategories.includes(data[0]) ? 'selected-row' : '';
     };
 
-    return (
-        <div className="card mr-32 ml-32 mb-10 border w-2/4">
-            {header}
-            <DataTable  value={filteredTotals} dataKey="0" emptyMessage="No categories found." rowClassName={rowClassName}>
-                {/* <Column header={selectAllRadioButton} body={radioButtonBodyTemplate} style={{ width: '4rem' }} /> */}
-                <Column field="0" header="Category" body={(rowData) => rowData[0]} sortable />
-                <Column field="1.total" header="Total" body={(rowData) => `¥${rowData[1].total.toLocaleString()}`} sortable />
-                <Column header="Action" body={actionBodyTemplate} />
-            </DataTable>
-
-        </div>
-    );
+		return (
+			<div className="card border rounded-lg p-8 w-full h-96 shadow-sm">
+					{header}
+					<div className="h-[calc(100%-80px)] overflow-y-auto">
+							<DataTable 
+									value={filteredTotals} 
+									dataKey="0" 
+									emptyMessage="No categories found." 
+									rowClassName={rowClassName}
+									className="border-none"
+									stripedRows
+									rows={5}
+									showGridlines={false}
+									scrollable
+									scrollHeight="100%"
+							>
+									<Column 
+											field="0" 
+											header="Category" 
+											body={(rowData) => (
+													<div className="flex items-center gap-2 py-2">
+															<span className="w-2 h-2 rounded-full bg-blue-500"></span>
+															<span className="font-medium">{rowData[0]}</span>
+													</div>
+											)} 
+											sortable 
+											className="text-gray-700"
+											frozen
+									/>
+									<Column 
+											field="1.total" 
+											header="Total" 
+											body={(rowData) => (
+													<div className="font-semibold text-gray-800">
+															¥{rowData[1].total.toLocaleString()}
+													</div>
+											)} 
+											sortable 
+									/>
+									<Column 
+											header="Action" 
+											className="w-24" 
+									/>
+							</DataTable>
+					</div>
+			</div>
+	);
 }
 
 export default CategoryTotal;

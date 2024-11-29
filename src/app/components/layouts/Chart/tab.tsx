@@ -102,6 +102,9 @@ return (
                     <ExpenseBarGraph transactions={transactions} selectedMonth={selectedMonth} />
 										<div className='flex flex-col items-center'>
 											{/* <MonthlySummary summary={monthlySummary} /> */}
+											<div className='border bg-slate-600'>
+												月の合計金額
+											</div>
 											<CategoryTotal selectedMonth={selectedMonth} activeIndex={activeIndex}/>
 										</div>
                 </div>

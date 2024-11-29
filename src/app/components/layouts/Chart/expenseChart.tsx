@@ -60,20 +60,50 @@ export default function ExpenseBarGraph({ transactions, selectedMonth }: BarGrap
         };
 
         const options = {
+            maintainAspectRatio: false,
+            aspectRatio: 0.75,
             scales: {
-                y: {
-                    beginAtZero: true
+                x: {
+                    grid: {
+                        display: false
+                    },
+                    ticks: {
+                        maxRotation: 45,
+                        minRotation: 45
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
                 }
             }
         };
+
+        // データセットの幅を調整（カテゴリーごとの最小幅を設定）
+        const minBarWidth = 80; // 各バーの最小幅（ピクセル）
+        const totalMinWidth = labels.length * minBarWidth;
+        
+        setChartData({
+            ...BarGraphData,
+            datasets: [{
+                ...BarGraphData.datasets[0],
+                barPercentage: 0.8,
+                categoryPercentage: 0.9
+            }]
+        });
 
         setChartData(BarGraphData);
         setChartOptions(options);
     }, [transactions, selectedMonth]); // transactionsとselectedMonthが変更されたときに再計算
 
     return (
-        <div className="card border rounded-lg p-8 w-1/2 shadow-sm">
-            <Chart type="bar" data={chartData} options={chartOptions} />
+        <div className="card border rounded-lg p-8 shadow-sm h-[30rem] w-[55rem]">
+            <div className="overflow-x-auto h-full">
+                <div className="min-w-[55rem] h-full"> {/* グラフの最小幅を設定 */}
+                    <Chart type="bar" data={chartData} options={chartOptions} />
+                </div>
+            </div>
         </div>
     );
 }

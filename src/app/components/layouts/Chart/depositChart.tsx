@@ -72,8 +72,12 @@ export default function BarGraph({ transactions, selectedMonth }: BarGraphProps)
     }, [transactions, selectedMonth]); // transactionsとselectedMonthが変更されたときに再計算
 
     return (
-        <div className="card border rounded-lg p-8 w-1/2 shadow-sm">
+        <div className="card border rounded-lg p-8 shadow-xl h-[30rem] w-[52rem]">
+        <div className="overflow-x-auto h-full">
+            <div className="h-full"> {/* グラフの最小幅を設定 */}
             <Chart type="bar" data={chartData} options={chartOptions} />
+            </div>
         </div>
+    </div>
     );
 }

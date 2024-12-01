@@ -8,7 +8,6 @@ import DepositBarGraph from '@/app/components/layouts/Chart/depositChart'; // �
 // import BudgetPage from '@/app/components/layouts/Chart/budgetChart'; // ここでBarGraphコンポーネントをインポート
 import { Transaction } from '@/app/components/layouts/income-expense/transactions';
 import CategoryTotal from '@/app/components/layouts/Chart/CategoryTotal';
-import MonthlySummary from '../income-expense/MonthlySummary';
 import { calculateMonthlySummaryAndCategoryTotals, calculateMonthSummary, getFilterTransactions } from '@/app/components/util/transactionUtil';
 
 
@@ -89,8 +88,33 @@ return (
             {activeIndex === 0 && (
                 <div className='flex justify-center items-end gap-6'>
                     <IncomeBarGraph transactions={transactions} selectedMonth={selectedMonth} />
-										<div className='flex flex-col items-center'>
-											{/* <MonthlySummary summary={monthlySummary} /> */}
+										<div className='flex flex-col items-center gap-5'>
+											{monthlySummary ? (
+												<div className='flex justify-around w-[28.5rem] border rounded-md pt-2 pb-2 shadow-md'>
+													<div className="flex flex-col items-center w-20 mb-2 pr-5 border-r">
+														<span className='text-sm'>収入</span>
+														<span className="text-muted-green text-center">¥{monthlySummary.income.toLocaleString()}</span>
+													</div>
+													<div className="flex flex-col justify-between items-center w-20 mb-2 pr-8 border-r">
+														<span className='text-sm'>支出</span>
+														<span className="text-muted-red">¥{monthlySummary.expense.toLocaleString()}</span>
+													</div>
+													<div className="flex flex-col items-center w-20 pr-8 border-r">
+														<span className='text-sm'>貯金</span>
+														<span className="text-muted-blue">¥{monthlySummary.deposit.toLocaleString()}</span>
+													</div>
+													<div className="">
+														<div className="flex flex-col items-center w-20 pr-5">
+															<span className='text-sm'>収支合計</span>
+															<span className={`${monthlySummary.income - monthlySummary.expense > 0 ? 'text-muted-green' : 'text-muted-red'}`}>
+																¥{(monthlySummary.income - monthlySummary.expense).toLocaleString()}
+															</span>
+														</div>
+													</div>
+												</div>
+												) : (
+													<p className="text-center text-gray-500">データがありません</p>
+												)}
 											<CategoryTotal selectedMonth={selectedMonth} activeIndex={activeIndex}/>
 										</div>
                 </div>
@@ -100,11 +124,33 @@ return (
             {activeIndex === 1 && (
                 <div className='flex justify-center items-end gap-6'>
                     <ExpenseBarGraph transactions={transactions} selectedMonth={selectedMonth} />
-										<div className='flex flex-col items-center'>
-											{/* <MonthlySummary summary={monthlySummary} /> */}
-											<div className='border bg-slate-600'>
-												月の合計金額
-											</div>
+										<div className='flex flex-col items-center gap-5'>
+											{monthlySummary ? (
+												<div className='flex justify-around w-[28.5rem] border rounded-md pt-2 pb-2 shadow-md'>
+													<div className="flex flex-col items-center w-20 mb-2 pr-5 border-r">
+														<span className='text-sm'>収入</span>
+														<span className="text-muted-green text-center">¥{monthlySummary.income.toLocaleString()}</span>
+													</div>
+													<div className="flex flex-col justify-between items-center w-20 mb-2 pr-8 border-r">
+														<span className='text-sm'>支出</span>
+														<span className="text-muted-red">¥{monthlySummary.expense.toLocaleString()}</span>
+													</div>
+													<div className="flex flex-col items-center w-20 pr-8 border-r">
+														<span className='text-sm'>貯金</span>
+														<span className="text-muted-blue">¥{monthlySummary.deposit.toLocaleString()}</span>
+													</div>
+													<div className="">
+														<div className="flex flex-col items-center w-20 pr-5">
+															<span className='text-sm'>収支合計</span>
+															<span className={`${monthlySummary.income - monthlySummary.expense > 0 ? 'text-muted-green' : 'text-muted-red'}`}>
+																¥{(monthlySummary.income - monthlySummary.expense).toLocaleString()}
+															</span>
+														</div>
+													</div>
+												</div>
+												) : (
+													<p className="text-center text-gray-500">データがありません</p>
+												)}
 											<CategoryTotal selectedMonth={selectedMonth} activeIndex={activeIndex}/>
 										</div>
                 </div>
@@ -115,8 +161,33 @@ return (
             {activeIndex === 2 && (
                 <div className='flex justify-center items-end gap-6'>
                     <DepositBarGraph transactions={transactions} selectedMonth={selectedMonth} />
-										<div className='flex flex-col items-center'>
-											{/* <MonthlySummary summary={monthlySummary} /> */}
+										<div className='flex flex-col items-center gap-5'>
+											{monthlySummary ? (
+												<div className='flex justify-around w-[28.5rem] border rounded-md pt-2 pb-2 shadow-md'>
+													<div className="flex flex-col items-center w-20 mb-2 pr-5 border-r">
+														<span className='text-sm'>収入</span>
+														<span className="text-muted-green text-center">¥{monthlySummary.income.toLocaleString()}</span>
+													</div>
+													<div className="flex flex-col justify-between items-center w-20 mb-2 pr-8 border-r">
+														<span className='text-sm'>支出</span>
+														<span className="text-muted-red">¥{monthlySummary.expense.toLocaleString()}</span>
+													</div>
+													<div className="flex flex-col items-center w-20 pr-8 border-r">
+														<span className='text-sm'>貯金</span>
+														<span className="text-muted-blue">¥{monthlySummary.deposit.toLocaleString()}</span>
+													</div>
+													<div className="">
+														<div className="flex flex-col items-center w-20 pr-5">
+															<span className='text-sm'>収支合計</span>
+															<span className={`${monthlySummary.income - monthlySummary.expense > 0 ? 'text-muted-green' : 'text-muted-red'}`}>
+																¥{(monthlySummary.income - monthlySummary.expense).toLocaleString()}
+															</span>
+														</div>
+													</div>
+												</div>
+												) : (
+													<p className="text-center text-gray-500">データがありません</p>
+												)}
 											<CategoryTotal selectedMonth={selectedMonth} activeIndex={activeIndex}/>
 										</div>
                 </div>

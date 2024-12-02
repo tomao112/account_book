@@ -101,7 +101,7 @@ export default function ExpenseBarGraph({ transactions, selectedMonth }: BarGrap
     }, [transactions, selectedMonth]); // transactionsとselectedMonthが変更されたときに再計算
 
     return (
-        <div className="card border rounded-lg p-8 shadow-xl h-[30rem] w-[52rem]">
+        <div className="card border rounded-lg p-8 shadow-xl h-[30rem] w-[56rem]">
             <div className="overflow-x-auto h-full">
                 <div className="h-full"> {/* グラフの最小幅を設定 */}
                     <Chart type="bar" data={chartData} options={chartOptions} />

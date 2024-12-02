@@ -107,17 +107,16 @@ useEffect(() => {
   return (
   <div className="overflow-x-auto">
     <div className="flex justify-end mr-20 mt-5 items-center">
-      <button onClick={() => changeMonth(-1)} className="border text-black px-2 py-1 rounded">
+      <button onClick={() => changeMonth(-1)} className="border text-black px-2 py-1 rounded shadow-md">
         &lt;
       </button>
       <h2 className="pr-2 pl-2">
         {selectedMonth.getFullYear()}-{selectedMonth.getMonth() + 1}
       </h2>
-      <button onClick={() => changeMonth(+1)} className="border text-black px-2 py-1 rounded">
+      <button onClick={() => changeMonth(+1)} className="border text-black px-2 py-1 rounded shadow-md">
         &gt;
       </button>
     </div>
-
 		<div>
 			<Tab transactions={transactions} selectedMonth={selectedMonth} />
 		</div>

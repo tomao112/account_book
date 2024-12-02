@@ -138,131 +138,133 @@ const categories = [
         </button>
       </div>
 
-      <div>
+      <div className='flex justify-center'>
         <MonthlySummary summary={monthlySummary} />
       </div>
 
-      <div className='ml-32 mr-32 bg-white w-2/4 flex justify-center'>
-        <table className="w-full ">
-          <thead>
-            <tr className="bg-gray-100 text-gray-600 uppercase text-sm leading-normal">
-              <th className="border px-4 py-3 text-left">金額</th>
-              <th className="border px-4 py-3 text-left">支出/収入/貯金</th>
-              <th className="border px-4 py-3 text-left">カテゴリー</th>
-              <th className="border px-4 py-3 text-left">メモ</th>
-              <th className="border px-4 py-3 text-left">日付</th>
-              <th className="border px-4 py-3 text-left">編集/削除</th>
-            </tr>
-          </thead>
-          <tbody className="text-gray-600 text-sm">
-            {transactions
-              .filter(transaction => {
-                const transactionDate = new Date(transaction.date);
-                return (
-                  transactionDate.getFullYear() === selectedMonth.getFullYear() &&
-                  transactionDate.getMonth() === selectedMonth.getMonth()
-                );
-              })
-              .map((transaction) => (
-                <tr key={transaction.id} className="border-b hover:bg-gray-100">
-                  <td className="border px-4 py-2 w-1/6"> {/* 固定幅を設定 */}
-                    {editingTransaction?.id === transaction.id ? (
-                      <input
-                        type="number"
-                        value={editingTransaction.amount}
-                        onChange={(e) => setEditingTransaction({ ...editingTransaction, amount: parseFloat(e.target.value) })}
-                        className="w-full px-4 py-2 border rounded-md"
-                      />
-                    ) : (
-                      <span className="w-full">{transaction.amount}</span>
-                    )}
-                  </td>
-                  <td className="border px-4 py-2 w-1/6">
-                    {editingTransaction?.id === transaction.id ? (
-                      <select
-                        value={editingTransaction.type}
-                        onChange={(e) => setEditingTransaction({ ...editingTransaction, type: e.target.value })}
-                        className="w-full px-4 py-2 border rounded-md"
-                      >
-                        <option value="expense">支出</option>
-                        <option value="income">収入</option>
-                        <option value="deposit">貯金</option>
-                      </select>
-                    ) : (
-                      <span className="w-full">{transaction.type === 'expense' ? '支出' : transaction.type === 'income' ? '収入' : '貯金'}</span>
-                    )}
-                  </td>
-                  <td className="border px-4 py-2 w-1/6">
+      <div className='flex justify-center'>
+        <div className='h-[calc(100vh-20rem)] overflow-y-auto bg-white w-3/4'>
+          <table className="w-full">
+            <thead>
+              <tr className="bg-gray-100 text-gray-600 uppercase text-sm leading-normal">
+                <th className="border px-4 py-3 text-left">金額</th>
+                <th className="border px-4 py-3 text-left">支出/収入/貯金</th>
+                <th className="border px-4 py-3 text-left">カテゴリー</th>
+                <th className="border px-4 py-3 text-left">メモ</th>
+                <th className="border px-4 py-3 text-left">日付</th>
+                <th className="border px-4 py-3 text-left">編集/削除</th>
+              </tr>
+            </thead>
+            <tbody className="text-gray-600 text-sm">
+              {transactions
+                .filter(transaction => {
+                  const transactionDate = new Date(transaction.date);
+                  return (
+                    transactionDate.getFullYear() === selectedMonth.getFullYear() &&
+                    transactionDate.getMonth() === selectedMonth.getMonth()
+                  );
+                })
+                .map((transaction) => (
+                  <tr key={transaction.id} className="border-b hover:bg-gray-100">
+                    <td className="border px-4 py-2 w-1/6"> {/* 固定幅を設定 */}
                       {editingTransaction?.id === transaction.id ? (
-                          <select
-                              value={editingTransaction.category}
-                              onChange={(e) => setEditingTransaction({ ...editingTransaction, category: e.target.value })}
-                              className="w-full px-4 py-2 border rounded-md"
-                          >
-                              <option value="">選択してください</option>
-                              {categories.map((category) => (
-                                  <option key={category} value={category}>
-                                      {category}
-                                  </option>
-                              ))}
-                          </select>
+                        <input
+                          type="number"
+                          value={editingTransaction.amount}
+                          onChange={(e) => setEditingTransaction({ ...editingTransaction, amount: parseFloat(e.target.value) })}
+                          className="w-full px-4 py-2 border rounded-md"
+                        />
                       ) : (
-                          <span className="w-full">{transaction.category}</span>
+                        <span className="w-full">{transaction.amount}</span>
                       )}
-                  </td>
-                  <td className="border px-4 py-2 w-1/6">
-                    {editingTransaction?.id === transaction.id ? (
-                      <input
-                        type="text"
-                        value={editingTransaction.note}
-                        onChange={(e) => setEditingTransaction({ ...editingTransaction, note: e.target.value })}
-                        className="w-full px-2 py-2 border rounded-md"
-                      />
-                    ) : (
-                      <span className="w-full">{transaction.note}</span>
-                    )}
-                  </td>
-                  <td className="px-4 py-2 w-1/6">
-                    {editingTransaction?.id === transaction.id ? (
-                      <Calendar 
-                        value={new Date(editingTransaction.date)}
-                        onChange={(e) => setEditingTransaction({ ...editingTransaction, date: e.value ? e.value.toLocaleDateString('en-CA') : '' })}
-                        className="w-full"
-                        inputStyle={{ width: '6rem', borderColor: '#d3d3d3', borderRadius: '0.5rem', margin: 'initial', padding: '0.5rem', border: '1px solid #d3d3d3' }}
-                        // showIcon
-                        dateFormat='yy/mm/dd'
-                        placeholder='日付を選択'/>
-                    ) : (
-                      <span className="w-full">{transaction.date}</span>
-                    )}
-                  </td>
-                  <td className="px-4 py-2 flex items-center justify-center border-l border-r">
-                    {editingTransaction?.id === transaction.id ? (
-                      <div className='flex gap-3 items-center justify-center'>
-                        <SaveButton 
-                          onClick={() => handleSaveEdit(editingTransaction)}
+                    </td>
+                    <td className="border px-4 py-2 w-1/6">
+                      {editingTransaction?.id === transaction.id ? (
+                        <select
+                          value={editingTransaction.type}
+                          onChange={(e) => setEditingTransaction({ ...editingTransaction, type: e.target.value })}
+                          className="w-full px-4 py-2 border rounded-md"
+                        >
+                          <option value="expense">支出</option>
+                          <option value="income">収入</option>
+                          <option value="deposit">貯金</option>
+                        </select>
+                      ) : (
+                        <span className="w-full">{transaction.type === 'expense' ? '支出' : transaction.type === 'income' ? '収入' : '貯金'}</span>
+                      )}
+                    </td>
+                    <td className="border px-4 py-2 w-1/6">
+                        {editingTransaction?.id === transaction.id ? (
+                            <select
+                                value={editingTransaction.category}
+                                onChange={(e) => setEditingTransaction({ ...editingTransaction, category: e.target.value })}
+                                className="w-full px-4 py-2 border rounded-md"
+                            >
+                                <option value="">選択してください</option>
+                                {categories.map((category) => (
+                                    <option key={category} value={category}>
+                                        {category}
+                                    </option>
+                                ))}
+                            </select>
+                        ) : (
+                            <span className="w-full">{transaction.category}</span>
+                        )}
+                    </td>
+                    <td className="border px-4 py-2 w-1/6">
+                      {editingTransaction?.id === transaction.id ? (
+                        <input
+                          type="text"
+                          value={editingTransaction.note}
+                          onChange={(e) => setEditingTransaction({ ...editingTransaction, note: e.target.value })}
+                          className="w-full px-2 py-2 border rounded-md"
                         />
-                        <CancelButton 
-                          onClick={handleCancelEdit}
-                        />
-                      </div>
-                    ) : (
-                      <div className='flex gap-3 items-center justify-center'>
-                        <EditButton
-                          onClick={() => {
-                            setEditingTransaction(transaction); // 編集ボタンをクリックしたときにトランザクションを設定
-                          }} />
-                        <DeleteButton
-                          onClick={() => {
-                            handleDeleteTransaction(transaction.id); // 削除ボタンをクリックしたときに削除処理を呼び出す
-                          }} />
-                      </div>
-                    )}
-                  </td>
-                </tr>
-              ))}
-          </tbody>
-        </table>
+                      ) : (
+                        <span className="w-full">{transaction.note}</span>
+                      )}
+                    </td>
+                    <td className="px-4 py-2 w-1/6">
+                      {editingTransaction?.id === transaction.id ? (
+                        <Calendar 
+                          value={new Date(editingTransaction.date)}
+                          onChange={(e) => setEditingTransaction({ ...editingTransaction, date: e.value ? e.value.toLocaleDateString('en-CA') : '' })}
+                          className="w-full"
+                          inputStyle={{ width: '6rem', borderColor: '#d3d3d3', borderRadius: '0.5rem', margin: 'initial', padding: '0.5rem', border: '1px solid #d3d3d3' }}
+                          // showIcon
+                          dateFormat='yy/mm/dd'
+                          placeholder='日付を選択'/>
+                      ) : (
+                        <span className="w-full">{transaction.date}</span>
+                      )}
+                    </td>
+                    <td className="px-4 py-2 flex items-center justify-center border-l border-r">
+                      {editingTransaction?.id === transaction.id ? (
+                        <div className='flex gap-3 items-center justify-center'>
+                          <SaveButton 
+                            onClick={() => handleSaveEdit(editingTransaction)}
+                          />
+                          <CancelButton 
+                            onClick={handleCancelEdit}
+                          />
+                        </div>
+                      ) : (
+                        <div className='flex gap-3 items-center justify-center'>
+                          <EditButton
+                            onClick={() => {
+                              setEditingTransaction(transaction); // 編集ボタンをクリックしたときにトランザクションを設定
+                            }} />
+                          <DeleteButton
+                            onClick={() => {
+                              handleDeleteTransaction(transaction.id); // 削除ボタンをクリックしたときに削除処理を呼び出す
+                            }} />
+                        </div>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );

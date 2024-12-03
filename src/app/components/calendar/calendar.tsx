@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Transaction } from '../layouts/income-expense/transactions';
+import { Transaction } from '../../income-expense/transactions';
 
 interface CalendarProps {
   selectedMonth: Date;

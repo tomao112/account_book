@@ -5,8 +5,8 @@ import { supabase } from '@/app/lib/supabaseClient';
 import type { Transaction } from './transactions';
 import Calendar from '@/app/components/calendar/calendar';
 // import TransactionList from '@/app/components/layouts/ToransactionList/TransactionList';
-import TransactionForm from '@/app/components/layouts/income-expense/TransactionForm';
-import MonthlySummary from '@/app/components/layouts/income-expense/MonthlySummary';
+import TransactionForm from '@/app/income-expense/TransactionForm';
+import MonthlySummary from '@/app/income-expense/MonthlySummary';
 import TransactionModel from './TransactionModel';
 import { calculateMonthSummary, getFilterTransactions, calculateMonthlyCategoryTotals, calculateMonthlySummaryAndCategoryTotals} from '@/app/components/util/transactionUtil';
 

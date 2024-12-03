@@ -1,5 +1,5 @@
 // account_book/src/app/components/util/transactionUtil.ts
-import { Transaction } from '@/app/components/layouts/income-expense/transactions';
+import { Transaction } from '@/app/income-expense/transactions';
 
 export const calculateMonthSummary = (filteredTransactions: Transaction[]) => {
     const income = filteredTransactions

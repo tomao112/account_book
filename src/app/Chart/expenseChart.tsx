@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Chart } from 'primereact/chart';
-import { Transaction } from '@/app/components/layouts/income-expense/transactions';
+import { Transaction } from '@/app/income-expense/transactions';
 
 interface BarGraphProps {
     transactions: Transaction[] | null;

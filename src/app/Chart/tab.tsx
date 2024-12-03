@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { TabMenu } from 'primereact/tabmenu';
 import { MenuItem } from 'primereact/menuitem';
 import { TabMenuTabChangeEvent } from 'primereact/tabmenu'; // 追加
-import ExpenseBarGraph from '@/app/components/layouts/Chart/expenseChart'; // ここでBarGraphコンポーネントをインポート
-import IncomeBarGraph from '@/app/components/layouts/Chart/incomeChart'; // ここでBarGraphコンポーネントをインポート
-import DepositBarGraph from '@/app/components/layouts/Chart/depositChart'; // ここでBarGraphコンポーネントをインポート
+import ExpenseBarGraph from '@/app/Chart/expenseChart'; // ここでBarGraphコンポーネントをインポート
+import IncomeBarGraph from '@/app/Chart/incomeChart'; // ここでBarGraphコンポーネントをインポート
+import DepositBarGraph from '@/app/Chart/depositChart'; // ここでBarGraphコンポーネントをインポート
 // import BudgetPage from '@/app/components/layouts/Chart/budgetChart'; // ここでBarGraphコンポーネントをインポート
-import { Transaction } from '@/app/components/layouts/income-expense/transactions';
-import CategoryTotal from '@/app/components/layouts/Chart/CategoryTotal';
+import { Transaction } from '@/app/income-expense/transactions';
+import CategoryTotal from '@/app/Chart/CategoryTotal';
 import { calculateMonthlySummaryAndCategoryTotals, calculateMonthSummary, getFilterTransactions } from '@/app/components/util/transactionUtil';
 
 
@@ -159,7 +159,7 @@ return (
         </div>
         <div>
             {activeIndex === 2 && (
-                <div className='flex justify-center items-end gap-6'>
+                <div className='flex justify-center items-end gap-6 w-3/4'>
                     <DepositBarGraph transactions={transactions} selectedMonth={selectedMonth} />
 										<div className='flex flex-col items-center gap-5'>
 											{monthlySummary ? (

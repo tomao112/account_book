@@ -1,8 +1,8 @@
 'use client'
 import { FC, useState, useEffect } from 'react';
-import { Transaction } from '@/app/components/layouts/income-expense/transactions';
+import { Transaction } from '@/app/income-expense/transactions';
 import { supabase } from '@/app/lib/supabaseClient';
-import Tab from '@/app/components/layouts/Chart/tab';
+import Tab from '@/app/Chart/tab';
 import { calculateMonthlySummaryAndCategoryTotals} from '@/app/components/util/transactionUtil';
 
 interface TransactionListProps {

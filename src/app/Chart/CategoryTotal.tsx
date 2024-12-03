@@ -5,7 +5,7 @@ import { Tag } from 'primereact/tag';
 import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
 import { supabase } from '@/app/lib/supabaseClient';
-import { Transaction } from '@/app/components/layouts/income-expense/transactions';
+import { Transaction } from '@/app/income-expense/transactions';
 import { calculateMonthlySummaryAndCategoryTotals } from '@/app/components/util/transactionUtil';
 import { IoIosSearch } from "react-icons/io";
 

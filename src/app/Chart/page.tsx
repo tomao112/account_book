@@ -1,4 +1,5 @@
 'use client'
+import React from 'react';
 import { FC, useState, useEffect } from 'react';
 import { Transaction } from '@/app/income-expense/transactions';
 import { supabase } from '@/app/lib/supabaseClient';

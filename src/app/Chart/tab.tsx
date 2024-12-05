@@ -84,13 +84,13 @@ return (
         <div className='flex justify-center'>
             <TabMenu className='p-3 mb-5 mt-5 border rounded-lg w-3/4 shadow-md' model={items} activeIndex={activeIndex} />
         </div>
-        <div className=''>
+        <div className='w-full'>
             {activeIndex === 0 && (
-                <div className='flex justify-center items-end gap-6'>
+                <div className='flex justify-center gap-6 w-full'>
                     <IncomeBarGraph transactions={transactions} selectedMonth={selectedMonth} />
-										<div className='flex flex-col items-center gap-5'>
+										<div className='flex flex-col justify-between gap-5'>
 											{monthlySummary ? (
-												<div className='flex justify-around w-[35rem] border rounded-md pt-2 pb-2 shadow-md'>
+												<div className='flex justify-around border rounded-md pt-2 pb-2 shadow-md'>
 													<div className="flex flex-col items-center w-[7rem] mb-2 pl-5 pr-8 border-r">
 														<span className='text-sm'>収入</span>
 														<span className="text-muted-green text-center">¥{monthlySummary.income.toLocaleString()}</span>
@@ -122,11 +122,11 @@ return (
         </div>
         <div>
             {activeIndex === 1 && (
-                <div className='flex justify-center items-end gap-6'>
+                <div className='flex justify-center gap-6'>
                     <ExpenseBarGraph transactions={transactions} selectedMonth={selectedMonth} />
-										<div className='flex flex-col items-center gap-5'>
+										<div className='flex flex-col justify-between gap-5'>
 											{monthlySummary ? (
-												<div className='flex justify-around w-[28.5rem] border rounded-md pt-2 pb-2 shadow-md'>
+												<div className='flex justify-around w-[35rem] border rounded-md pt-2 pb-2 shadow-md'>
 													<div className="flex flex-col items-center w-[7rem] mb-2 pl-5 pr-8 border-r">
 														<span className='text-sm'>収入</span>
 														<span className="text-muted-green text-center">¥{monthlySummary.income.toLocaleString()}</span>
@@ -159,11 +159,11 @@ return (
         </div>
         <div>
             {activeIndex === 2 && (
-                <div className='flex justify-center items-end gap-6 w-3/4'>
+                <div className='flex justify-center gap-6'>
                     <DepositBarGraph transactions={transactions} selectedMonth={selectedMonth} />
-										<div className='flex flex-col items-center gap-5'>
+										<div className='flex flex-col justify-between gap-5'>
 											{monthlySummary ? (
-												<div className='flex justify-around w-[28.5rem] border rounded-md pt-2 pb-2 shadow-md'>
+												<div className='flex justify-around w-[35rem] border rounded-md pt-2 pb-2 shadow-md'>
 													<div className="flex flex-col items-center w-[7rem] mb-2 pl-5 pr-8 border-r">
 														<span className='text-sm'>収入</span>
 														<span className="text-muted-green text-center">¥{monthlySummary.income.toLocaleString()}</span>

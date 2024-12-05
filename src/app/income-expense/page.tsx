@@ -1,10 +1,10 @@
 'use client';
 
+import React from 'react';
 import { useEffect, useState } from 'react';
 import { supabase } from '@/app/lib/supabaseClient';
 import type { Transaction } from './transactions';
 import Calendar from '@/app/components/calendar/calendar';
-// import TransactionList from '@/app/components/layouts/ToransactionList/TransactionList';
 import TransactionForm from '@/app/income-expense/TransactionForm';
 import MonthlySummary from '@/app/income-expense/MonthlySummary';
 import TransactionModel from './TransactionModel';

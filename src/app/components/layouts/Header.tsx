@@ -3,6 +3,7 @@ import React from 'react';
 import { Button } from 'primereact/button';
 import Headless from '@/app/components/layouts/sidebar';
 import Image from "next/image"
+import Setting from './setting';
 
 
 const Header = () => {
@@ -34,6 +35,7 @@ const Header = () => {
 					</div>
 				</div>
 			</div>
+			<Setting />
 			<Headless />
 		</div>
 	)

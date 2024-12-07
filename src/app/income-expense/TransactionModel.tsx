@@ -63,7 +63,7 @@ const TransactionModel: React.FC<TransactionModelProps> = ({
 					</button>
 				<div className="flex items-center justify-around mb-3">
 					<button onClick={onAddNew} className="bg-muted-green border-2 text-white px-4 py-2 rounded-full">
-						+ 内訳
+						+ 追加
 					</button>
 					{/* メモ機能追加予定 */}
 					{/* <button onClick={onClose} className="bg-muted-yellow border-2 text-white px-4 py-2 rounded-full">

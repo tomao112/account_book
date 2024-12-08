@@ -250,22 +250,6 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ selectedDate, editing
                         </button>
                     </div>
                 </form>
-                {/* <div className='border-t-4 pt-4 mt-5'>
-                    <p className='pb-1'>新規カテゴリーを追加</p>
-                    <input
-                        type="text"
-                        value={newCategory}
-                        onChange={(e) => setNewCategory(e.target.value)}
-                        className='mt-1 p-2 w-full border'
-                    />
-                    <div className='flex gap-3 mt-3'>
-                        <button type="button" onClick={handleSaveCategory} className="mt-2 bg-muted-green border-2 text-white px-4 py-2 rounded-full">
-                            保存
-                        </button>
-                        <button type='button' onClick={() => handleEditCategory(transaction.category)} className='mt-2 bg-muted-yellow border-2 text-white px-4 py-2 rounded-full'>編集</button>
-                        <button type='button' onClick={handleAddCategory} className="mt-2 bg-muted-blue border-2 text-white px-4 py-2 rounded-full">追加</button>
-                    </div>
-                </div> */}
             </div>
         </div>
     );

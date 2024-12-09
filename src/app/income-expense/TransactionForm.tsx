@@ -99,30 +99,6 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ selectedDate, editing
 				'その他',
 			];
 
-
-// TransactionFormコンポーネントの定義はそのまま
-
-    // 新しいカテゴリー
-    const [newCategory, setNewCategory] = useState<string>('');
-
-    // カテゴリー追加処理
-    // const handleAddCategory = async () => {
-    //     if (newCategory && !categories.includes(newCategory)) {
-    //         // カテゴリーをローカルに追加
-    //         setCategories([...categories, newCategory]);
-
-    //         // カテゴリーをデータベースに登録
-    //         const { data, error } = await supabase.from('categories').insert([{ name: newCategory }]);
-    //         if (error) {
-    //             console.error('Error adding category:', error.message);
-    //         } else {
-    //             console.log('Category added:', data);
-    //         }
-
-    //         setNewCategory('');
-    //     }
-    // };
-
     // 編集中のカテゴリ
     const [editingCategory, setEditingCategory] = useState<string | null>(null);
 

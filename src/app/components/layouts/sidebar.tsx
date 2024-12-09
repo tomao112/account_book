@@ -21,9 +21,9 @@ export default function Headless() {
 							<Link className="tooltip w-14 h-14 flex items-center justify-center" data-pr-tooltip="chart" href={"/Chart"}>
 								<span className='pi pi-chart-line mt-2' style={{ fontSize: '1.75rem', color: '#495057' }}></span>
 							</Link>
-							<Link className="tooltip w-14 h-14 flex items-center justify-center" data-pr-tooltip="setting" href={"/appsetting"}>
+							{/* <Link className="tooltip w-14 h-14 flex items-center justify-center" data-pr-tooltip="setting" href={"/appsetting"}>
 								<span className='pi pi-cog mt-2' style={{ fontSize: '1.75rem', color: '#495057' }}></span>
-							</Link>
+							</Link> */}
             </div>
         </div>
     )

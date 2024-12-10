@@ -31,7 +31,6 @@ export default function BarGraph({ transactions, selectedMonth }: BarGraphProps)
             } else {
                 categoryTotals[transaction.category] = transaction.amount;
             }
-						console.log(categoryTotals);
         });
 
         const labels = Object.keys(categoryTotals);

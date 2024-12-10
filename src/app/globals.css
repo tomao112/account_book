@@ -213,3 +213,11 @@ select:focus {
   border-style: solid;
   border-color: transparent #4b5563 transparent transparent; /* 吹き出しの色 */
 }
+
+.p-chart {
+  position: initial;
+}
+
+/* .p-datatable-wrapper {
+  position: initial;
+} */

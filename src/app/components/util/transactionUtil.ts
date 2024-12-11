@@ -1,6 +1,7 @@
 // account_book/src/app/components/util/transactionUtil.ts
 import { Transaction } from '@/app/income-expense/transactions';
 
+// 月ごとの収支をフィルタリング
 export const calculateMonthSummary = (filteredTransactions: Transaction[]) => {
     const income = filteredTransactions
         .filter(t => t.type === 'income')
@@ -14,6 +15,7 @@ export const calculateMonthSummary = (filteredTransactions: Transaction[]) => {
     return { income, expense, deposit };
 };
 
+// 月が変更されるたびにその月の収支を表示
 export const getFilterTransactions = (transactions: Transaction[], selectedMonth: Date) => {
     return transactions.filter(transaction => {
         const transactionDate = new Date(transaction.date);
@@ -24,6 +26,7 @@ export const getFilterTransactions = (transactions: Transaction[], selectedMonth
     });
 };
 
+// 収支のタイプを分別し、カテゴリーごとの収支の合計を取得
 export const calculateMonthlyCategoryTotals = (transactions: Transaction[]) => {
     const categoryTotals: { [key: string]: number } = {};
 
@@ -40,6 +43,7 @@ export const calculateMonthlyCategoryTotals = (transactions: Transaction[]) => {
     return categoryTotals;
 };
 
+// それぞれの月のカテゴリーごとの収支を計算し、カテゴリーごとの合計を計算する
 export function calculateMonthlySummaryAndCategoryTotals(transactions: Transaction[], selectedMonth: Date) {
     const categoryTotals: { [key: string]: { total: number; type: string } } = {};
     let summary = { income: 0, expense: 0, deposit: 0 };
@@ -72,7 +76,6 @@ export function calculateMonthlySummaryAndCategoryTotals(transactions: Transacti
             }
         }
     });
-    console.log(summary);
     return { summary, totals: categoryTotals };
 
 }

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Tag } from 'primereact/tag';
-import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
 import { supabase } from '@/app/lib/supabaseClient';
 import { Transaction } from '@/app/income-expense/transactions';

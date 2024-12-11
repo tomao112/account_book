@@ -1,3 +1,5 @@
+// 日別の収支を表示するページ
+
 'use client'
 import { FC, useState, useEffect } from 'react';
 import { Transaction } from '@/app/income-expense/transactions';
@@ -9,7 +11,6 @@ import DeleteButton from '@/app/TransactionList/DeleteButton';
 import SaveButton from '@/app/TransactionList/SaveButton';
 import CancelButton from '@/app/TransactionList/CancelButton';
 import { Calendar } from 'primereact/calendar';
-import styles from '@/app/components/layouts/TransactionList/MonthlySummary.module.css'
 
 interface TransactionListProps {
   transactions: Transaction[];
@@ -24,10 +25,12 @@ const TransactionList: FC<TransactionListProps> = ({ onEdit, onDelete }) => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [categoryTotals, setCategoryTotals] = useState<{ [key: string]: { total: number; type: string } }>({});
 
+  // 編集用キャンセルボタンの処理
   const handleCancelEdit = () => {
     setEditingTransaction(null);
   };
 
+  // 編集した収支をsupabaseに保存し、即座に反映させる
   const handleSaveEdit = async (updatedTransaction: Transaction) => {
     // Supabaseでトランザクションを更新
     const { data, error } = await supabase
@@ -46,12 +49,14 @@ const TransactionList: FC<TransactionListProps> = ({ onEdit, onDelete }) => {
     }
   };
 
+  // 月を変更したときにそれぞれの月の収支を取得
   useEffect(() => {
     const filteredTransactions = getFilterTransactions(transactions, selectedMonth);
     const summary = calculateMonthSummary(filteredTransactions);
     setMonthlySummary(summary);
   }, [selectedMonth, transactions]);
 
+  // 月を変更する
   const changeMonth = (increment: number): void => {
     setSelectedMonth(prevMonth => {
       const newMonth = new Date(prevMonth);
@@ -59,13 +64,17 @@ const TransactionList: FC<TransactionListProps> = ({ onEdit, onDelete }) => {
       return newMonth;
     });
   };
-
+  
+  // 選択された月の収支とカテゴリの合計を計算し、状態を更新する
+  // 必要ないかも？
   useEffect(() => {
     const { summary, totals } = calculateMonthlySummaryAndCategoryTotals(transactions, selectedMonth);
     setMonthlySummary(summary);
     setCategoryTotals(totals as unknown as { [key: string]: { total: number; type: string } });
   }, [selectedMonth, transactions]);
 
+  // ページがレンダリングされたときに１度だけ実行される
+  // 収支のデータをすべて取得し、表示する
   useEffect(() => {
     const fetchTransactions = async () => {
       const { data, error } = await supabase
@@ -82,6 +91,7 @@ const TransactionList: FC<TransactionListProps> = ({ onEdit, onDelete }) => {
 
     fetchTransactions();
 
+    // 収支が変更されたときに最新のデータを再取得する
     const subscription = supabase
       .channel('public:transactions')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'transactions' }, (payload) => {
@@ -91,10 +101,12 @@ const TransactionList: FC<TransactionListProps> = ({ onEdit, onDelete }) => {
       .subscribe();
 
     return () => {
+      // メモリリークを防ぎ、不要なリスニングを停止
       supabase.removeChannel(subscription);
     };
   }, []);
 
+  // 削除ボタン用処理
   const handleDeleteTransaction = async (id: number) => {
     const { error } = await supabase
         .from('transactions')

@@ -40,9 +40,9 @@ const Contact = () => {
       console.log(values)
     }
   return (
-    <div className='flex justify-center'>
+    <div className='flex justify-center items-center h-full'>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 flex flex-col justify-center items-center">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 flex flex-col w-2/3 border p-20 rounded-xl shadow-md">
           {/* ユーザーネーム */}
           <FormField
             control={form.control}
@@ -51,7 +51,7 @@ const Contact = () => {
               <FormItem>
                 <FormLabel>Username</FormLabel>
                 <FormControl>
-                  <Input placeholder="user name" {...field} />
+                  <Input className='rounded-xl' placeholder="user name" {...field} />
                 </FormControl>
                 <FormDescription>
                   This is your public display name.
@@ -69,7 +69,7 @@ const Contact = () => {
               <FormItem>
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input type='email' placeholder="email" {...field} />
+                  <Input className='rounded-xl' type='email' placeholder="email" {...field} />
                 </FormControl>
                 <FormDescription>
                   This is your public display email.
@@ -87,7 +87,7 @@ const Contact = () => {
               <FormItem>
                 <FormLabel>Message</FormLabel>
                 <FormControl>
-                  <Input placeholder="message" {...field} />
+                  <Input className='rounded-xl' placeholder="message" {...field} />
                 </FormControl>
                 <FormDescription>
                   This is your public display message.
@@ -96,7 +96,7 @@ const Contact = () => {
               </FormItem>
             )}
           />
-          <Button type="submit">Submit</Button>
+          <Button className='rounded-xl bg-blue-300' type="submit">Submit</Button>
         </form>
       </Form>
     </div>

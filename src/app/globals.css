@@ -201,6 +201,11 @@ select:focus {
   outline: none;
 }
 
+textarea:focus {
+  border-color: #007bff; /* フォーカス時のボーダー色を青に変更 */
+  outline: none; /* デフォルトのアウトラインを解除 */
+}
+
 .tooltip-custom::after {
   content: "";
   position: absolute;

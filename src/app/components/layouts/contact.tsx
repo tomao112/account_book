@@ -15,6 +15,8 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
+
 
 const formSchema = z.object({
   username: z.string().min(2).max(50),
@@ -49,9 +51,9 @@ const Contact = () => {
             name="username"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Username</FormLabel>
+                <FormLabel>User name</FormLabel>
                 <FormControl>
-                  <Input className='rounded-xl' placeholder="user name" {...field} />
+                  <Input className='rounded-xl focus:border-blue-500' placeholder="user name" {...field} />
                 </FormControl>
                 <FormDescription>
                   This is your public display name.
@@ -87,7 +89,7 @@ const Contact = () => {
               <FormItem>
                 <FormLabel>Message</FormLabel>
                 <FormControl>
-                  <Input className='rounded-xl' placeholder="message" {...field} />
+                  <Textarea className='rounded-xl shadow-sm' />
                 </FormControl>
                 <FormDescription>
                   This is your public display message.

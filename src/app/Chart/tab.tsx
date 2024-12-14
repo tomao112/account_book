@@ -3,7 +3,7 @@ import { TabMenu } from 'primereact/tabmenu';
 import { MenuItem } from 'primereact/menuitem';
 import { TabMenuTabChangeEvent } from 'primereact/tabmenu'; // 追加
 import ExpenseBarGraph from '@/app/Chart/expenseChart'; // ここでBarGraphコンポーネントをインポート
-import IncomeBarGraph from '@/app/Chart/incomeChart'; // ここでBarGraphコンポーネントをインポート
+import IncomeComponents from '@/app/Chart/incomeChart'; // ここでBarGraphコンポーネントをインポート
 import DepositBarGraph from '@/app/Chart/depositChart'; // ここでBarGraphコンポーネントをインポート
 // import BudgetPage from '@/app/components/layouts/Chart/budgetChart'; // ここでBarGraphコンポーネントをインポート
 import { Transaction } from '@/app/income-expense/transactions';
@@ -87,7 +87,8 @@ return (
         <div className='w-full'>
             {activeIndex === 0 && (
                 <div className='flex justify-center gap-6 w-full'>
-                    <IncomeBarGraph transactions={transactions} selectedMonth={selectedMonth} />
+                    {/* <IncomeBarGraph transactions={transactions} selectedMonth={selectedMonth} /> */}
+										<IncomeComponents transactions={transactions} selectedMonth={selectedMonth} />
 										<div className='flex flex-col justify-between gap-5'>
 											{monthlySummary ? (
 												<div className='flex justify-around border rounded-md pt-2 pb-2 shadow-md'>

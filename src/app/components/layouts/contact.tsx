@@ -45,6 +45,7 @@ const Contact = () => {
     <div className='flex justify-center items-center h-full'>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 flex flex-col w-2/3 border p-20 rounded-xl shadow-md">
+          <h1 className='text-center text-2xl'>Contact us</h1>
           {/* ユーザーネーム */}
           <FormField
             control={form.control}
@@ -98,7 +99,7 @@ const Contact = () => {
               </FormItem>
             )}
           />
-          <Button className='rounded-xl bg-blue-300' type="submit">Submit</Button>
+          <Button className='rounded-xl bg-blue-300' type="submit">send your message!</Button>
         </form>
       </Form>
     </div>

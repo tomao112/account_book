@@ -62,23 +62,25 @@ export default function IncomeComponents({ transactions, selectedMonth }: ChartP
 	} satisfies ChartConfig;
 
   return (
-    <div className="p-4 bg-white rounded-lg shadow-md w-[56rem] border">
+    <div className="bg-white rounded-lg shadow-md w-[56rem]">
       {/* <h2 className="text-xl font-semibold text-center">Income Chart</h2> */}
-      <ChartContainer config={chartConfig} className="min-h-[200px] w-full p-4">
-        <BarChart accessibilityLayer data={chartData} height={300} width={500}>
+      <ChartContainer config={chartConfig} className="min-h-[300px] w-full">
+        <BarChart accessibilityLayer data={chartData}>
 				<XAxis
+				className="pb-4"
 					dataKey="category"
 					tickLine={false}
 					tickMargin={10}
 					axisLine={false}
-					tickFormatter={(value) => value.slice(0, 3)}
+					tickFormatter={(value) => value}
 					fontSize="10px"
 					stroke="#888"
 					interval={0}
 					orientation="bottom"
-					padding={{ left: 10, right: 10 }}
-					angle={-30}
-					textAnchor="end"
+					padding={{ left: 20, right: 20 }}
+					// angle={-30}
+					// textAnchor="end"
+					minTickGap={10}
 				/>
 				<Tooltip content={<ChartTooltipContent />} />
           <Bar dataKey="amount" fill={chartConfig.income.color} radius={4} />

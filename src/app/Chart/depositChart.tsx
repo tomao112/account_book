@@ -1,83 +1,86 @@
-import React, { useState, useEffect } from 'react';
-import { Chart } from 'primereact/chart';
-import { Transaction } from '@/app/income-expense/transactions';
+"use client"
 
-interface BarGraphProps {
+import { useEffect, useState } from "react";
+import { Bar, BarChart, Tooltip, XAxis } from "recharts"
+import { ChartConfig, ChartContainer } from "@/components/ui/chart"
+import { ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
+import { Transaction } from "@/app/income-expense/transactions";
+
+interface ChartProps {
 	transactions: Transaction[] | null;
-  selectedMonth: Date; // 選択された月を受け取る
+	selectedMonth: Date; // 選択された月を受け取る
 }
 
-export default function BarGraph({ transactions, selectedMonth }: BarGraphProps) {
-    const [chartData, setChartData] = useState({});
-    const [chartOptions, setChartOptions] = useState({});
+// ... existing code ...
+// ... existing code ...
+export default function IncomeComponents({ transactions, selectedMonth }: ChartProps) {
+  const [chartData, setChartData] = useState<{ category: string; amount: number }[]>([]);
 
-    useEffect(() => {
-        // transactionsがnullまたはundefinedの場合は処理をスキップ
-        if (!transactions) return;
+  useEffect(() => {
+    if (!transactions) return;
 
-        // typeがdepositのトランザクションのみをフィルタリングし、選択された月に基づいてフィルタリング
-        const depositTransactions = transactions.filter(transaction => {
-            const transactionDate = new Date(transaction.date);
-            return  transaction.type === 'deposit' &&
-                    transactionDate.getFullYear() === selectedMonth.getFullYear() &&
-                    transactionDate.getMonth() === selectedMonth.getMonth();
-        });
+    // incomeトランザクションのみをフィルタリングし、選択された月に基づいてフィルタリング
+    const incomeTransactions = transactions.filter(transaction => {
+      const transactionDate = new Date(transaction.date);
+      return  transaction.type === 'income' &&
+              transactionDate.getFullYear() === selectedMonth.getFullYear() &&
+              transactionDate.getMonth() === selectedMonth.getMonth();
+    });
 
-        // カテゴリーごとの合計を計算
-        const categoryTotals: { [key: string]: number } = {};
-        depositTransactions.forEach(transaction => {
-            if (categoryTotals[transaction.category]) {
-                categoryTotals[transaction.category] += transaction.amount;
-            } else {
-                categoryTotals[transaction.category] = transaction.amount;
-            }
-        });
+    // カテゴリーごとの合計を計算
+    const categoryTotals: { [key: string]: number } = {};
+    incomeTransactions.forEach(transaction => {
+      if (categoryTotals[transaction.category]) {
+        categoryTotals[transaction.category] += transaction.amount;
+      } else {
+        categoryTotals[transaction.category] = transaction.amount;
+      }
+    });
 
-        const labels = Object.keys(categoryTotals);
-        const data = Object.values(categoryTotals);
+    const newChartData = Object.entries(categoryTotals).map(([category, amount]) => ({
+      category,
+      amount,
+    }));
 
-        const BarGraphData = {
-            labels: labels,
-            datasets: [
-                {
-                    label: '貯金',
-                    data: data,
-                    backgroundColor: [
-                        'rgba(255, 159, 64, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(153, 102, 255, 0.2)'
-                    ],
-                    borderColor: [
-                        'rgb(255, 159, 64)',
-                        'rgb(75, 192, 192)',
-                        'rgb(54, 162, 235)',
-                        'rgb(153, 102, 255)'
-                    ],
-                    borderWidth: 1
-                }
-            ]
-        };
+    setChartData(newChartData); // chartDataを更新
+  }, [transactions, selectedMonth]); // 依存配列に追加
+	console.log(transactions)
 
-        const options = {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
-        };
+	const chartConfig = {
+		desktop: {
+			label: "Desktop",
+			color: "#FFB3BA", // パステルピンク
+		},
+		mobile: {
+			label: "Mobile",
+			color: "#FFDFBA", // パステルオレンジ
+		},
+		income: {
+			label: "Income",
+			color: "#BAFFC9", // パステルグリーン
+		},
+	} satisfies ChartConfig;
 
-        setChartData(BarGraphData);
-        setChartOptions(options);
-    }, [transactions, selectedMonth]); // transactionsとselectedMonthが変更されたときに再計算
-
-    return (
-        <div className="card border rounded-lg p-8 shadow-xl h-[31rem] w-[56rem]">
-        <div className="overflow-x-auto h-full">
-            <div className="h-full"> {/* グラフの最小幅を設定 */}
-            <Chart type="bar" data={chartData} options={chartOptions} />
-            </div>
-        </div>
+  return (
+    <div className="border p-4 bg-white rounded-lg shadow-md w-[56rem]">
+      {/* <h2 className="text-xl font-semibold text-center">Income Chart</h2> */}
+      <ChartContainer config={chartConfig} className="min-h-[200px] w-full p-4">
+        <BarChart accessibilityLayer data={chartData} height={300} width={500}>
+				<XAxis
+					dataKey="category"
+					tickLine={false}
+					tickMargin={10}
+					axisLine={false}
+					tickFormatter={(value) => value.slice(0, 3)}
+					fontSize="10px"
+					stroke="#888"
+					interval={0}
+					padding={{ left: 10, right: 10 }}
+				/>
+				<Tooltip content={<ChartTooltipContent />} />
+					<Bar dataKey="amount" fill={chartConfig.income.color} radius={4} />
+        </BarChart>
+      </ChartContainer>
     </div>
-    );
+  );
 }

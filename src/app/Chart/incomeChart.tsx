@@ -1,91 +1,112 @@
-"use client"
+import React, { useState, useEffect } from 'react';
+import { Chart } from 'primereact/chart';
+import { Transaction } from '@/app/income-expense/transactions';
 
-import { useEffect, useState } from "react";
-import { Bar, BarChart, Tooltip, XAxis } from "recharts"
-import { ChartConfig, ChartContainer } from "@/components/ui/chart"
-import { ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
-import { Transaction } from "@/app/income-expense/transactions";
-
-interface ChartProps {
-	transactions: Transaction[] | null;
-	selectedMonth: Date; // 選択された月を受け取る
+interface BarGraphProps {
+    transactions: Transaction[] | null;
+    selectedMonth: Date; // 選択された月を受け取る
 }
 
-// ... existing code ...
-// ... existing code ...
-export default function IncomeComponents({ transactions, selectedMonth }: ChartProps) {
-  const [chartData, setChartData] = useState<{ category: string; amount: number }[]>([]);
+export default function ExpenseBarGraph({ transactions, selectedMonth }: BarGraphProps) {
+    const [chartData, setChartData] = useState({});
+    const [chartOptions, setChartOptions] = useState({});
 
-  useEffect(() => {
-    if (!transactions) return;
+    useEffect(() => {
+        // transactionsがnullまたはundefinedの場合は処理をスキップ
+        if (!transactions) return;
 
-    // incomeトランザクションのみをフィルタリングし、選択された月に基づいてフィルタリング
-    const incomeTransactions = transactions.filter(transaction => {
-      const transactionDate = new Date(transaction.date);
-      return  transaction.type === 'income' &&
-              transactionDate.getFullYear() === selectedMonth.getFullYear() &&
-              transactionDate.getMonth() === selectedMonth.getMonth();
-    });
+        // typeがexpenseのトランザクションのみをフィルタリングし、選択された月に基づいてフィルタリング
+        const expenseTransactions = transactions.filter(transaction => {
+            const transactionDate = new Date(transaction.date);
+            return  transaction.type === 'income' &&
+                    transactionDate.getFullYear() === selectedMonth.getFullYear() &&
+                    transactionDate.getMonth() === selectedMonth.getMonth();
+        });
 
-    // カテゴリーごとの合計を計算
-    const categoryTotals: { [key: string]: number } = {};
-    incomeTransactions.forEach(transaction => {
-      if (categoryTotals[transaction.category]) {
-        categoryTotals[transaction.category] += transaction.amount;
-      } else {
-        categoryTotals[transaction.category] = transaction.amount;
-      }
-    });
+        // カテゴリーごとの合計を計算
+        const categoryTotals: { [key: string]: number } = {};
+        expenseTransactions.forEach(transaction => {
+            if (categoryTotals[transaction.category]) {
+                categoryTotals[transaction.category] += transaction.amount;
+            } else {
+                categoryTotals[transaction.category] = transaction.amount;
+            }
+        });
 
-    const newChartData = Object.entries(categoryTotals).map(([category, amount]) => ({
-      category,
-      amount,
-    }));
+        const labels = Object.keys(categoryTotals);
+        const data = Object.values(categoryTotals);
 
-    setChartData(newChartData); // chartDataを更新
-  }, [transactions, selectedMonth]); // 依存配列に追加
-	console.log(transactions)
+        const BarGraphData = {
+            labels: labels,
+            datasets: [
+                {
+                    label: '収入',
+                    data: data,
+                    backgroundColor: [
+                        'rgba(255, 159, 64, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(153, 102, 255, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgb(255, 159, 64)',
+                        'rgb(75, 192, 192)',
+                        'rgb(54, 162, 235)',
+                        'rgb(153, 102, 255)'
+                    ],
+                    borderWidth: 1
+                }
+            ]
+        };
 
-	const chartConfig = {
-		desktop: {
-			label: "Desktop",
-			color: "#FFB3BA", // パステルピンク
-		},
-		mobile: {
-			label: "Mobile",
-			color: "#FFDFBA", // パステルオレンジ
-		},
-		income: {
-			label: "Income",
-			color: "#BAFFC9", // パステルグリーン
-		},
-	} satisfies ChartConfig;
+        const options = {
+            maintainAspectRatio: false,
+            aspectRatio: 0.75,
+            scales: {
+                x: {
+                    grid: {
+                        display: false
+                    },
+                    ticks: {
+                        maxRotation: 45,
+                        minRotation: 45
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+            response: true,
+            width: 800,
+            height: 400
+        };
 
-  return (
-    <div className="bg-white rounded-lg shadow-md w-[56rem]">
-      {/* <h2 className="text-xl font-semibold text-center">Income Chart</h2> */}
-      <ChartContainer config={chartConfig} className="min-h-[300px] w-full">
-        <BarChart accessibilityLayer data={chartData}>
-				<XAxis
-				className="pb-4"
-					dataKey="category"
-					tickLine={false}
-					tickMargin={10}
-					axisLine={false}
-					tickFormatter={(value) => value}
-					fontSize="10px"
-					stroke="#888"
-					interval={0}
-					orientation="bottom"
-					padding={{ left: 20, right: 20 }}
-					// angle={-30}
-					// textAnchor="end"
-					minTickGap={10}
-				/>
-				<Tooltip content={<ChartTooltipContent />} />
-          <Bar dataKey="amount" fill={chartConfig.income.color} radius={4} />
-        </BarChart>
-      </ChartContainer>
-    </div>
-  );
+        // データセットの幅を調整（カテゴリーごとの最小幅を設定）
+        const minBarWidth = 80; // 各バーの最小幅（ピクセル）
+        const totalMinWidth = labels.length * minBarWidth;
+        
+        setChartData({
+            ...BarGraphData,
+            datasets: [{
+                ...BarGraphData.datasets[0],
+                barPercentage: 0.8,
+                categoryPercentage: 0.9
+            }]
+        });
+
+        setChartData(BarGraphData);
+        setChartOptions(options);
+    }, [transactions, selectedMonth]); // transactionsとselectedMonthが変更されたときに再計算
+
+    return (
+        <div className="card border rounded-lg p-8 shadow-xl h-[31rem] w-[56rem]">
+            <div className="overflow-x-auto h-full">
+                <div className="h-full"> {/* グラフの最小幅を設定 */}
+                    <Chart type="bar" data={chartData} options={chartOptions} />
+                </div>
+            </div>
+        </div>
+    );
 }

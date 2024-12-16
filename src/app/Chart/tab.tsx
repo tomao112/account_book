@@ -84,7 +84,7 @@ return (
         <div className='flex justify-center'>
             <TabMenu className='p-3 mb-5 mt-5 border rounded-lg w-3/4 shadow-md' model={items} activeIndex={activeIndex} />
         </div>
-        <div className='w-full'>
+        <div className=''>
             {activeIndex === 0 && (
                 <div className='flex justify-center gap-6 w-full'>
                     {/* <IncomeBarGraph transactions={transactions} selectedMonth={selectedMonth} /> */}
@@ -123,7 +123,7 @@ return (
         </div>
         <div>
             {activeIndex === 1 && (
-                <div className='flex justify-center gap-6'>
+                <div className='flex justify-center gap-6 w-3/4'>
                     <ExpenseBarGraph transactions={transactions} selectedMonth={selectedMonth} />
 										<div className='flex flex-col justify-between gap-5'>
 											{monthlySummary ? (
@@ -189,7 +189,9 @@ return (
 												) : (
 													<p className="text-center text-gray-500">データがありません</p>
 												)}
-											<CategoryTotal selectedMonth={selectedMonth} activeIndex={activeIndex}/>
+											<div className='z-1'>
+												<CategoryTotal selectedMonth={selectedMonth} activeIndex={activeIndex}/>
+											</div>
 										</div>
                 </div>
             )}

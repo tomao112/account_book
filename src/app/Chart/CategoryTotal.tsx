@@ -86,8 +86,8 @@ function CategoryTotal({ selectedMonth, activeIndex }: CategoryTotalProps) {
         return (
             <div className="flex flex-wrap gap-2 justify-content-between align-items-center">
                 {/* <h4 className="m-0">カテゴリーごとの月の収支</h4> */}
-                <div style={{ marginLeft: '18rem', marginBottom: '1rem', position: 'relative' }}>
-									<IoIosSearch style={{ position: 'absolute', left: '0.6rem', top: '37%', transform: 'translateY(-50%)', fontSize: '1.3rem', color: 'gray'}} />
+                <div style={{ marginLeft: '18rem', marginBottom: '1rem' }}>
+									<IoIosSearch style={{ left: '0.6rem', top: '37%', transform: 'translateY(-50%)', fontSize: '1.3rem', color: 'gray'}} />
                   <InputText value={globalFilterValue} onChange={onGlobalFilterChange} placeholder="カテゴリー検索" style={{ paddingLeft: '2.5rem', borderColor: '#d3d3d3', width: '13rem', border: '1px solid #d3d3d3', fontSize: '0.9rem', padding: '0.5rem 2.3rem', margin: '0 3rem 1rem 0' ,borderRadius: '0.5rem'}}  />
                 </div>
             </div>

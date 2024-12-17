@@ -89,7 +89,7 @@ return (
                 <div className='flex justify-center gap-6 w-full'>
                     {/* <IncomeBarGraph transactions={transactions} selectedMonth={selectedMonth} /> */}
 										<IncomeComponents transactions={transactions} selectedMonth={selectedMonth} />
-										<div className='flex flex-col justify-between gap-5'>
+										<div className='flex flex-col justify-between gap-5 -z-10'>
 											{monthlySummary ? (
 												<div className='flex justify-around border rounded-md pt-2 pb-2 shadow-md'>
 													<div className="flex flex-col items-center w-[7rem] mb-2 pl-5 pr-8 border-r">
@@ -189,9 +189,7 @@ return (
 												) : (
 													<p className="text-center text-gray-500">データがありません</p>
 												)}
-											<div className='z-1'>
-												<CategoryTotal selectedMonth={selectedMonth} activeIndex={activeIndex}/>
-											</div>
+											<CategoryTotal selectedMonth={selectedMonth} activeIndex={activeIndex}/>
 										</div>
                 </div>
             )}

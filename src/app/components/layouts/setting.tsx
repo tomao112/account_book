@@ -18,7 +18,7 @@ const Setting = () => {
   }
 
   return (
-    <div>
+    <div className='z-[100]'>
       <div className='fixed top-1/3 right-0'>
         <div className='flex justify-end'>
           <button onClick={handleTogglePanel} className='z-50 bg-blue-400 rounded-tl-full rounded-bl-full pr-5 pl-3 pt-3 pb-3'>

@@ -62,6 +62,9 @@ export default function ExpenseBarGraph({ transactions, selectedMonth }: BarGrap
         const options = {
             maintainAspectRatio: false,
             aspectRatio: 0.75,
+            layout: {
+                padding: 0
+            },
             scales: {
                 x: {
                     grid: {
@@ -69,18 +72,49 @@ export default function ExpenseBarGraph({ transactions, selectedMonth }: BarGrap
                     },
                     ticks: {
                         maxRotation: 45,
-                        minRotation: 45
+                        minRotation: 45,
+                        font: {
+                            size: 10,
+                            '@media (min-width: 768px)': {
+                                size: 12
+                            }
+                        }
+                    },
+                    border: {
+                        display: false
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        font: {
+                            size: 10,
+                            '@media (min-width: 768px)': {
+                                size: 12
+                            }
+                        }
+                    },
+                    border: {
+                        display: false
+                    },
+                    grid: {
+                        drawBorder: false
                     }
                 }
             },
             plugins: {
                 legend: {
                     display: false
+                },
+                title: {
+                    display: false
                 }
             },
-            response: true,
-            width: 800,
-            height: 400
+            responsive: true,
+            interaction: {
+                intersect: false,
+                mode: 'index'
+            }
         };
 
         // データセットの幅を調整（カテゴリーごとの最小幅を設定）
@@ -101,9 +135,9 @@ export default function ExpenseBarGraph({ transactions, selectedMonth }: BarGrap
     }, [transactions, selectedMonth]); // transactionsとselectedMonthが変更されたときに再計算
 
     return (
-        <div className="card border rounded-lg p-8 shadow-xl h-[31rem] w-[56rem]">
-            <div className="overflow-x-auto h-full">
-                <div className="h-full"> {/* グラフの最小幅を設定 */}
+        <div className="card border rounded-lg p-3 sm:p-4 md:p-6 shadow-xl w-full">
+            <div className="h-[300px] sm:h-[400px] md:h-[500px] flex items-center justify-center">
+                <div className="h-[95%] w-full">
                     <Chart type="bar" data={chartData} options={chartOptions} />
                 </div>
             </div>

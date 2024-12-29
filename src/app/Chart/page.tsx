@@ -106,7 +106,7 @@ useEffect(() => {
 }, [selectedMonth]); // selectedMonthが変更されたときに再取得
 
   return (
-  <div className="overflow-x-auto">
+  <div className="overflow-x-auto mr-20 ml-20">
     <div className="flex justify-end mr-20 mt-5 items-center">
       <button onClick={() => changeMonth(-1)} className="border text-black px-2 py-1 rounded shadow-md">
         &lt;

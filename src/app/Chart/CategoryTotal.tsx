@@ -102,50 +102,60 @@ function CategoryTotal({ selectedMonth, activeIndex }: CategoryTotalProps) {
     };
 
 		return (
-			<div className="card border rounded-lg p-8 w-[35rem] h-96 shadow-xl">
-					{header}
-					<div className="h-[calc(100%-80px)] overflow-y-auto">
-							<DataTable 
-									value={filteredTotals} 
-									dataKey="0" 
-									emptyMessage="No categories found." 
-									rowClassName={rowClassName}
-									className="border-none"
-									stripedRows
-									rows={5}
-									showGridlines={false}
-									scrollable
-									scrollHeight="100%"
-							>
-									<Column 
-											field="0" 
-											header="Category" 
-											body={(rowData) => (
-													<div className="flex items-center gap-2 py-2">
-															<span className="w-2 h-2 rounded-full bg-blue-500"></span>
-															<span className="font-medium">{rowData[0]}</span>
-													</div>
-											)} 
-											sortable 
-											className="text-gray-700"
-											frozen
-									/>
-									<Column 
-											field="1.total" 
-											header="Total" 
-											body={(rowData) => (
-													<div className="font-semibold text-gray-800">
-															¥{rowData[1].total.toLocaleString()}
-													</div>
-											)} 
-											sortable 
-									/>
-									<Column 
-											header="Action" 
-											className="w-24" 
-									/>
-							</DataTable>
+			<div className="card border rounded-lg p-3 sm:p-4 w-full shadow-xl">
+				<div className="mb-4">
+					<div className="flex flex-col sm:flex-row items-center justify-between gap-2">
+						<div className="w-full sm:w-auto">
+							<div className="relative">
+								<IoIosSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
+								<InputText 
+									value={globalFilterValue} 
+									onChange={onGlobalFilterChange} 
+									placeholder="カテゴリー検索" 
+									className="w-full sm:w-[13rem] pl-10 pr-3 py-2 text-sm border border-gray-300 rounded-lg"
+								/>
+							</div>
+						</div>
 					</div>
+				</div>
+				<div className="h-[300px] sm:h-[400px] overflow-y-auto">
+					<DataTable 
+						value={filteredTotals} 
+						dataKey="0" 
+						emptyMessage="No categories found." 
+						rowClassName={rowClassName}
+						className="border-none"
+						stripedRows
+						showGridlines={false}
+						scrollable
+						scrollHeight="100%"
+						responsiveLayout="stack"
+						breakpoint="575px"
+					>
+						<Column 
+							field="0" 
+							header="Category" 
+							body={(rowData) => (
+								<div className="flex items-center gap-2 py-2">
+									<span className="w-2 h-2 rounded-full bg-blue-500"></span>
+									<span className="font-medium">{rowData[0]}</span>
+								</div>
+							)} 
+							sortable 
+							className="text-gray-700"
+						/>
+						<Column 
+							field="1.total" 
+							header="Total" 
+							body={(rowData) => (
+								<div className="font-semibold text-gray-800">
+									¥{rowData[1].total.toLocaleString()}
+								</div>
+							)} 
+							sortable 
+						/>
+					</DataTable>
+				</div>
 			</div>
 	);
 }

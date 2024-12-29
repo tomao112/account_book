@@ -69,7 +69,24 @@ export default function ExpenseBarGraph({ transactions, selectedMonth }: BarGrap
                     },
                     ticks: {
                         maxRotation: 45,
-                        minRotation: 45
+                        minRotation: 45,
+                        font: {
+                            size: 10,
+                            '@media (min-width: 768px)': {
+                                size: 12
+                            }
+                        }
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        font: {
+                            size: 10,
+                            '@media (min-width: 768px)': {
+                                size: 12
+                            }
+                        }
                     }
                 }
             },
@@ -78,9 +95,7 @@ export default function ExpenseBarGraph({ transactions, selectedMonth }: BarGrap
                     display: false
                 }
             },
-            response: true,
-            width: 800,
-            height: 400
+            responsive: true
         };
 
         // データセットの幅を調整（カテゴリーごとの最小幅を設定）
@@ -101,9 +116,9 @@ export default function ExpenseBarGraph({ transactions, selectedMonth }: BarGrap
     }, [transactions, selectedMonth]); // transactionsとselectedMonthが変更されたときに再計算
 
     return (
-        <div className="card border rounded-lg p-8 shadow-xl h-[31rem] w-[56rem]">
-            <div className="overflow-x-auto h-full">
-                <div className="h-full"> {/* グラフの最小幅を設定 */}
+        <div className="card border rounded-lg p-3 sm:p-4 md:p-6 shadow-xl w-full">
+            <div className="h-[300px] sm:h-[400px] md:h-[500px]">
+                <div className="h-[300px] w-full">
                     <Chart type="bar" data={chartData} options={chartOptions} />
                 </div>
             </div>

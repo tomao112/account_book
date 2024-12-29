@@ -223,6 +223,10 @@ textarea:focus {
   position: initial;
 }
 
+canvas {
+  height: 100%s;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;

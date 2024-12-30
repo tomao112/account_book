@@ -224,7 +224,7 @@ textarea:focus {
 }
 
 canvas {
-  height: 100%s;
+  height: 500px;
 }
 
 @layer base {

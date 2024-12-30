@@ -61,6 +61,7 @@ export default function ExpenseBarGraph({ transactions, selectedMonth }: BarGrap
 
         const options = {
             maintainAspectRatio: false,
+            height: 500,
             aspectRatio: 0.75,
             scales: {
                 x: {
@@ -116,10 +117,17 @@ export default function ExpenseBarGraph({ transactions, selectedMonth }: BarGrap
     }, [transactions, selectedMonth]); // transactionsとselectedMonthが変更されたときに再計算
 
     return (
-        <div className="card border rounded-lg p-3 sm:p-4 md:p-6 shadow-xl w-full">
-            <div className="h-[300px] sm:h-[400px] md:h-[500px]">
-                <div className="h-[300px] w-full">
-                    <Chart type="bar" data={chartData} options={chartOptions} />
+        <div className="card border rounded-lg p-3 sm:p-4 md:p-6 shadow-xl h-[574px] w-full">
+            <div className="h-[500px]">
+                <div className="h-full w-full">
+                    <Chart 
+                        type="bar" 
+                        data={chartData} 
+                        options={{
+                            ...chartOptions,
+                            maintainAspectRatio: false,
+                        }} 
+                    />
                 </div>
             </div>
         </div>

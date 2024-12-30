@@ -123,7 +123,7 @@ return (
                 <div className='w-full xl:w-2/3'>
                     <ExpenseBarGraph transactions={transactions} selectedMonth={selectedMonth} />
                 </div>
-                <div className='w-full xl:w-1/3 flex flex-col gap-4'>
+                <div className='w-full xl:w-1/3 flex flex-col gap-4 h-[574px]'>
                     {monthlySummary ? (
                         <div className='grid grid-cols-2 sm:grid-cols-4 gap-2 border rounded-md p-3 shadow-md w-full'>
                             <div className="flex flex-col items-center">
